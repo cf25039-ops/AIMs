@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  aims-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aims-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - .env.local
+    networks:
+      - aims_network
+      - supabase_default
+
+networks:
+  aims_network:
+    driver: bridge
+  supabase_default:
+    external: true
