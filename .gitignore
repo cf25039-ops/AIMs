@@ -33,3 +33,36 @@ src/db/migrations/
 
 # supabase local
 supabase/.temp
+
+# Chrome browser profile - contains personal data, cookies, logins
+chrome-profile/
+
+# Debug/scratch scripts (ad-hoc diagnostics, one-time use)
+scratch_*.mjs
+scratch_*.js
+check_*.mjs
+fix_*.mjs
+test_*.mjs
+verify_*.mjs
+quick_*.mjs
+deploy*.mjs
+pull_*.mjs
+restart_*.mjs
+migrate*.mjs
+run_*.mjs
+reset_*.mjs
+describe_*.mjs
+diagnose*.mjs
+clean_*.mjs
+deep_*.mjs
+seed_*.mjs
+setup*.mjs
+start_*.mjs
+final_*.mjs
+get_*.mjs
+find_*.mjs
+
+# Project files (transient)
+deploy.zip
+*.zip
+aims_v5_upgrade_patch_only.md

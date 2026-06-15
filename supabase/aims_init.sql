@@ -1642,4 +1642,25 @@ using (
 
 create policy analytics_snapshots_select on public.analytics_snapshots
 for select
-using (public.has_project_access(proj
+using (public.has_project_access(project_id));
+
+create policy analytics_snapshots_insert on public.analytics_snapshots
+for insert
+with check (public.has_project_role(project_id, array['project_manager']::public.user_role[]));
+
+create policy analytics_snapshots_update on public.analytics_snapshots
+for update
+using (public.has_project_role(project_id, array['project_manager']::public.user_role[]))
+with check (public.has_project_role(project_id, array['project_manager']::public.user_role[]));
+
+create policy analytics_snapshots_delete on public.analytics_snapshots
+for delete
+using (public.has_project_role(project_id, array['project_manager']::public.user_role[]));
+
+-- Grants
+
+grant usage on schema public to authenticated;
+grant select, insert, update, delete on all tables in schema public to authenticated;
+grant usage, select on all sequences in schema public to authenticated;
+
+commit;
