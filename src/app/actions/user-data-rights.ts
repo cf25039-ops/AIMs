@@ -18,16 +18,8 @@ export async function exportMyData() {
       .select("*")
       .or(`assigned_to.eq.${user.id},created_by.eq.${user.id}`)
       .limit(500),
-    supabase
-      .from("maintenance_tickets")
-      .select("*")
-      .eq("created_by", user.id)
-      .limit(500),
-    supabase
-      .from("audit_logs")
-      .select("*")
-      .eq("user_id", user.id)
-      .limit(500),
+    supabase.from("maintenance_tickets").select("*").eq("created_by", user.id).limit(500),
+    supabase.from("audit_logs").select("*").eq("user_id", user.id).limit(500),
   ]);
 
   return {

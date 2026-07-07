@@ -1,15 +1,15 @@
-const { Client } = require('pg');
-const fs = require('fs');
+const { Client } = require("pg");
+const fs = require("fs");
 
-const envFile = fs.readFileSync('.env.local', 'utf8');
+const envFile = fs.readFileSync(".env.local", "utf8");
 const envVars = {};
-envFile.split('\n').forEach(line => {
-  const [key, ...val] = line.split('=');
-  if (key && val) envVars[key.trim()] = val.join('=').trim();
+envFile.split("\n").forEach((line) => {
+  const [key, ...val] = line.split("=");
+  if (key && val) envVars[key.trim()] = val.join("=").trim();
 });
 
 const client = new Client({
-  connectionString: envVars.DATABASE_URL
+  connectionString: envVars.DATABASE_URL,
 });
 
 async function runMigration() {

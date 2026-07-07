@@ -16,7 +16,12 @@ type DrillBreadcrumbProps = {
 
 export function DrillBreadcrumb({ steps, className }: DrillBreadcrumbProps) {
   return (
-    <nav className={cn("flex items-center gap-1.5 overflow-x-auto whitespace-nowrap py-2 px-1 scrollbar-none", className)}>
+    <nav
+      className={cn(
+        "flex items-center gap-1.5 overflow-x-auto whitespace-nowrap py-2 px-1 scrollbar-none",
+        className,
+      )}
+    >
       <AnimatePresence initial={false}>
         {steps.map((step, index) => {
           const isFirst = index === 0;
@@ -36,7 +41,9 @@ export function DrillBreadcrumb({ steps, className }: DrillBreadcrumbProps) {
                 <Home
                   className={cn(
                     "h-3.5 w-3.5 shrink-0",
-                    isClickable ? "text-muted-foreground hover:text-primary cursor-pointer" : "text-primary/60"
+                    isClickable
+                      ? "text-muted-foreground hover:text-primary cursor-pointer"
+                      : "text-primary/60",
                   )}
                   onClick={step.onClick}
                 />
@@ -51,7 +58,7 @@ export function DrillBreadcrumb({ steps, className }: DrillBreadcrumbProps) {
                     ? "text-foreground"
                     : isClickable
                       ? "text-muted-foreground hover:text-primary cursor-pointer"
-                      : "text-muted-foreground/60"
+                      : "text-muted-foreground/60",
                 )}
               >
                 {step.label}

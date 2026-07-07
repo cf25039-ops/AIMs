@@ -57,7 +57,9 @@ export function Pagination({ currentPage, totalPages, onPageChange, className }:
 
       {getVisiblePages().map((page, i) =>
         page === "..." ? (
-          <span key={`dots-${i}`} className="px-2 text-muted-foreground text-sm">…</span>
+          <span key={`dots-${i}`} className="px-2 text-muted-foreground text-sm">
+            …
+          </span>
         ) : (
           <Button
             key={page}
@@ -68,7 +70,7 @@ export function Pagination({ currentPage, totalPages, onPageChange, className }:
           >
             {page}
           </Button>
-        )
+        ),
       )}
 
       <Button

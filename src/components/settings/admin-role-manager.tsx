@@ -37,7 +37,12 @@ export function AdminRoleManager({ currentUserId }: { currentUserId: string }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [createForm, setCreateForm] = useState({ email: "", password: "", fullName: "", role: "department_user" });
+  const [createForm, setCreateForm] = useState({
+    email: "",
+    password: "",
+    fullName: "",
+    role: "department_user",
+  });
   const [createError, setCreateError] = useState("");
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
   const [createLoading, setCreateLoading] = useState(false);
@@ -63,7 +68,9 @@ export function AdminRoleManager({ currentUserId }: { currentUserId: string }) {
     if (!query) return profiles;
     return profiles.filter((profile) => {
       const haystack = [profile.full_name, profile.email, profile.role, getRoleLabel(profile.role)]
-        .filter(Boolean).join(" ").toLowerCase();
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
       return haystack.includes(query);
     });
   }, [profiles, searchQuery]);
@@ -128,14 +135,18 @@ export function AdminRoleManager({ currentUserId }: { currentUserId: string }) {
           <div className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-600 dark:text-emerald-400">
             <Check className="h-4 w-4 shrink-0" />
             <span>{successMsg}</span>
-            <button onClick={() => setSuccessMsg("")} className="ml-auto"><X className="h-3 w-3" /></button>
+            <button onClick={() => setSuccessMsg("")} className="ml-auto">
+              <X className="h-3 w-3" />
+            </button>
           </div>
         )}
         {errorMsg && (
           <div className="flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-600 dark:text-rose-400">
             <X className="h-4 w-4 shrink-0" />
             <span>{errorMsg}</span>
-            <button onClick={() => setErrorMsg("")} className="ml-auto"><X className="h-3 w-3" /></button>
+            <button onClick={() => setErrorMsg("")} className="ml-auto">
+              <X className="h-3 w-3" />
+            </button>
           </div>
         )}
 
@@ -164,14 +175,19 @@ export function AdminRoleManager({ currentUserId }: { currentUserId: string }) {
         </div>
 
         {showCreateForm && (
-          <form onSubmit={handleCreateUser} className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-3">
+          <form
+            onSubmit={handleCreateUser}
+            className="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-3"
+          >
             <h4 className="text-xs font-semibold text-foreground flex items-center gap-2">
               <UserPlus className="h-3.5 w-3.5 text-primary" />
               Create New User Account
             </h4>
             <div className="grid gap-3 md:grid-cols-2">
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Email</label>
+                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                  Email
+                </label>
                 <Input
                   value={createForm.email}
                   onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
@@ -182,7 +198,9 @@ export function AdminRoleManager({ currentUserId }: { currentUserId: string }) {
                 />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Password</label>
+                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                  Password
+                </label>
                 <Input
                   value={createForm.password}
                   onChange={(e) => {
@@ -202,13 +220,17 @@ export function AdminRoleManager({ currentUserId }: { currentUserId: string }) {
                 {passwordErrors.length > 0 && (
                   <ul className="mt-1 space-y-0.5">
                     {passwordErrors.map((err, i) => (
-                      <li key={i} className="text-[10px] text-rose-500">{err}</li>
+                      <li key={i} className="text-[10px] text-rose-500">
+                        {err}
+                      </li>
                     ))}
                   </ul>
                 )}
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Full Name</label>
+                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                  Full Name
+                </label>
                 <Input
                   value={createForm.fullName}
                   onChange={(e) => setCreateForm({ ...createForm, fullName: e.target.value })}
@@ -218,21 +240,27 @@ export function AdminRoleManager({ currentUserId }: { currentUserId: string }) {
                 />
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Role</label>
+                <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                  Role
+                </label>
                 <select
                   value={createForm.role}
                   onChange={(e) => setCreateForm({ ...createForm, role: e.target.value })}
                   className="h-9 w-full rounded-lg border border-border bg-card px-3 text-sm outline-none focus:border-primary/50"
                 >
                   {assignableRoles.map((r) => (
-                    <option key={r.value} value={r.value}>{r.label}</option>
+                    <option key={r.value} value={r.value}>
+                      {r.label}
+                    </option>
                   ))}
                 </select>
               </div>
             </div>
 
             {createError && (
-              <p className="text-xs text-rose-500 bg-rose-500/10 rounded-lg px-3 py-2">{createError}</p>
+              <p className="text-xs text-rose-500 bg-rose-500/10 rounded-lg px-3 py-2">
+                {createError}
+              </p>
             )}
 
             <div className="flex gap-2 pt-1">
@@ -240,7 +268,13 @@ export function AdminRoleManager({ currentUserId }: { currentUserId: string }) {
                 {createLoading && <Loader2 className="h-3 w-3 animate-spin" />}
                 {createLoading ? "Creating..." : "Create Account"}
               </Button>
-              <Button type="button" size="sm" variant="outline" onClick={() => setShowCreateForm(false)} className="text-xs">
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => setShowCreateForm(false)}
+                className="text-xs"
+              >
                 Cancel
               </Button>
             </div>
@@ -256,7 +290,9 @@ export function AdminRoleManager({ currentUserId }: { currentUserId: string }) {
           <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/70 py-8 text-center">
             <Users className="mb-2 h-7 w-7 text-muted-foreground" />
             <p className="text-sm font-medium">No users found</p>
-            <p className="text-xs text-muted-foreground">Try a different search term or create a new user.</p>
+            <p className="text-xs text-muted-foreground">
+              Try a different search term or create a new user.
+            </p>
           </div>
         ) : (
           <div className="max-h-[420px] overflow-y-auto rounded-xl border border-border/70">
@@ -274,12 +310,15 @@ export function AdminRoleManager({ currentUserId }: { currentUserId: string }) {
                       <p className="truncate text-sm font-semibold">
                         {profile.full_name || profile.email || "Unnamed User"}
                       </p>
-                      <span className={getRoleBadgeColor(profile.role) + " inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold"}>
+                      <span
+                        className={
+                          getRoleBadgeColor(profile.role) +
+                          " inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold"
+                        }
+                      >
                         {getRoleLabel(profile.role)}
                       </span>
-                      {profile.id === currentUserId ? (
-                        <Badge variant="info">You</Badge>
-                      ) : null}
+                      {profile.id === currentUserId ? <Badge variant="info">You</Badge> : null}
                     </div>
                     <p className="mt-1 truncate text-xs text-muted-foreground">
                       {profile.email || "No email"}
@@ -290,17 +329,23 @@ export function AdminRoleManager({ currentUserId }: { currentUserId: string }) {
                     <select
                       value={profile.role}
                       disabled={isProtected || isUpdating}
-                      onChange={(event) => handleUpdateRole(profile, event.target.value as UserRole)}
+                      onChange={(event) =>
+                        handleUpdateRole(profile, event.target.value as UserRole)
+                      }
                       className="h-9 flex-1 rounded-lg border border-border bg-card/60 px-3 text-xs outline-none focus:border-primary/50 disabled:opacity-50"
                     >
                       {profile.role === "super_admin" ? (
                         <option value="super_admin">Super Admin</option>
                       ) : null}
                       {assignableRoles.map((ro) => (
-                        <option key={ro.value} value={ro.value}>{ro.label}</option>
+                        <option key={ro.value} value={ro.value}>
+                          {ro.label}
+                        </option>
                       ))}
                     </select>
-                    {isUpdating && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground shrink-0" />}
+                    {isUpdating && (
+                      <Loader2 className="h-4 w-4 animate-spin text-muted-foreground shrink-0" />
+                    )}
                   </div>
                 </div>
               );

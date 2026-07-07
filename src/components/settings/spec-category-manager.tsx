@@ -15,10 +15,8 @@ import {
   saveSpecRules,
   autoClassifyHardware,
   type SpecCategoryRow,
-  type SpecRuleRow,
 } from "@/services/spec-categories";
-import { getHardwareTypes, type HardwareTypeRow } from "@/services/hardware-types";
-import { cn } from "@/lib/utils";
+import { getHardwareTypes } from "@/services/hardware-types";
 import toast from "react-hot-toast";
 
 type SpecCategoryManagerProps = {
@@ -68,8 +66,13 @@ export function SpecCategoryManager({ contractId }: SpecCategoryManagerProps) {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, values }: { id: string; values: { name?: string; description?: string; color?: string } }) =>
-      updateSpecCategory(id, values),
+    mutationFn: ({
+      id,
+      values,
+    }: {
+      id: string;
+      values: { name?: string; description?: string; color?: string };
+    }) => updateSpecCategory(id, values),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["spec-categories", selectedTypeId] });
       setEditingId(null);
@@ -101,11 +104,18 @@ export function SpecCategoryManager({ contractId }: SpecCategoryManagerProps) {
           >
             <option value="">Select hardware type...</option>
             {types.map((t) => (
-              <option key={t.id} value={t.id}>{t.name}</option>
+              <option key={t.id} value={t.id}>
+                {t.name}
+              </option>
             ))}
           </select>
           {selectedTypeId && (
-            <Button variant="outline" size="sm" onClick={() => setIsAdding(!isAdding)} className="gap-1.5 text-xs">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsAdding(!isAdding)}
+              className="gap-1.5 text-xs"
+            >
               <Plus className="h-3.5 w-3.5" />
               Add Spec Category
             </Button>
@@ -114,20 +124,49 @@ export function SpecCategoryManager({ contractId }: SpecCategoryManagerProps) {
       </div>
 
       {!selectedTypeId ? (
-        <p className="text-xs text-muted-foreground py-2">Select a hardware type above to manage its spec categories.</p>
+        <p className="text-xs text-muted-foreground py-2">
+          Select a hardware type above to manage its spec categories.
+        </p>
       ) : (
         <>
           {isAdding && (
             <div className="rounded-xl border border-primary/20 bg-primary/5 p-3 space-y-2">
-              <Input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Category name (e.g. Low Spec)" className="h-9 text-sm" />
-              <Input value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="Description (optional)" className="h-9 text-sm" />
-              <Input value={newColor} onChange={(e) => setNewColor(e.target.value)} placeholder="Color (e.g. amber, red, green)" className="h-9 text-sm" />
+              <Input
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                placeholder="Category name (e.g. Low Spec)"
+                className="h-9 text-sm"
+              />
+              <Input
+                value={newDesc}
+                onChange={(e) => setNewDesc(e.target.value)}
+                placeholder="Description (optional)"
+                className="h-9 text-sm"
+              />
+              <Input
+                value={newColor}
+                onChange={(e) => setNewColor(e.target.value)}
+                placeholder="Color (e.g. amber, red, green)"
+                className="h-9 text-sm"
+              />
               <div className="flex gap-2">
-                <Button size="sm" onClick={() => createMutation.mutate()} disabled={!newName || createMutation.isPending} className="text-xs gap-1">
+                <Button
+                  size="sm"
+                  onClick={() => createMutation.mutate()}
+                  disabled={!newName || createMutation.isPending}
+                  className="text-xs gap-1"
+                >
                   {createMutation.isPending && <Loader2 className="h-3 w-3 animate-spin" />}
                   Save
                 </Button>
-                <Button size="sm" variant="outline" onClick={() => setIsAdding(false)} className="text-xs">Cancel</Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setIsAdding(false)}
+                  className="text-xs"
+                >
+                  Cancel
+                </Button>
               </div>
             </div>
           )}
@@ -137,7 +176,9 @@ export function SpecCategoryManager({ contractId }: SpecCategoryManagerProps) {
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
             </div>
           ) : categories.length === 0 ? (
-            <p className="text-xs text-muted-foreground py-2">No spec categories defined for this hardware type.</p>
+            <p className="text-xs text-muted-foreground py-2">
+              No spec categories defined for this hardware type.
+            </p>
           ) : (
             <>
               <div className="space-y-1.5">
@@ -151,7 +192,9 @@ export function SpecCategoryManager({ contractId }: SpecCategoryManagerProps) {
                     onCancelEdit={() => setEditingId(null)}
                     onSave={(values) => updateMutation.mutate({ id: cat.id, values })}
                     onDelete={() => setDeletingId(cat.id)}
-                    onManageRules={() => setManagedCategoryId(managedCategoryId === cat.id ? null : cat.id)}
+                    onManageRules={() =>
+                      setManagedCategoryId(managedCategoryId === cat.id ? null : cat.id)
+                    }
                   />
                 ))}
               </div>
@@ -159,7 +202,7 @@ export function SpecCategoryManager({ contractId }: SpecCategoryManagerProps) {
               <ConfirmDialog
                 open={!!deletingId}
                 title="Delete Spec Category"
-                message={`Are you sure you want to delete "${categories.find(c => c.id === deletingId)?.name || 'this category'}"? This action cannot be undone.`}
+                message={`Are you sure you want to delete "${categories.find((c) => c.id === deletingId)?.name || "this category"}"? This action cannot be undone.`}
                 onClose={() => setDeletingId(null)}
                 onConfirm={() => {
                   if (deletingId) {
@@ -197,7 +240,6 @@ function CategoryRow({
   onDelete: () => void;
   onManageRules: () => void;
 }) {
-  const queryClient = useQueryClient();
   const [name, setName] = useState(category.name);
   const [desc, setDesc] = useState(category.description ?? "");
   const [color, setColor] = useState(category.color ?? "");
@@ -208,30 +250,70 @@ function CategoryRow({
         {isEditing ? (
           <div className="flex-1 space-y-1.5">
             <Input value={name} onChange={(e) => setName(e.target.value)} className="h-8 text-xs" />
-            <Input value={desc} onChange={(e) => setDesc(e.target.value)} className="h-8 text-xs" placeholder="Description" />
-            <Input value={color} onChange={(e) => setColor(e.target.value)} className="h-8 text-xs" placeholder="Color" />
+            <Input
+              value={desc}
+              onChange={(e) => setDesc(e.target.value)}
+              className="h-8 text-xs"
+              placeholder="Description"
+            />
+            <Input
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              className="h-8 text-xs"
+              placeholder="Color"
+            />
             <div className="flex gap-1.5">
-              <Button size="sm" onClick={() => onSave({ name, description: desc, color })} className="h-7 text-[10px]">Save</Button>
-              <Button size="sm" variant="outline" onClick={onCancelEdit} className="h-7 text-[10px]">Cancel</Button>
+              <Button
+                size="sm"
+                onClick={() => onSave({ name, description: desc, color })}
+                className="h-7 text-[10px]"
+              >
+                Save
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={onCancelEdit}
+                className="h-7 text-[10px]"
+              >
+                Cancel
+              </Button>
             </div>
           </div>
         ) : (
           <>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-foreground truncate flex items-center gap-2">
-                {category.color && <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: category.color }} />}
+                {category.color && (
+                  <span
+                    className="h-2.5 w-2.5 rounded-full"
+                    style={{ backgroundColor: category.color }}
+                  />
+                )}
                 {category.name}
               </p>
-              {category.description && <p className="text-[10px] text-muted-foreground truncate">{category.description}</p>}
+              {category.description && (
+                <p className="text-[10px] text-muted-foreground truncate">{category.description}</p>
+              )}
             </div>
             <div className="flex items-center gap-1 shrink-0">
-              <button onClick={onManageRules} className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground" title="Manage rules">
+              <button
+                onClick={onManageRules}
+                className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
+                title="Manage rules"
+              >
                 <Zap className="h-3.5 w-3.5" />
               </button>
-              <button onClick={onStartEdit} className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground">
+              <button
+                onClick={onStartEdit}
+                className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
+              >
                 <Pencil className="h-3.5 w-3.5" />
               </button>
-              <button onClick={onDelete} className="p-1.5 rounded hover:bg-rose-500/10 text-muted-foreground hover:text-rose-500">
+              <button
+                onClick={onDelete}
+                className="p-1.5 rounded hover:bg-rose-500/10 text-muted-foreground hover:text-rose-500"
+              >
                 <Trash2 className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -239,26 +321,26 @@ function CategoryRow({
         )}
       </div>
 
-      {isManaging && (
-        <RuleEditor categoryId={category.id} onClose={() => onManageRules()} />
-      )}
+      {isManaging && <RuleEditor categoryId={category.id} onClose={() => onManageRules()} />}
     </div>
   );
 }
 
 function RuleEditor({ categoryId, onClose }: { categoryId: string; onClose: () => void }) {
   const queryClient = useQueryClient();
-  const { data: rules = [], isLoading } = useQuery({
+  const { data: rules = [] } = useQuery({
     queryKey: ["spec-rules", categoryId],
     queryFn: () => getSpecRules(categoryId),
   });
 
-  const [localRules, setLocalRules] = useState<Array<{
-    id?: string;
-    rule_type: string;
-    rule_operator: string;
-    rule_value: string;
-  }>>([]);
+  const [localRules, setLocalRules] = useState<
+    Array<{
+      id?: string;
+      rule_type: string;
+      rule_operator: string;
+      rule_value: string;
+    }>
+  >([]);
 
   useState(() => {
     if (rules.length > 0) setLocalRules(rules.map((r) => ({ ...r })));
@@ -285,7 +367,10 @@ function RuleEditor({ categoryId, onClose }: { categoryId: string; onClose: () =
   });
 
   const addRule = () => {
-    setLocalRules((prev) => [...prev, { rule_type: "cpu", rule_operator: "contains", rule_value: "" }]);
+    setLocalRules((prev) => [
+      ...prev,
+      { rule_type: "cpu", rule_operator: "contains", rule_value: "" },
+    ]);
   };
 
   const removeRule = (index: number) => {
@@ -293,7 +378,7 @@ function RuleEditor({ categoryId, onClose }: { categoryId: string; onClose: () =
   };
 
   const updateRule = (index: number, field: string, value: string) => {
-    setLocalRules((prev) => prev.map((r, i) => i === index ? { ...r, [field]: value } : r));
+    setLocalRules((prev) => prev.map((r, i) => (i === index ? { ...r, [field]: value } : r)));
   };
 
   return (
@@ -319,7 +404,9 @@ function RuleEditor({ categoryId, onClose }: { categoryId: string; onClose: () =
       </div>
 
       {localRules.length === 0 ? (
-        <p className="text-[10px] text-muted-foreground">No rules defined. Rules auto-classify hardware into this category.</p>
+        <p className="text-[10px] text-muted-foreground">
+          No rules defined. Rules auto-classify hardware into this category.
+        </p>
       ) : (
         <div className="space-y-1.5">
           {localRules.map((rule, index) => (
@@ -351,7 +438,10 @@ function RuleEditor({ categoryId, onClose }: { categoryId: string; onClose: () =
                 className="h-8 text-xs flex-1"
                 placeholder="Value"
               />
-              <button onClick={() => removeRule(index)} className="p-1 hover:bg-rose-500/10 rounded text-muted-foreground hover:text-rose-500">
+              <button
+                onClick={() => removeRule(index)}
+                className="p-1 hover:bg-rose-500/10 rounded text-muted-foreground hover:text-rose-500"
+              >
                 <Trash2 className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -369,7 +459,9 @@ function RuleEditor({ categoryId, onClose }: { categoryId: string; onClose: () =
           {saveMutation.isPending && <Loader2 className="h-3 w-3 animate-spin" />}
           Save Rules
         </Button>
-        <Button size="sm" variant="outline" onClick={onClose} className="text-xs">Close</Button>
+        <Button size="sm" variant="outline" onClick={onClose} className="text-xs">
+          Close
+        </Button>
       </div>
     </div>
   );

@@ -9,7 +9,21 @@ import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/client";
 import { AdminRoleManager } from "@/components/settings/admin-role-manager";
 import { exportMyData, deleteMyAccount } from "@/app/actions/user-data-rights";
-import { Settings, Moon, Sun, User, Database, Shield, Loader2, Lock, Copy, Check as CheckIcon, Download, Trash2, AlertTriangle } from "lucide-react";
+import {
+  Settings,
+  Moon,
+  Sun,
+  User,
+  Database,
+  Shield,
+  Loader2,
+  Lock,
+  Copy,
+  Check as CheckIcon,
+  Download,
+  Trash2,
+  AlertTriangle,
+} from "lucide-react";
 
 export default function SettingsPage() {
   const [isDark, setIsDark] = useState(false);
@@ -17,7 +31,9 @@ export default function SettingsPage() {
   const [mfaSecret, setMfaSecret] = useState("");
   const [mfaFactorId, setMfaFactorId] = useState("");
   const [mfaCode, setMfaCode] = useState("");
-  const [mfaStatus, setMfaStatus] = useState<"none" | "enrolling" | "verifying" | "enabled">("none");
+  const [mfaStatus, setMfaStatus] = useState<"none" | "enrolling" | "verifying" | "enabled">(
+    "none",
+  );
   const [mfaError, setMfaError] = useState("");
   const [mfaLoading, setMfaLoading] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -31,7 +47,9 @@ export default function SettingsPage() {
     queryKey: ["current-user-profile"],
     queryFn: async () => {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) return null;
       const { data: profile } = await supabase
         .from("profiles")
@@ -79,8 +97,9 @@ export default function SettingsPage() {
     setMfaError("");
     try {
       const supabase = createClient();
-      const { data: challengeData, error: challengeError } =
-        await supabase.auth.mfa.challenge({ factorId: mfaFactorId });
+      const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
+        factorId: mfaFactorId,
+      });
       if (challengeError) throw challengeError;
       const { error: verifyError } = await supabase.auth.mfa.verify({
         factorId: mfaFactorId,
@@ -182,7 +201,9 @@ export default function SettingsPage() {
           </div>
           <div>
             <h2 className="text-3xl font-semibold tracking-tight">System Settings</h2>
-            <p className="text-sm text-muted-foreground">Configure application preferences and view system info</p>
+            <p className="text-sm text-muted-foreground">
+              Configure application preferences and view system info
+            </p>
           </div>
         </div>
       </FadeIn>
@@ -192,7 +213,11 @@ export default function SettingsPage() {
         <Card className="glass-card">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
-              {isDark ? <Moon className="h-5 w-5 text-indigo-400" /> : <Sun className="h-5 w-5 text-amber-500" />}
+              {isDark ? (
+                <Moon className="h-5 w-5 text-indigo-400" />
+              ) : (
+                <Sun className="h-5 w-5 text-amber-500" />
+              )}
               Appearance
             </CardTitle>
             <CardDescription>Manage theme and visual preferences</CardDescription>
@@ -223,11 +248,16 @@ export default function SettingsPage() {
                 <User className="h-5 w-5 text-primary" />
                 Profile Information
               </CardTitle>
-              <Badge variant="success" className="uppercase text-[10px] tracking-wider px-2.5 py-0.5">
+              <Badge
+                variant="success"
+                className="uppercase text-[10px] tracking-wider px-2.5 py-0.5"
+              >
                 Authenticated
               </Badge>
             </div>
-            <CardDescription>Your account details retrieved from the authentication provider</CardDescription>
+            <CardDescription>
+              Your account details retrieved from the authentication provider
+            </CardDescription>
           </CardHeader>
           <CardContent className="pt-6">
             {loadingUser ? (
@@ -238,7 +268,8 @@ export default function SettingsPage() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between border-b border-border/40 pb-3">
                   <span className="text-sm font-semibold text-foreground">
-                    User Profile: {(() => {
+                    User Profile:{" "}
+                    {(() => {
                       const id = userProfile.user.id;
                       let hash = 0;
                       for (let i = 0; i < id.length; i++) {
@@ -252,7 +283,9 @@ export default function SettingsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
                   {/* Row 1 */}
                   <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Group</span>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      Group
+                    </span>
                     <span className="text-sm font-medium text-foreground capitalize">
                       {(() => {
                         const role = userProfile.profile?.role;
@@ -264,9 +297,11 @@ export default function SettingsPage() {
                       })()}
                     </span>
                   </div>
-                  
+
                   <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">User ID</span>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      User ID
+                    </span>
                     <span className="text-sm font-medium text-foreground">
                       {userProfile.user.email?.split("@")[0] || "N/A"}
                     </span>
@@ -274,14 +309,18 @@ export default function SettingsPage() {
 
                   {/* Row 2 */}
                   <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</span>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      Name
+                    </span>
                     <span className="text-sm font-medium text-foreground">
                       {userProfile.profile?.full_name || "N/A"}
                     </span>
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email</span>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      Email
+                    </span>
                     <span className="text-sm font-medium text-foreground break-all">
                       {userProfile.user.email || "N/A"}
                     </span>
@@ -289,7 +328,9 @@ export default function SettingsPage() {
 
                   {/* Row 3 */}
                   <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Phone</span>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      Phone
+                    </span>
                     <span className="text-sm font-medium text-foreground">
                       {(() => {
                         const role = userProfile.profile?.role;
@@ -303,7 +344,9 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Site Office</span>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      Site Office
+                    </span>
                     <span className="text-sm font-medium text-foreground">
                       {(() => {
                         const role = userProfile.profile?.role;
@@ -318,14 +361,16 @@ export default function SettingsPage() {
 
                   {/* Row 4 */}
                   <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Timezone</span>
-                    <span className="text-sm font-medium text-foreground">
-                      Asia/Kuala_Lumpur
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      Timezone
                     </span>
+                    <span className="text-sm font-medium text-foreground">Asia/Kuala_Lumpur</span>
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">User Status</span>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      User Status
+                    </span>
                     <div className="flex items-center gap-1.5 mt-0.5">
                       <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                       <span className="text-sm font-medium text-foreground">Active</span>
@@ -355,7 +400,11 @@ export default function SettingsPage() {
                 variant={mfaStatus === "enabled" ? "success" : "warning"}
                 className="uppercase text-[10px] tracking-wider px-2.5 py-0.5"
               >
-                {mfaStatus === "enabled" ? "Active" : mfaStatus === "enrolling" ? "Setting Up" : "Not Set"}
+                {mfaStatus === "enabled"
+                  ? "Active"
+                  : mfaStatus === "enrolling"
+                    ? "Setting Up"
+                    : "Not Set"}
               </Badge>
             </div>
             <CardDescription>
@@ -368,7 +417,8 @@ export default function SettingsPage() {
                 <div>
                   <p className="text-sm font-medium">2FA is currently disabled</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Use an authenticator app (Google Authenticator, Authy, 1Password) to scan a QR code.
+                    Use an authenticator app (Google Authenticator, Authy, 1Password) to scan a QR
+                    code.
                   </p>
                 </div>
                 <Button
@@ -378,7 +428,11 @@ export default function SettingsPage() {
                   disabled={mfaLoading}
                   className="gap-2"
                 >
-                  {mfaLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Shield className="h-4 w-4" />}
+                  {mfaLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Shield className="h-4 w-4" />
+                  )}
                   Enable 2FA
                 </Button>
               </div>
@@ -406,7 +460,11 @@ export default function SettingsPage() {
                         onClick={copySecret}
                         className="gap-1 shrink-0"
                       >
-                        {copied ? <CheckIcon className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                        {copied ? (
+                          <CheckIcon className="h-3.5 w-3.5" />
+                        ) : (
+                          <Copy className="h-3.5 w-3.5" />
+                        )}
                         {copied ? "Copied" : "Copy"}
                       </Button>
                     </div>
@@ -432,14 +490,20 @@ export default function SettingsPage() {
                       className="mt-1 h-10 w-full rounded-lg border border-border bg-card px-3 text-center text-lg font-mono tracking-widest outline-none focus:border-primary/50 focus:ring-2 focus:ring-ring"
                     />
                   </div>
-                  <Button onClick={verifyMFA} disabled={mfaLoading || mfaCode.length !== 6} className="gap-1">
+                  <Button
+                    onClick={verifyMFA}
+                    disabled={mfaLoading || mfaCode.length !== 6}
+                    className="gap-1"
+                  >
                     {mfaLoading && <Loader2 className="h-4 w-4 animate-spin" />}
                     Verify & Enable
                   </Button>
                 </div>
 
                 {mfaError && (
-                  <p className="text-xs text-rose-500 bg-rose-500/10 rounded-lg px-3 py-2">{mfaError}</p>
+                  <p className="text-xs text-rose-500 bg-rose-500/10 rounded-lg px-3 py-2">
+                    {mfaError}
+                  </p>
                 )}
 
                 <Button
@@ -474,7 +538,11 @@ export default function SettingsPage() {
                   disabled={mfaLoading}
                   className="gap-1 text-destructive hover:text-destructive"
                 >
-                  {mfaLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
+                  {mfaLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Lock className="h-4 w-4" />
+                  )}
                   Disable 2FA
                 </Button>
               </div>
@@ -515,7 +583,11 @@ export default function SettingsPage() {
                 disabled={exportLoading}
                 className="gap-1"
               >
-                {exportLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+                {exportLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Download className="h-4 w-4" />
+                )}
                 Export
               </Button>
             </div>
@@ -556,7 +628,10 @@ export default function SettingsPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => { setDeleteConfirm(false); setDeleteError(""); }}
+                    onClick={() => {
+                      setDeleteConfirm(false);
+                      setDeleteError("");
+                    }}
                     className="text-xs"
                   >
                     Cancel
@@ -566,7 +641,9 @@ export default function SettingsPage() {
             </div>
 
             {deleteError && (
-              <p className="text-xs text-rose-500 bg-rose-500/10 rounded-lg px-3 py-2">{deleteError}</p>
+              <p className="text-xs text-rose-500 bg-rose-500/10 rounded-lg px-3 py-2">
+                {deleteError}
+              </p>
             )}
           </CardContent>
         </Card>

@@ -17,16 +17,22 @@ const data = [
 
 export function AnalyticsCharts() {
   const { theme } = useTheme();
-  
+
   const primaryColor = theme === "dark" ? "#3B82F6" : "#2563EB";
   const accentColor = theme === "dark" ? "#8B5CF6" : "#7C3AED";
-  
+
   return (
     <div className="grid gap-6 md:grid-cols-2 mt-6">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+      >
         <Card className="glass-card">
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">Asset Growth vs Repairs</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Asset Growth vs Repairs
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[250px] w-full">
@@ -42,25 +48,55 @@ export function AnalyticsCharts() {
                       <stop offset="95%" stopColor={accentColor} stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: 'hsl(var(--card))', borderColor: 'hsl(var(--border))', borderRadius: '8px' }}
-                    itemStyle={{ color: 'hsl(var(--foreground))' }}
+                  <XAxis
+                    dataKey="name"
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
                   />
-                  <Area type="monotone" dataKey="assets" stroke={primaryColor} strokeWidth={2} fillOpacity={1} fill="url(#colorAssets)" />
-                  <Area type="monotone" dataKey="repairs" stroke={accentColor} strokeWidth={2} fillOpacity={1} fill="url(#colorRepairs)" />
+                  <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      borderColor: "hsl(var(--border))",
+                      borderRadius: "8px",
+                    }}
+                    itemStyle={{ color: "hsl(var(--foreground))" }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="assets"
+                    stroke={primaryColor}
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill="url(#colorAssets)"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="repairs"
+                    stroke={accentColor}
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill="url(#colorRepairs)"
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
       </motion.div>
-      
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
         <Card className="glass-card h-full">
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">Operational Tables</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Operational Tables
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

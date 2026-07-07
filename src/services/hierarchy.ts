@@ -11,7 +11,7 @@ export async function getProjects(): Promise<SelectOption[]> {
     console.error("Error fetching projects:", error);
     return [];
   }
-  return data.map((item: any) => ({ id: item.id, label: item.name }));
+  return data.map((item) => ({ id: item.id, label: item.name }));
 }
 
 export async function getAccessibleContracts(): Promise<SelectOption[]> {
@@ -24,7 +24,7 @@ export async function getAccessibleContracts(): Promise<SelectOption[]> {
     console.error("Error fetching accessible contracts:", error);
     return [];
   }
-  return data.map((item: any) => ({ id: item.id, label: item.contract_number }));
+  return data.map((item) => ({ id: item.id, label: item.contract_number }));
 }
 
 export async function getContracts(projectId?: string): Promise<SelectOption[]> {
@@ -39,39 +39,51 @@ export async function getContracts(projectId?: string): Promise<SelectOption[]> 
     console.error("Error fetching contracts:", error);
     return [];
   }
-return data.map((item: any) => ({ id: item.id, label: item.contract_number }));
+  return data.map((item) => ({ id: item.id, label: item.contract_number }));
 }
 
 export async function getRegions(contractId?: string): Promise<SelectOption[]> {
   if (!contractId) return [];
   const supabase = createClient();
-  const { data, error } = await supabase.from("regions").select("id, name").eq("contract_id", contractId);
+  const { data, error } = await supabase
+    .from("regions")
+    .select("id, name")
+    .eq("contract_id", contractId);
   if (error) return [];
-  return data.map((item: any) => ({ id: item.id, label: item.name }));
+  return data.map((item) => ({ id: item.id, label: item.name }));
 }
 
 export async function getStates(regionId?: string): Promise<SelectOption[]> {
   if (!regionId) return [];
   const supabase = createClient();
-  const { data, error } = await supabase.from("states").select("id, name").eq("region_id", regionId);
+  const { data, error } = await supabase
+    .from("states")
+    .select("id, name")
+    .eq("region_id", regionId);
   if (error) return [];
-  return data.map((item: any) => ({ id: item.id, label: item.name }));
+  return data.map((item) => ({ id: item.id, label: item.name }));
 }
 
 export async function getFacilities(stateId?: string): Promise<SelectOption[]> {
   if (!stateId) return [];
   const supabase = createClient();
-  const { data, error } = await supabase.from("facilities").select("id, name").eq("state_id", stateId);
+  const { data, error } = await supabase
+    .from("facilities")
+    .select("id, name")
+    .eq("state_id", stateId);
   if (error) return [];
-  return data.map((item: any) => ({ id: item.id, label: item.name }));
+  return data.map((item) => ({ id: item.id, label: item.name }));
 }
 
 export async function getDepartments(facilityId?: string): Promise<SelectOption[]> {
   if (!facilityId) return [];
   const supabase = createClient();
-  const { data, error } = await supabase.from("departments").select("id, name").eq("facility_id", facilityId);
+  const { data, error } = await supabase
+    .from("departments")
+    .select("id, name")
+    .eq("facility_id", facilityId);
   if (error) return [];
-  return data.map((item: any) => ({ id: item.id, label: item.name }));
+  return data.map((item) => ({ id: item.id, label: item.name }));
 }
 
 export type DrillNode = SelectOption & { count: number };
@@ -85,23 +97,47 @@ export async function getRegionsWithCounts(contractId: string): Promise<DrillNod
     .order("name");
   if (!regions) return [];
 
-  const states = await supabase.from("states").select("id, region_id").in("region_id", regions.map((r) => r.id));
+  const states = await supabase
+    .from("states")
+    .select("id, region_id")
+    .in(
+      "region_id",
+      regions.map((r) => r.id),
+    );
   const facilities = states.data
-    ? await supabase.from("facilities").select("id, state_id").in("state_id", states.data.map((s: any) => s.id))
+    ? await supabase
+        .from("facilities")
+        .select("id, state_id")
+        .in(
+          "state_id",
+          states.data.map((s) => s.id),
+        )
     : { data: [] };
   const departments = facilities.data
-    ? await supabase.from("departments").select("id, facility_id").in("facility_id", facilities.data.map((f: any) => f.id))
+    ? await supabase
+        .from("departments")
+        .select("id, facility_id")
+        .in(
+          "facility_id",
+          facilities.data.map((f) => f.id),
+        )
     : { data: [] };
   const hardware = departments.data
-    ? await supabase.from("hardware").select("id, department_id").in("department_id", departments.data.map((d: any) => d.id))
+    ? await supabase
+        .from("hardware")
+        .select("id, department_id")
+        .in(
+          "department_id",
+          departments.data.map((d) => d.id),
+        )
     : { data: [] };
 
   const deptToRegion: Record<string, string> = {};
   if (departments.data) {
     for (const d of departments.data) {
-      const fac = facilities.data?.find((f: any) => f.id === d.facility_id);
+      const fac = facilities.data?.find((f) => f.id === d.facility_id);
       if (fac) {
-        const st = states.data?.find((s: any) => s.id === fac.state_id);
+        const st = states.data?.find((s) => s.id === fac.state_id);
         if (st) deptToRegion[d.id] = st.region_id;
       }
     }
@@ -134,12 +170,18 @@ export async function getFacilitiesWithCounts(stateId: string): Promise<DrillNod
   const departments = await supabase
     .from("departments")
     .select("id, facility_id")
-    .in("facility_id", facilities.map((f) => f.id));
+    .in(
+      "facility_id",
+      facilities.map((f) => f.id),
+    );
   const hardware = departments.data
     ? await supabase
         .from("hardware")
         .select("id, department_id")
-        .in("department_id", departments.data.map((d: any) => d.id))
+        .in(
+          "department_id",
+          departments.data.map((d) => d.id),
+        )
     : { data: [] };
 
   const deptToFac: Record<string, string> = {};
@@ -163,19 +205,20 @@ export async function getFacilitiesWithCounts(stateId: string): Promise<DrillNod
 }
 
 export async function getFacilitiesForRegion(regionId: string): Promise<DrillNode[]> {
+  if (!regionId) return [];
   const supabase = createClient();
 
-  const { data: states } = await supabase
-    .from("states")
-    .select("id")
-    .eq("region_id", regionId);
+  const { data: states } = await supabase.from("states").select("id").eq("region_id", regionId);
 
   if (!states || states.length === 0) return [];
 
   const { data: facilities } = await supabase
     .from("facilities")
     .select("id, name, state_id")
-    .in("state_id", states.map((s) => s.id))
+    .in(
+      "state_id",
+      states.map((s) => s.id),
+    )
     .order("name");
 
   if (!facilities) return [];
@@ -183,13 +226,19 @@ export async function getFacilitiesForRegion(regionId: string): Promise<DrillNod
   const departments = await supabase
     .from("departments")
     .select("id, facility_id")
-    .in("facility_id", facilities.map((f) => f.id));
+    .in(
+      "facility_id",
+      facilities.map((f) => f.id),
+    );
 
   const hardware = departments.data
     ? await supabase
         .from("hardware")
         .select("id, department_id")
-        .in("department_id", departments.data.map((d: any) => d.id))
+        .in(
+          "department_id",
+          departments.data.map((d) => d.id),
+        )
     : { data: [] };
 
   const deptToFac: Record<string, string> = {};
@@ -222,34 +271,53 @@ export async function getContractsWithCounts(): Promise<DrillNode[]> {
 
   if (!contracts) return [];
 
-  const { data: regions } = await supabase
-    .from("regions")
-    .select("id, contract_id");
+  const { data: regions } = await supabase.from("regions").select("id, contract_id");
 
   const { data: states } = regions
     ? await supabase.from("states").select("id, region_id")
-    : { data: [] as any[] };
+    : { data: [] };
 
-  const { data: facilities } = states && states.length > 0
-    ? await supabase.from("facilities").select("id, state_id").in("state_id", states.map((s: any) => s.id))
-    : { data: [] as any[] };
+  const { data: facilities } =
+    states && states.length > 0
+      ? await supabase
+          .from("facilities")
+          .select("id, state_id")
+          .in(
+            "state_id",
+            states.map((s) => s.id),
+          )
+      : { data: [] };
 
-  const { data: departments } = facilities && facilities.length > 0
-    ? await supabase.from("departments").select("id, facility_id").in("facility_id", facilities.map((f: any) => f.id))
-    : { data: [] as any[] };
+  const { data: departments } =
+    facilities && facilities.length > 0
+      ? await supabase
+          .from("departments")
+          .select("id, facility_id")
+          .in(
+            "facility_id",
+            facilities.map((f) => f.id),
+          )
+      : { data: [] };
 
-  const { data: hardware } = departments && departments.length > 0
-    ? await supabase.from("hardware").select("id, department_id").in("department_id", departments.map((d: any) => d.id))
-    : { data: [] as any[] };
+  const { data: hardware } =
+    departments && departments.length > 0
+      ? await supabase
+          .from("hardware")
+          .select("id, department_id")
+          .in(
+            "department_id",
+            departments.map((d) => d.id),
+          )
+      : { data: [] };
 
   const deptToContract: Record<string, string> = {};
   if (departments) {
     for (const d of departments) {
-      const fac = facilities?.find((f: any) => f.id === d.facility_id);
+      const fac = facilities?.find((f) => f.id === d.facility_id);
       if (fac) {
-        const st = states?.find((s: any) => s.id === fac.state_id);
+        const st = states?.find((s) => s.id === fac.state_id);
         if (st) {
-          const reg = regions?.find((r: any) => r.id === st.region_id);
+          const reg = regions?.find((r) => r.id === st.region_id);
           if (reg) deptToContract[d.id] = reg.contract_id;
         }
       }
@@ -283,7 +351,10 @@ export async function getDepartmentsWithCounts(facilityId: string): Promise<Dril
   const { data: hardware } = await supabase
     .from("hardware")
     .select("department_id")
-    .in("department_id", departments.map((d) => d.id));
+    .in(
+      "department_id",
+      departments.map((d) => d.id),
+    );
 
   const countMap: Record<string, number> = {};
   if (hardware) {
@@ -305,5 +376,8 @@ export async function getContractIdForDepartment(departmentId: string): Promise<
     .eq("id", departmentId)
     .single();
 
-  return (data as any)?.facility?.state?.region?.contract_id ?? null;
+  return (
+    (data as unknown as { facility: { state: { region: { contract_id: string } } } })?.facility
+      ?.state?.region?.contract_id ?? null
+  );
 }

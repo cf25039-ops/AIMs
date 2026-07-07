@@ -34,9 +34,9 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-lg font-semibold text-foreground">3. Data Retention</h2>
           <p className="mt-2 text-muted-foreground">
-            Personal data is retained for the duration of the active contract plus 7 years
-            for audit compliance purposes. After this period, data is securely deleted or
-            anonymized in accordance with PDPA requirements.
+            Personal data is retained for the duration of the active contract plus 7 years for audit
+            compliance purposes. After this period, data is securely deleted or anonymized in
+            accordance with PDPA requirements.
           </p>
         </section>
 
@@ -44,24 +44,24 @@ export default function PrivacyPage() {
           <h2 className="text-lg font-semibold text-foreground">4. Your Rights (PDPA)</h2>
           <ul className="mt-2 ml-4 list-disc space-y-1 text-muted-foreground">
             <li>
-              <strong className="text-foreground">Right to access</strong> — download your personal data via
-              the Export feature in Settings
+              <strong className="text-foreground">Right to access</strong> — download your personal
+              data via the Export feature in Settings
             </li>
             <li>
-              <strong className="text-foreground">Right to correction</strong> — edit your profile information
-              at any time
+              <strong className="text-foreground">Right to correction</strong> — edit your profile
+              information at any time
             </li>
             <li>
-              <strong className="text-foreground">Right to deletion</strong> — request account deletion via
-              the Settings page
+              <strong className="text-foreground">Right to deletion</strong> — request account
+              deletion via the Settings page
             </li>
             <li>
-              <strong className="text-foreground">Right to portability</strong> — export your data in JSON
-              format
+              <strong className="text-foreground">Right to portability</strong> — export your data
+              in JSON format
             </li>
             <li>
-              <strong className="text-foreground">Right to object</strong> — contact the Data Protection
-              Officer to restrict processing
+              <strong className="text-foreground">Right to object</strong> — contact the Data
+              Protection Officer to restrict processing
             </li>
           </ul>
         </section>
@@ -69,18 +69,18 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-lg font-semibold text-foreground">5. Data Security</h2>
           <p className="mt-2 text-muted-foreground">
-            We implement industry-standard security measures including HTTPS encryption,
-            secure session management, two-factor authentication, and role-based access
-            controls. All data is stored on servers within Malaysia.
+            We implement industry-standard security measures including HTTPS encryption, secure
+            session management, two-factor authentication, and role-based access controls. All data
+            is stored on servers within Malaysia.
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-foreground">6. Third-Party Processors</h2>
           <p className="mt-2 text-muted-foreground">
-            Your data may be processed by trusted service providers for hosting,
-            authentication, and analytics purposes. All third-party processors are bound
-            by data processing agreements compliant with PDPA.
+            Your data may be processed by trusted service providers for hosting, authentication, and
+            analytics purposes. All third-party processors are bound by data processing agreements
+            compliant with PDPA.
           </p>
         </section>
 

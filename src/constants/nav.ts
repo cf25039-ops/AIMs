@@ -1,6 +1,5 @@
 import {
   BarChart3,
-  Bell,
   Boxes,
   BrainCircuit,
   FileText,

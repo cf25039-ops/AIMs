@@ -9,7 +9,6 @@ import { useRole } from "@/contexts/role-context";
 import { getGreeting } from "@/utils/role";
 import { createClient } from "@/lib/supabase/client";
 import {
-  Wrench,
   Clock,
   AlertTriangle,
   CheckCircle2,
@@ -31,7 +30,9 @@ export function TechnicianDashboard() {
       // Get all tickets (technician sees assigned/available tickets)
       const { data: tickets } = await supabase
         .from("repair_tickets")
-        .select("id, status, severity, title, description, created_at, hardware(asset_tag, type_hardware)")
+        .select(
+          "id, status, severity, title, description, created_at, hardware(asset_tag, type_hardware)",
+        )
         .not("status", "in", '("resolved","closed")')
         .order("created_at", { ascending: false })
         .limit(10);
@@ -62,10 +63,14 @@ export function TechnicianDashboard() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "bg-rose-500";
-      case "high": return "bg-amber-500";
-      case "medium": return "bg-yellow-500";
-      default: return "bg-emerald-500";
+      case "critical":
+        return "bg-rose-500";
+      case "high":
+        return "bg-amber-500";
+      case "medium":
+        return "bg-yellow-500";
+      default:
+        return "bg-emerald-500";
     }
   };
 
@@ -184,7 +189,9 @@ export function TechnicianDashboard() {
                     className="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-card p-4 hover:bg-muted/30 transition-colors"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${getSeverityColor(ticket.severity)}`} />
+                      <div
+                        className={`h-2.5 w-2.5 rounded-full shrink-0 ${getSeverityColor(ticket.severity)}`}
+                      />
                       <div className="min-w-0">
                         <p className="text-sm font-medium truncate">
                           {ticket.title || "Issue Reported"}
@@ -197,7 +204,9 @@ export function TechnicianDashboard() {
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       <Badge
-                        variant={ticket.severity === "high" ? ("warning" as any) : ("default" as any)}
+                        variant={
+                          ticket.severity === "high" ? ("warning" as any) : ("default" as any)
+                        }
                         className="text-[10px] uppercase"
                       >
                         {ticket.severity}

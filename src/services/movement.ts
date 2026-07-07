@@ -7,7 +7,9 @@ export async function transferHardware(values: AssetTransferValues) {
   const supabase = await createClient();
 
   // 1. Get current user profile to verify admin role
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) {
     return { error: "Unauthorized access. Please log in." };
   }
@@ -36,7 +38,7 @@ export async function transferHardware(values: AssetTransferValues) {
 
   // 3. Perform a database transaction equivalent using sequential queries
   // Since we don't have a custom RPC for this, we do it sequentially.
-  
+
   // a. Insert log
   const movementPayload = {
     hardware_id: values.assetId,
@@ -49,9 +51,7 @@ export async function transferHardware(values: AssetTransferValues) {
     approved_by: user.id, // The admin who is performing this action
   };
 
-  const { error: logError } = await supabase
-    .from("asset_movements")
-    .insert(movementPayload);
+  const { error: logError } = await supabase.from("asset_movements").insert(movementPayload);
 
   if (logError) {
     console.error("Log error:", logError);

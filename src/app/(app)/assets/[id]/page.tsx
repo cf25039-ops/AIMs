@@ -29,14 +29,19 @@ export default function AssetDetailPage() {
   const router = useRouter();
   const id = params?.id as string;
 
-  const { data: asset, isLoading, error } = useQuery({
+  const {
+    data: asset,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["asset-detail", id],
     queryFn: async () => {
       const { createClient } = await import("@/lib/supabase/client");
       const supabase = createClient();
       const { data, error } = await supabase
         .from("hardware")
-        .select(`
+        .select(
+          `
           *,
           department:departments(
             id, name, code,
@@ -45,7 +50,8 @@ export default function AssetDetailPage() {
               state:states(id, name)
             )
           )
-        `)
+        `,
+        )
         .eq("id", id)
         .single();
 
@@ -79,33 +85,36 @@ export default function AssetDetailPage() {
   }
 
   const qrUrl =
-    typeof window !== "undefined"
-      ? window.location.href
-      : `https://aims.local/assets/${id}`;
+    typeof window !== "undefined" ? window.location.href : `https://aims.local/assets/${id}`;
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "active": return "success" as const;
-      case "in_repair": return "warning" as const;
-      case "disposed": case "retired": case "lost": return "danger" as const;
-      default: return "info" as const;
+      case "active":
+        return "success" as const;
+      case "in_repair":
+        return "warning" as const;
+      case "disposed":
+      case "retired":
+      case "lost":
+        return "danger" as const;
+      default:
+        return "info" as const;
     }
   };
 
   const healthScore = asset.health_score ?? null;
   const healthColor =
-    healthScore === null ? "text-muted-foreground" :
-    healthScore < 40 ? "text-rose-500" :
-    healthScore < 70 ? "text-amber-500" :
-    "text-emerald-500";
+    healthScore === null
+      ? "text-muted-foreground"
+      : healthScore < 40
+        ? "text-rose-500"
+        : healthScore < 70
+          ? "text-amber-500"
+          : "text-emerald-500";
 
   const facilityName = (asset.department as any)?.facility?.name || null;
   const stateName = (asset.department as any)?.facility?.state?.name || null;
-  const locationParts = [
-    (asset.department as any)?.name,
-    facilityName,
-    stateName,
-  ].filter(Boolean);
+  const locationParts = [(asset.department as any)?.name, facilityName, stateName].filter(Boolean);
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-10">
@@ -122,9 +131,7 @@ export default function AssetDetailPage() {
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight">
-                Asset Details
-              </h2>
+              <h2 className="text-2xl font-semibold tracking-tight">Asset Details</h2>
               <p className="text-sm text-muted-foreground">
                 {asset.brand} {asset.model} — {asset.asset_tag}
               </p>
@@ -147,16 +154,9 @@ export default function AssetDetailPage() {
               <div className="bg-white p-4 rounded-xl border border-border shadow-sm print:shadow-none print:border-none print:p-0">
                 <QRCode value={qrUrl} size={180} />
               </div>
-              <h3 className="mt-6 text-xl font-bold font-mono tracking-tight">
-                {asset.asset_tag}
-              </h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Scan QR to view this profile
-              </p>
-              <Badge
-                variant={getStatusBadge(asset.status)}
-                className="uppercase px-3 py-1"
-              >
+              <h3 className="mt-6 text-xl font-bold font-mono tracking-tight">{asset.asset_tag}</h3>
+              <p className="text-sm text-muted-foreground mb-4">Scan QR to view this profile</p>
+              <Badge variant={getStatusBadge(asset.status)} className="uppercase px-3 py-1">
                 {asset.status.replace(/_/g, " ")}
               </Badge>
             </Card>
@@ -197,15 +197,15 @@ export default function AssetDetailPage() {
                     <div>
                       <p className="text-xs text-muted-foreground">Health Score</p>
                       <div className="flex items-center gap-2">
-                        <span className={`text-sm font-bold ${healthColor}`}>
-                          {healthScore}%
-                        </span>
+                        <span className={`text-sm font-bold ${healthColor}`}>{healthScore}%</span>
                         <div className="h-2 w-20 bg-muted rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full ${
-                              healthScore < 40 ? "bg-rose-500" :
-                              healthScore < 70 ? "bg-amber-500" :
-                              "bg-emerald-500"
+                              healthScore < 40
+                                ? "bg-rose-500"
+                                : healthScore < 70
+                                  ? "bg-amber-500"
+                                  : "bg-emerald-500"
                             }`}
                             style={{ width: `${healthScore}%` }}
                           />
@@ -242,19 +242,25 @@ export default function AssetDetailPage() {
                     <dt className="text-muted-foreground text-xs uppercase tracking-wider mb-1 flex items-center gap-1">
                       <Server className="h-3 w-3" /> Hardware Type
                     </dt>
-                    <dd className="font-medium capitalize">{asset.type_hardware?.replace(/_/g, " ")}</dd>
+                    <dd className="font-medium capitalize">
+                      {asset.type_hardware?.replace(/_/g, " ")}
+                    </dd>
                   </div>
                   <div>
                     <dt className="text-muted-foreground text-xs uppercase tracking-wider mb-1 flex items-center gap-1">
                       <Wrench className="h-3 w-3" /> Brand & Model
                     </dt>
-                    <dd className="font-medium">{asset.brand} {asset.model}</dd>
+                    <dd className="font-medium">
+                      {asset.brand} {asset.model}
+                    </dd>
                   </div>
                   <div>
                     <dt className="text-muted-foreground text-xs uppercase tracking-wider mb-1 flex items-center gap-1">
                       <Shield className="h-3 w-3" /> Condition
                     </dt>
-                    <dd className="font-medium capitalize">{asset.condition?.replace(/_/g, " ") || "-"}</dd>
+                    <dd className="font-medium capitalize">
+                      {asset.condition?.replace(/_/g, " ") || "-"}
+                    </dd>
                   </div>
                   <div>
                     <dt className="text-muted-foreground text-xs uppercase tracking-wider mb-1 flex items-center gap-1">

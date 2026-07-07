@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState, useMemo } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -18,7 +18,6 @@ import {
   getContracts,
   getProjects,
   getRegions,
-  getFacilities,
   getFacilitiesForRegion,
   getDepartments,
 } from "@/services/hierarchy";
@@ -41,14 +40,7 @@ const stepFields: Array<Array<keyof HardwareFormValues>> = [
   ["contractId"],
   ["region", "state", "district"],
   ["assignedUser", "assignedDepartment", "custodianTeam", "physicalRoom"],
-  [
-    "hardwareProfile",
-    "picName",
-    "contactNumber",
-    "serialNumber",
-    "runningNumber",
-    "status",
-  ],
+  ["hardwareProfile", "picName", "contactNumber", "serialNumber", "runningNumber", "status"],
 ];
 
 export function AddHardwareWizard() {
@@ -83,7 +75,7 @@ export function AddHardwareWizard() {
   const contractId = watch("contractId");
   const regionId = watch("region");
   const facilityId = watch("state");
-  const departmentId = watch("district");
+  const _departmentId = watch("district");
   const hardwareTypeId = watch("hardwareProfile");
   const specCategoryId = watch("notes");
 
@@ -186,16 +178,23 @@ export function AddHardwareWizard() {
                       {projectsLoading ? "Loading projects..." : "Select project"}
                     </option>
                     {projects.map((project) => (
-                      <option key={project.id} value={project.id}>{project.label}</option>
+                      <option key={project.id} value={project.id}>
+                        {project.label}
+                      </option>
                     ))}
                     {!projectsLoading && projects.length === 0 ? (
-                      <option value="" disabled>No projects available</option>
+                      <option value="" disabled>
+                        No projects available
+                      </option>
                     ) : null}
                   </Select>
-                  {errors.projectId && <p className="text-xs text-rose-500 mt-1">{errors.projectId.message}</p>}
+                  {errors.projectId && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.projectId.message}</p>
+                  )}
                   {!projectsLoading && projects.length === 0 ? (
                     <p className="mt-2 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-700 dark:text-amber-300">
-                      No projects are visible for this account. Ask a Super Admin to assign Admin access or project membership.
+                      No projects are visible for this account. Ask a Super Admin to assign Admin
+                      access or project membership.
                     </p>
                   ) : null}
                 </div>
@@ -222,13 +221,18 @@ export function AddHardwareWizard() {
                       {contractsLoading ? "Loading contracts..." : "Select contract"}
                     </option>
                     {contracts.map((contract) => (
-                      <option key={contract.id} value={contract.id}>{contract.label}</option>
+                      <option key={contract.id} value={contract.id}>
+                        {contract.label}
+                      </option>
                     ))}
                   </Select>
-                  {errors.contractId && <p className="text-xs text-rose-500 mt-1">{errors.contractId.message}</p>}
+                  {errors.contractId && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.contractId.message}</p>
+                  )}
                   {projectId && contracts.length === 0 ? (
                     <p className="mt-2 rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs text-amber-700 dark:text-amber-300">
-                      No contract number exists for this project yet. Create one first, then return here.
+                      No contract number exists for this project yet. Create one first, then return
+                      here.
                     </p>
                   ) : null}
                 </div>
@@ -239,40 +243,67 @@ export function AddHardwareWizard() {
               <div className="grid gap-4 md:grid-cols-3">
                 <div>
                   <label className="text-sm font-medium">Region</label>
-                  <Select {...register("region")} defaultValue="" onChange={(e) => {
-                    setValue("region", e.target.value);
-                    setValue("state", "");
-                    setValue("district", "");
-                  }}>
-                    <option value="" disabled>Select region</option>
+                  <Select
+                    {...register("region")}
+                    defaultValue=""
+                    onChange={(e) => {
+                      setValue("region", e.target.value);
+                      setValue("state", "");
+                      setValue("district", "");
+                    }}
+                  >
+                    <option value="" disabled>
+                      Select region
+                    </option>
                     {regions.map((r) => (
-                      <option key={r.id} value={r.id}>{r.label}</option>
+                      <option key={r.id} value={r.id}>
+                        {r.label}
+                      </option>
                     ))}
                   </Select>
-                  {errors.region && <p className="text-xs text-rose-500 mt-1">{errors.region.message}</p>}
+                  {errors.region && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.region.message}</p>
+                  )}
                 </div>
                 <div>
                   <label className="text-sm font-medium">Facility</label>
-                  <Select {...register("state")} defaultValue="" disabled={!regionId} onChange={(e) => {
-                    setValue("state", e.target.value);
-                    setValue("district", "");
-                  }}>
-                    <option value="" disabled>Select facility</option>
+                  <Select
+                    {...register("state")}
+                    defaultValue=""
+                    disabled={!regionId}
+                    onChange={(e) => {
+                      setValue("state", e.target.value);
+                      setValue("district", "");
+                    }}
+                  >
+                    <option value="" disabled>
+                      Select facility
+                    </option>
                     {facilities.map((f) => (
-                      <option key={f.id} value={f.id}>{f.label}</option>
+                      <option key={f.id} value={f.id}>
+                        {f.label}
+                      </option>
                     ))}
                   </Select>
-                  {errors.state && <p className="text-xs text-rose-500 mt-1">{errors.state.message}</p>}
+                  {errors.state && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.state.message}</p>
+                  )}
                 </div>
                 <div>
                   <label className="text-sm font-medium">Department</label>
                   <Select {...register("district")} defaultValue="" disabled={!facilityId}>
-                    <option value="" disabled>Select department</option>
+                    <option value="" disabled>
+                      Select department
+                    </option>
                     {departments.map((d) => (
-                      <option key={d.id} value={d.id}>{d.label}</option>
+                      <option key={d.id} value={d.id}>
+                        {d.label}
+                      </option>
                     ))}
                   </Select>
-                  {errors.district && <p className="text-xs text-rose-500 mt-1">{errors.district.message}</p>}
+                  {errors.district && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.district.message}</p>
+                  )}
                 </div>
               </div>
             ) : null}
@@ -282,22 +313,32 @@ export function AddHardwareWizard() {
                 <div>
                   <label className="text-sm font-medium">Assigned User</label>
                   <Input {...register("assignedUser")} placeholder="e.g. Dr. Ahmad" />
-                  {errors.assignedUser && <p className="text-xs text-rose-500 mt-1">{errors.assignedUser.message}</p>}
+                  {errors.assignedUser && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.assignedUser.message}</p>
+                  )}
                 </div>
                 <div>
                   <label className="text-sm font-medium">Department Ownership</label>
                   <Input {...register("assignedDepartment")} placeholder="e.g. Emergency Dept" />
-                  {errors.assignedDepartment && <p className="text-xs text-rose-500 mt-1">{errors.assignedDepartment.message}</p>}
+                  {errors.assignedDepartment && (
+                    <p className="text-xs text-rose-500 mt-1">
+                      {errors.assignedDepartment.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="text-sm font-medium">Technical Custodian</label>
                   <Input {...register("custodianTeam")} placeholder="e.g. IT Infra Team" />
-                  {errors.custodianTeam && <p className="text-xs text-rose-500 mt-1">{errors.custodianTeam.message}</p>}
+                  {errors.custodianTeam && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.custodianTeam.message}</p>
+                  )}
                 </div>
                 <div>
                   <label className="text-sm font-medium">Physical Room / Floor</label>
                   <Input {...register("physicalRoom")} placeholder="e.g. Level 2, Room ICU-03" />
-                  {errors.physicalRoom && <p className="text-xs text-rose-500 mt-1">{errors.physicalRoom.message}</p>}
+                  {errors.physicalRoom && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.physicalRoom.message}</p>
+                  )}
                 </div>
               </div>
             ) : null}
@@ -306,21 +347,33 @@ export function AddHardwareWizard() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
                   <label className="text-sm font-medium">Hardware Type</label>
-                  <Select {...register("hardwareProfile")} defaultValue="" onChange={(e) => {
-                    setValue("hardwareProfile", e.target.value);
-                    setValue("notes", "");
-                  }}>
-                    <option value="" disabled>Select hardware type</option>
+                  <Select
+                    {...register("hardwareProfile")}
+                    defaultValue=""
+                    onChange={(e) => {
+                      setValue("hardwareProfile", e.target.value);
+                      setValue("notes", "");
+                    }}
+                  >
+                    <option value="" disabled>
+                      Select hardware type
+                    </option>
                     {hardwareTypes.map((t) => (
-                      <option key={t.id} value={t.id}>{t.name}</option>
+                      <option key={t.id} value={t.id}>
+                        {t.name}
+                      </option>
                     ))}
                   </Select>
-                  {errors.hardwareProfile && <p className="text-xs text-rose-500 mt-1">{errors.hardwareProfile.message}</p>}
+                  {errors.hardwareProfile && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.hardwareProfile.message}</p>
+                  )}
                 </div>
                 <div>
                   <label className="text-sm font-medium">Spec Category</label>
                   <Select {...register("notes")} defaultValue="" disabled={!hardwareTypeId}>
-                    <option value="" disabled>{hardwareTypeId ? "Select spec category" : "Select hardware type first"}</option>
+                    <option value="" disabled>
+                      {hardwareTypeId ? "Select spec category" : "Select hardware type first"}
+                    </option>
                     {specCategories.map((s) => (
                       <option key={s.id} value={s.id}>
                         {s.color && <span>[{s.color}] </span>}
@@ -328,7 +381,9 @@ export function AddHardwareWizard() {
                       </option>
                     ))}
                   </Select>
-                  {errors.notes && <p className="text-xs text-rose-500 mt-1">{errors.notes.message}</p>}
+                  {errors.notes && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.notes.message}</p>
+                  )}
                 </div>
 
                 <div className="md:col-span-2 my-2 border-b"></div>
@@ -336,12 +391,16 @@ export function AddHardwareWizard() {
                 <div>
                   <label className="text-sm font-medium">Brand</label>
                   <Input {...register("brand")} placeholder="e.g. Dell, HP, Canon" />
-                  {errors.brand && <p className="text-xs text-rose-500 mt-1">{errors.brand.message}</p>}
+                  {errors.brand && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.brand.message}</p>
+                  )}
                 </div>
                 <div>
                   <label className="text-sm font-medium">Model</label>
                   <Input {...register("model")} placeholder="e.g. Latitude 5430" />
-                  {errors.model && <p className="text-xs text-rose-500 mt-1">{errors.model.message}</p>}
+                  {errors.model && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.model.message}</p>
+                  )}
                 </div>
 
                 <div>
@@ -359,7 +418,8 @@ export function AddHardwareWizard() {
 
                 {selectedSpecCategory && (
                   <div className="md:col-span-2 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2 text-xs font-semibold text-primary">
-                    Spec: {selectedSpecCategory.name} {selectedSpecCategory.description && ` — ${selectedSpecCategory.description}`}
+                    Spec: {selectedSpecCategory.name}{" "}
+                    {selectedSpecCategory.description && ` — ${selectedSpecCategory.description}`}
                   </div>
                 )}
 
@@ -368,12 +428,16 @@ export function AddHardwareWizard() {
                 <div>
                   <label className="text-sm font-medium">Serial Number</label>
                   <Input {...register("serialNumber")} placeholder="SN-" />
-                  {errors.serialNumber && <p className="text-xs text-rose-500 mt-1">{errors.serialNumber.message}</p>}
+                  {errors.serialNumber && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.serialNumber.message}</p>
+                  )}
                 </div>
                 <div>
                   <label className="text-sm font-medium">Running Number</label>
                   <Input {...register("runningNumber")} placeholder="Office ID" />
-                  {errors.runningNumber && <p className="text-xs text-rose-500 mt-1">{errors.runningNumber.message}</p>}
+                  {errors.runningNumber && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.runningNumber.message}</p>
+                  )}
                 </div>
 
                 <div className="md:col-span-2 my-2 border-b"></div>
@@ -381,12 +445,16 @@ export function AddHardwareWizard() {
                 <div>
                   <label className="text-sm font-medium">PIC Name</label>
                   <Input {...register("picName")} placeholder="e.g. Dr. Ahmad" />
-                  {errors.picName && <p className="text-xs text-rose-500 mt-1">{errors.picName.message}</p>}
+                  {errors.picName && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.picName.message}</p>
+                  )}
                 </div>
                 <div>
                   <label className="text-sm font-medium">Contact Number</label>
                   <Input {...register("contactNumber")} placeholder="+60" />
-                  {errors.contactNumber && <p className="text-xs text-rose-500 mt-1">{errors.contactNumber.message}</p>}
+                  {errors.contactNumber && (
+                    <p className="text-xs text-rose-500 mt-1">{errors.contactNumber.message}</p>
+                  )}
                 </div>
                 <div>
                   <label className="text-sm font-medium">Status</label>

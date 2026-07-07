@@ -53,7 +53,9 @@ export function UserPortal() {
       }
 
       // Get user's notifications
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       let notifications: any[] = [];
       if (user) {
         const { data: notifs } = await supabase
@@ -74,14 +76,19 @@ export function UserPortal() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active": return "success" as const;
-      case "in_repair": return "warning" as const;
-      case "disposed": case "retired": return "danger" as const;
-      default: return "default" as const;
+      case "active":
+        return "success" as const;
+      case "in_repair":
+        return "warning" as const;
+      case "disposed":
+      case "retired":
+        return "danger" as const;
+      default:
+        return "default" as const;
     }
   };
 
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (_type: string) => {
     return <Monitor className="h-5 w-5" />;
   };
 
@@ -113,9 +120,7 @@ export function UserPortal() {
             <span className="text-border">·</span>
             <div className="flex items-center gap-1.5">
               <Bell className="h-4 w-4" />
-              <span>
-                {data?.notifications.filter((n: any) => !n.read_at).length || 0} unread
-              </span>
+              <span>{data?.notifications.filter((n: any) => !n.read_at).length || 0} unread</span>
             </div>
           </div>
         </div>
@@ -197,7 +202,10 @@ export function UserPortal() {
                               </p>
                             </div>
                           </div>
-                          <Badge variant={getStatusColor(asset.status)} className="text-[10px] uppercase">
+                          <Badge
+                            variant={getStatusColor(asset.status)}
+                            className="text-[10px] uppercase"
+                          >
                             {asset.status?.replace(/_/g, " ")}
                           </Badge>
                         </div>

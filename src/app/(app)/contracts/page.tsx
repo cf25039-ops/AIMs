@@ -4,11 +4,26 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { FadeIn } from "@/components/animations/fade-in";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getContracts, getDashboardStats } from "@/services/contracts";
-import { Building2, Briefcase, AlertCircle, DollarSign, FileText, Loader2, Plus } from "lucide-react";
+import {
+  Building2,
+  Briefcase,
+  AlertCircle,
+  DollarSign,
+  FileText,
+  Loader2,
+  Plus,
+} from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 
 export default function ContractsPage() {
@@ -32,18 +47,18 @@ export default function ContractsPage() {
     if (!endDate) return <Badge variant={"secondary" as any}>Unknown</Badge>;
     const today = new Date();
     const end = new Date(endDate);
-    
+
     if (end < today) {
       return <Badge variant={"destructive" as any}>Expired</Badge>;
     }
-    
+
     const diffTime = Math.abs(end.getTime() - today.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-    
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
     if (diffDays <= 30) {
       return <Badge variant={"warning" as any}>Expiring Soon</Badge>;
     }
-    
+
     return <Badge variant={"success" as any}>Active</Badge>;
   };
 
@@ -56,8 +71,12 @@ export default function ContractsPage() {
               <Briefcase className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-3xl font-semibold tracking-tight">Project & Contract Management</h2>
-              <p className="text-sm text-muted-foreground">Manage service agreements and vendor SLA tracking</p>
+              <h2 className="text-3xl font-semibold tracking-tight">
+                Project & Contract Management
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Manage service agreements and vendor SLA tracking
+              </p>
             </div>
           </div>
           <Link href="/contracts/create">
@@ -78,19 +97,23 @@ export default function ContractsPage() {
               <Briefcase className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              {loadingStats ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+              {loadingStats ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
                 <div className="text-2xl font-bold">{stats?.projectCount}</div>
               )}
             </CardContent>
           </Card>
-          
+
           <Card className="glass-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Vendors</CardTitle>
               <Building2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              {loadingStats ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+              {loadingStats ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
                 <div className="text-2xl font-bold">{stats?.vendorCount}</div>
               )}
             </CardContent>
@@ -102,8 +125,12 @@ export default function ContractsPage() {
               <DollarSign className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              {loadingStats ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-                <div className="text-2xl font-bold text-primary">{formatCurrency(stats?.totalValue || 0)}</div>
+              {loadingStats ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <div className="text-2xl font-bold text-primary">
+                  {formatCurrency(stats?.totalValue || 0)}
+                </div>
               )}
             </CardContent>
           </Card>
@@ -114,8 +141,12 @@ export default function ContractsPage() {
               <AlertCircle className="h-4 w-4 text-rose-500" />
             </CardHeader>
             <CardContent>
-              {loadingStats ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-                <div className="text-2xl font-bold text-rose-600 dark:text-rose-400">{stats?.expiringSoon}</div>
+              {loadingStats ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <div className="text-2xl font-bold text-rose-600 dark:text-rose-400">
+                  {stats?.expiringSoon}
+                </div>
               )}
             </CardContent>
           </Card>
@@ -130,13 +161,15 @@ export default function ContractsPage() {
           </CardHeader>
           <CardContent>
             {loadingContracts ? (
-              <div className="flex justify-center py-8"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>
+              <div className="flex justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              </div>
             ) : contracts.length === 0 ? (
               <EmptyState
-  icon={FileText}
-  title="No contracts found"
-  description="Add your first contract to start tracking vendor agreements"
-/>
+                icon={FileText}
+                title="No contracts found"
+                description="Add your first contract to start tracking vendor agreements"
+              />
             ) : (
               <div className="rounded-md border">
                 <Table>
@@ -170,9 +203,7 @@ export default function ContractsPage() {
                         <TableCell className="text-right font-medium">
                           {c.value ? formatCurrency(c.value) : "-"}
                         </TableCell>
-                        <TableCell className="text-right">
-                          {getStatusBadge(c.end_date)}
-                        </TableCell>
+                        <TableCell className="text-right">{getStatusBadge(c.end_date)}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

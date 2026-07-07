@@ -13,22 +13,16 @@ import {
   SlidersHorizontal,
   Search,
   Plus,
-  ChevronRight,
   FileDown,
   Grid,
   List,
   Trash2,
   MoreHorizontal,
-  ArrowUpDown,
-  Calendar,
-  Activity,
   X,
   Building,
   MapPinIcon,
-  ShieldCheck,
   ClipboardList,
   Wrench,
-  AlertTriangle,
   Edit,
   ExternalLink,
 } from "lucide-react";
@@ -38,7 +32,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DrillCard } from "./drill-card";
 import { DrillBreadcrumb, type BreadcrumbStep } from "./drill-breadcrumb";
-import { getRegions, getFacilities, getDepartments, getRegionsWithCounts, getFacilitiesForRegion, getDepartmentsWithCounts, getContractsWithCounts } from "@/services/hierarchy";
+import {
+  getRegionsWithCounts,
+  getFacilitiesForRegion,
+  getDepartmentsWithCounts,
+  getContractsWithCounts,
+} from "@/services/hierarchy";
 import { getHardwareTypesWithCounts } from "@/services/hardware-types";
 import { getSpecCategoriesWithCounts } from "@/services/spec-categories";
 import { getHardwareByDepartment, deleteHardware } from "@/services/hardware";
@@ -67,7 +66,10 @@ type DrillState = {
   specLabel?: string;
 };
 
-function readStateFromParams(params: URLSearchParams, contracts: SelectOption[]): DrillState | null {
+function readStateFromParams(
+  params: URLSearchParams,
+  _contracts: SelectOption[],
+): DrillState | null {
   const level = params.get("level") as DrillLevel | null;
   if (!level) return null;
   return {
@@ -105,7 +107,7 @@ function stateToParams(state: DrillState): URLSearchParams {
   return p;
 }
 
-const iconMap: Record<string, any> = {
+const _iconMap: Record<string, any> = {
   Laptop: Monitor,
   PC: Monitor,
   Printer: Building2,
@@ -123,7 +125,13 @@ const typeIconMap: Record<DrillLevel, any> = {
   list: ClipboardList,
 };
 
-export function DrillDownView({ contracts, contractLabel: initialContractLabel }: { contracts: SelectOption[]; contractLabel?: string }) {
+export function DrillDownView({
+  contracts,
+  contractLabel: _initialContractLabel,
+}: {
+  contracts: SelectOption[];
+  contractLabel?: string;
+}) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -161,17 +169,20 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
     },
   });
 
-  const navigate = useCallback((updates: Partial<DrillState>) => {
-    setState((prev) => {
-      const next = { ...prev, ...updates };
-      const p = stateToParams(next);
-      router.replace(`/assets?${p.toString()}`, { scroll: false });
-      return next;
-    });
-    setSearchQuery("");
-    setSelectedIds([]);
-    setOpenMenuId(null);
-  }, [router]);
+  const navigate = useCallback(
+    (updates: Partial<DrillState>) => {
+      setState((prev) => {
+        const next = { ...prev, ...updates };
+        const p = stateToParams(next);
+        router.replace(`/assets?${p.toString()}`, { scroll: false });
+        return next;
+      });
+      setSearchQuery("");
+      setSelectedIds([]);
+      setOpenMenuId(null);
+    },
+    [router],
+  );
 
   // Queries
   const contractsQuery = useQuery({
@@ -224,22 +235,74 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
     }
     if (state.contractLabel) {
       const goBack = () => navigate({ level: "contract" });
-      steps.push({ label: state.contractLabel!, onClick: state.level !== "contract" ? goBack : undefined });
+      steps.push({
+        label: state.contractLabel!,
+        onClick: state.level !== "contract" ? goBack : undefined,
+      });
     }
     if (state.regionLabel) {
-      const goBack = () => navigate({ level: "region", regionId: undefined, regionLabel: undefined, facilityId: undefined, facilityLabel: undefined, departmentId: undefined, departmentLabel: undefined, typeId: undefined, typeLabel: undefined, specId: undefined, specLabel: undefined });
-      steps.push({ label: state.regionLabel!, onClick: state.level !== "region" ? goBack : undefined });
+      const goBack = () =>
+        navigate({
+          level: "region",
+          regionId: undefined,
+          regionLabel: undefined,
+          facilityId: undefined,
+          facilityLabel: undefined,
+          departmentId: undefined,
+          departmentLabel: undefined,
+          typeId: undefined,
+          typeLabel: undefined,
+          specId: undefined,
+          specLabel: undefined,
+        });
+      steps.push({
+        label: state.regionLabel!,
+        onClick: state.level !== "region" ? goBack : undefined,
+      });
     }
     if (state.facilityLabel) {
-      const goBack = () => navigate({ level: "facility", facilityId: undefined, facilityLabel: undefined, departmentId: undefined, departmentLabel: undefined, typeId: undefined, typeLabel: undefined, specId: undefined, specLabel: undefined });
-      steps.push({ label: state.facilityLabel!, onClick: state.level !== "facility" ? goBack : undefined });
+      const goBack = () =>
+        navigate({
+          level: "facility",
+          facilityId: undefined,
+          facilityLabel: undefined,
+          departmentId: undefined,
+          departmentLabel: undefined,
+          typeId: undefined,
+          typeLabel: undefined,
+          specId: undefined,
+          specLabel: undefined,
+        });
+      steps.push({
+        label: state.facilityLabel!,
+        onClick: state.level !== "facility" ? goBack : undefined,
+      });
     }
     if (state.departmentLabel) {
-      const goBack = () => navigate({ level: "department", departmentId: undefined, departmentLabel: undefined, typeId: undefined, typeLabel: undefined, specId: undefined, specLabel: undefined });
-      steps.push({ label: state.departmentLabel!, onClick: state.level !== "department" ? goBack : undefined });
+      const goBack = () =>
+        navigate({
+          level: "department",
+          departmentId: undefined,
+          departmentLabel: undefined,
+          typeId: undefined,
+          typeLabel: undefined,
+          specId: undefined,
+          specLabel: undefined,
+        });
+      steps.push({
+        label: state.departmentLabel!,
+        onClick: state.level !== "department" ? goBack : undefined,
+      });
     }
     if (state.typeLabel) {
-      const goBack = () => navigate({ level: "type", typeId: undefined, typeLabel: undefined, specId: undefined, specLabel: undefined });
+      const goBack = () =>
+        navigate({
+          level: "type",
+          typeId: undefined,
+          typeLabel: undefined,
+          specId: undefined,
+          specLabel: undefined,
+        });
       steps.push({ label: state.typeLabel!, onClick: state.level !== "type" ? goBack : undefined });
     }
     if (state.specLabel) {
@@ -253,19 +316,27 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
 
   const getLevelTitle = () => {
     switch (state.level) {
-      case "contract": return "Select Contract";
-      case "region": return "Select Region";
-      case "facility": return "Select Facility";
-      case "department": return "Select Department";
-      case "type": return "Select Hardware Type";
-      case "spec": return "Select Spec Category";
-      case "list": return "Hardware List";
+      case "contract":
+        return "Select Contract";
+      case "region":
+        return "Select Region";
+      case "facility":
+        return "Select Facility";
+      case "department":
+        return "Select Department";
+      case "type":
+        return "Select Hardware Type";
+      case "spec":
+        return "Select Spec Category";
+      case "list":
+        return "Hardware List";
     }
   };
 
   // Render contract selection
   if (state.level === "contract") {
-    const contractItems = contractsQuery.data ?? contracts.map((c) => ({ id: c.id, label: c.label, count: 0 }));
+    const contractItems =
+      contractsQuery.data ?? contracts.map((c) => ({ id: c.id, label: c.label, count: 0 }));
     return (
       <FadeIn className="space-y-6">
         <div>
@@ -277,7 +348,10 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
         {contractsQuery.isLoading ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-32 rounded-2xl border border-border/30 bg-card/30 animate-pulse" />
+              <div
+                key={i}
+                className="h-32 rounded-2xl border border-border/30 bg-card/30 animate-pulse"
+              />
             ))}
           </div>
         ) : contractItems.length === 0 ? (
@@ -285,7 +359,9 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
             <SlidersHorizontal className="h-12 w-12 text-muted-foreground/60 stroke-[1.5]" />
             <div>
               <h3 className="text-lg font-semibold text-foreground">No contracts found</h3>
-              <p className="text-sm text-muted-foreground mt-1">No contracts accessible to your account.</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                No contracts accessible to your account.
+              </p>
             </div>
           </div>
         ) : (
@@ -296,7 +372,13 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
                 label={contract.label}
                 count={contract.count}
                 icon={Building}
-                onClick={() => navigate({ level: "region", contractId: contract.id, contractLabel: contract.label })}
+                onClick={() =>
+                  navigate({
+                    level: "region",
+                    contractId: contract.id,
+                    contractLabel: contract.label,
+                  })
+                }
               />
             ))}
           </div>
@@ -308,33 +390,27 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
   // Render region/facility/department/type/spec as drill levels
   const renderDrillCards = () => {
     let items: { id: string; label: string; count: number }[] = [];
-    let levelLabel = "";
     let levelLabelPlural = "";
 
     switch (state.level) {
       case "region":
         items = regionsQuery.data ?? [];
-        levelLabel = "region";
         levelLabelPlural = "regions";
         break;
       case "facility":
         items = facilitiesQuery.data ?? [];
-        levelLabel = "facility";
         levelLabelPlural = "facilities";
         break;
       case "department":
         items = departmentsQuery.data ?? [];
-        levelLabel = "department";
         levelLabelPlural = "departments";
         break;
       case "type":
         items = (typesQuery.data ?? []).map((t) => ({ id: t.id, label: t.name, count: t.count }));
-        levelLabel = "hardware type";
         levelLabelPlural = "hardware types";
         break;
       case "spec":
         items = (specsQuery.data ?? []).map((s) => ({ id: s.id, label: s.name, count: s.count }));
-        levelLabel = "spec category";
         levelLabelPlural = "spec categories";
         break;
     }
@@ -373,11 +449,17 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
     };
 
     const isLoading =
-      state.level === "region" ? regionsQuery.isLoading :
-      state.level === "facility" ? facilitiesQuery.isLoading :
-      state.level === "department" ? departmentsQuery.isLoading :
-      state.level === "type" ? typesQuery.isLoading :
-      state.level === "spec" ? specsQuery.isLoading : false;
+      state.level === "region"
+        ? regionsQuery.isLoading
+        : state.level === "facility"
+          ? facilitiesQuery.isLoading
+          : state.level === "department"
+            ? departmentsQuery.isLoading
+            : state.level === "type"
+              ? typesQuery.isLoading
+              : state.level === "spec"
+                ? specsQuery.isLoading
+                : false;
 
     const Icon = typeIconMap[state.level];
 
@@ -386,9 +468,13 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-              {state.level === "region" ? "Step 2" :
-               state.level === "type" ? "Step 3" :
-               state.level === "spec" ? "Step 4" : ""}
+              {state.level === "region"
+                ? "Step 2"
+                : state.level === "type"
+                  ? "Step 3"
+                  : state.level === "spec"
+                    ? "Step 4"
+                    : ""}
             </p>
             <h2 className="text-3xl font-semibold bg-gradient-to-r from-foreground via-foreground/90 to-muted-foreground bg-clip-text text-transparent">
               {getLevelTitle()}
@@ -396,7 +482,10 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
           </div>
           {canManageHardware && (
             <Link href="/assets/add">
-              <Button variant="accent" className="gap-2 shadow-lg shadow-accent/20 hover:scale-[1.02] transition">
+              <Button
+                variant="accent"
+                className="gap-2 shadow-lg shadow-accent/20 hover:scale-[1.02] transition"
+              >
                 <Plus className="h-4 w-4" />
                 Add Asset
               </Button>
@@ -411,7 +500,10 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
         {isLoading ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-32 rounded-2xl border border-border/30 bg-card/30 animate-pulse" />
+              <div
+                key={i}
+                className="h-32 rounded-2xl border border-border/30 bg-card/30 animate-pulse"
+              />
             ))}
           </div>
         ) : items.length === 0 ? (
@@ -419,7 +511,9 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
             <SlidersHorizontal className="h-12 w-12 text-muted-foreground/60 stroke-[1.5]" />
             <div>
               <h3 className="text-lg font-semibold text-foreground">No {levelLabelPlural} found</h3>
-              <p className="text-sm text-muted-foreground mt-1">No items available at this level.</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                No items available at this level.
+              </p>
             </div>
           </div>
         ) : (
@@ -457,7 +551,11 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
     });
 
     const handleBulkDelete = async () => {
-      if (confirm(`Adakah anda pasti mahu memadam ${selectedIds.length} aset yang dipilih secara serentak?`)) {
+      if (
+        confirm(
+          `Adakah anda pasti mahu memadam ${selectedIds.length} aset yang dipilih secara serentak?`,
+        )
+      ) {
         try {
           for (const id of selectedIds) {
             await deleteHardware(id);
@@ -474,14 +572,34 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
 
     const exportToCSV = () => {
       if (filteredAssets.length === 0) return;
-      const headers = ["ID", "Asset Tag", "Asset Name", "Type", "Serial Number", "Status", "PIC", "Room", "Warranty Expiry"];
+      const headers = [
+        "ID",
+        "Asset Tag",
+        "Asset Name",
+        "Type",
+        "Serial Number",
+        "Status",
+        "PIC",
+        "Room",
+        "Warranty Expiry",
+      ];
       const rows = filteredAssets.map((asset: any) => [
-        asset.id, asset.asset_tag,
+        asset.id,
+        asset.asset_tag,
         `${asset.brand || ""} ${asset.model || ""}`.trim() || asset.type_hardware,
-        asset.type_hardware, asset.serial_number || "", asset.status,
-        asset.pic_name || "", asset.physical_room || "", asset.warranty_expiry || "",
+        asset.type_hardware,
+        asset.serial_number || "",
+        asset.status,
+        asset.pic_name || "",
+        asset.physical_room || "",
+        asset.warranty_expiry || "",
       ]);
-      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e: string[]) => e.map((val: string) => `"${val}"`).join(","))].join("\n");
+      const csvContent =
+        "data:text/csv;charset=utf-8," +
+        [
+          headers.join(","),
+          ...rows.map((e: string[]) => e.map((val: string) => `"${val}"`).join(",")),
+        ].join("\n");
       const link = document.createElement("a");
       link.setAttribute("href", encodeURI(csvContent));
       link.setAttribute("download", `AIMS_Asset_List_${Date.now()}.csv`);
@@ -501,7 +619,10 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
           </div>
           {canManageHardware && (
             <Link href="/assets/add">
-              <Button variant="accent" className="gap-2 shadow-lg shadow-accent/20 hover:scale-[1.02] transition">
+              <Button
+                variant="accent"
+                className="gap-2 shadow-lg shadow-accent/20 hover:scale-[1.02] transition"
+              >
                 <Plus className="h-4 w-4" />
                 Add Asset
               </Button>
@@ -524,7 +645,10 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
               className="h-10 w-full rounded-xl border border-border/80 bg-card/50 pl-9 pr-8 text-sm outline-none transition focus:border-primary/50 focus:bg-card focus:ring-4 focus:ring-primary/10"
             />
             {searchQuery && (
-              <button onClick={() => setSearchQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
                 <X className="h-3 w-3" />
               </button>
             )}
@@ -532,20 +656,46 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
 
           <div className="flex items-center gap-2 justify-end">
             {canManageHardware && selectedIds.length > 0 && (
-              <Button variant="destructive" size="sm" onClick={handleBulkDelete} className="h-10 rounded-xl gap-2">
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleBulkDelete}
+                className="h-10 rounded-xl gap-2"
+              >
                 <Trash2 className="h-4 w-4" />
                 Padam ({selectedIds.length})
               </Button>
             )}
-            <Button variant="outline" size="sm" onClick={exportToCSV} disabled={filteredAssets.length === 0} className="h-10 rounded-xl gap-1.5" title="Export CSV">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={exportToCSV}
+              disabled={filteredAssets.length === 0}
+              className="h-10 rounded-xl gap-1.5"
+              title="Export CSV"
+            >
               <FileDown className="h-4 w-4" />
               <span className="hidden sm:inline">Export</span>
             </Button>
             <div className="flex items-center border border-border/80 rounded-xl bg-card/40 p-1">
-              <button onClick={() => setViewMode("table")} className={cn("p-1.5 rounded-lg transition", viewMode === "table" ? "bg-primary/10 text-primary" : "text-muted-foreground")} title="Table View">
+              <button
+                onClick={() => setViewMode("table")}
+                className={cn(
+                  "p-1.5 rounded-lg transition",
+                  viewMode === "table" ? "bg-primary/10 text-primary" : "text-muted-foreground",
+                )}
+                title="Table View"
+              >
                 <List className="h-4 w-4" />
               </button>
-              <button onClick={() => setViewMode("grid")} className={cn("p-1.5 rounded-lg transition", viewMode === "grid" ? "bg-primary/10 text-primary" : "text-muted-foreground")} title="Grid View">
+              <button
+                onClick={() => setViewMode("grid")}
+                className={cn(
+                  "p-1.5 rounded-lg transition",
+                  viewMode === "grid" ? "bg-primary/10 text-primary" : "text-muted-foreground",
+                )}
+                title="Grid View"
+              >
                 <Grid className="h-4 w-4" />
               </button>
             </div>
@@ -556,7 +706,10 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
         {hardwareQuery.isLoading ? (
           <div className="space-y-4 rounded-3xl border border-border/50 bg-card/50 p-6 backdrop-blur-md">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="flex h-14 items-center rounded-2xl border border-border/30 bg-card/30 px-4 animate-pulse">
+              <div
+                key={i}
+                className="flex h-14 items-center rounded-2xl border border-border/30 bg-card/30 px-4 animate-pulse"
+              >
                 <div className="h-4 w-4 rounded bg-muted mr-4" />
                 <div className="space-y-2 flex-1">
                   <div className="h-4 w-32 rounded bg-muted" />
@@ -583,11 +736,15 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
                       <th className="w-12 px-5 py-4">
                         <input
                           type="checkbox"
-                          checked={filteredAssets.length > 0 && filteredAssets.every((a: any) => selectedIds.includes(a.id))}
+                          checked={
+                            filteredAssets.length > 0 &&
+                            filteredAssets.every((a: any) => selectedIds.includes(a.id))
+                          }
                           onChange={() => {
                             const ids = filteredAssets.map((a: any) => a.id);
                             const allSelected = ids.every((id: string) => selectedIds.includes(id));
-                            if (allSelected) setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
+                            if (allSelected)
+                              setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
                             else setSelectedIds((prev) => [...new Set([...prev, ...ids])]);
                           }}
                           className="h-4 w-4 rounded border-border text-primary focus:ring-primary/20 accent-primary"
@@ -608,10 +765,13 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
                   <AnimatePresence initial={false}>
                     {filteredAssets.map((asset: any) => {
                       const isSelected = selectedIds.includes(asset.id);
-                      const warranty = getWarrantyStatus(asset.warranty_expiry);
+                      const _warranty = getWarrantyStatus(asset.warranty_expiry);
                       const displayName =
                         `${asset.brand || ""} ${asset.model || ""}`.trim() ||
-                        (asset.type_hardware ? asset.type_hardware.charAt(0).toUpperCase() + asset.type_hardware.slice(1) : "Unnamed Asset");
+                        (asset.type_hardware
+                          ? asset.type_hardware.charAt(0).toUpperCase() +
+                            asset.type_hardware.slice(1)
+                          : "Unnamed Asset");
                       return (
                         <motion.tr
                           key={asset.id}
@@ -619,14 +779,23 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.98 }}
                           transition={{ duration: 0.15 }}
-                          className={cn("group hover:bg-muted/10 transition-colors select-none", isSelected && "bg-primary/5")}
+                          className={cn(
+                            "group hover:bg-muted/10 transition-colors select-none",
+                            isSelected && "bg-primary/5",
+                          )}
                         >
                           {canManageHardware && (
                             <td className="px-5 py-3">
                               <input
                                 type="checkbox"
                                 checked={isSelected}
-                                onChange={() => setSelectedIds((prev) => prev.includes(asset.id) ? prev.filter((id) => id !== asset.id) : [...prev, asset.id])}
+                                onChange={() =>
+                                  setSelectedIds((prev) =>
+                                    prev.includes(asset.id)
+                                      ? prev.filter((id) => id !== asset.id)
+                                      : [...prev, asset.id],
+                                  )
+                                }
                                 className="h-4 w-4 rounded border-border text-primary accent-primary"
                               />
                             </td>
@@ -634,32 +803,53 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-3">
                               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/5 text-primary border border-primary/10">
-                                <span className="text-[10px] font-bold uppercase">{asset.type_hardware?.substring(0, 2) || "HW"}</span>
+                                <span className="text-[10px] font-bold uppercase">
+                                  {asset.type_hardware?.substring(0, 2) || "HW"}
+                                </span>
                               </div>
-                              <Link href={`/assets/${asset.id}`} className="text-sm font-medium text-foreground hover:text-primary transition-colors hover:underline underline-offset-4">
+                              <Link
+                                href={`/assets/${asset.id}`}
+                                className="text-sm font-medium text-foreground hover:text-primary transition-colors hover:underline underline-offset-4"
+                              >
                                 {displayName}
                               </Link>
                             </div>
                           </td>
-                          <td className="px-4 py-3 text-xs font-mono text-muted-foreground hidden md:table-cell">{asset.serial_number || "—"}</td>
+                          <td className="px-4 py-3 text-xs font-mono text-muted-foreground hidden md:table-cell">
+                            {asset.serial_number || "—"}
+                          </td>
                           <td className="px-4 py-3 text-xs">
-                            <code className="rounded-md bg-muted px-2 py-1 font-mono text-xs text-muted-foreground border border-border/50">{asset.asset_tag}</code>
+                            <code className="rounded-md bg-muted px-2 py-1 font-mono text-xs text-muted-foreground border border-border/50">
+                              {asset.asset_tag}
+                            </code>
                           </td>
                           <td className="px-4 py-3">
-                            <span className={cn(
-                              "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-semibold border",
-                              asset.status === "active" ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" :
-                              asset.status === "in_repair" ? "bg-amber-500/10 text-amber-600 border-amber-500/20" :
-                              "bg-blue-500/10 text-blue-600 border-blue-500/20"
-                            )}>
-                              <span className={cn("h-1.5 w-1.5 rounded-full",
-                                asset.status === "active" ? "bg-emerald-500" :
-                                asset.status === "in_repair" ? "bg-amber-500 animate-pulse" : "bg-blue-500"
-                              )} />
+                            <span
+                              className={cn(
+                                "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-semibold border",
+                                asset.status === "active"
+                                  ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
+                                  : asset.status === "in_repair"
+                                    ? "bg-amber-500/10 text-amber-600 border-amber-500/20"
+                                    : "bg-blue-500/10 text-blue-600 border-blue-500/20",
+                              )}
+                            >
+                              <span
+                                className={cn(
+                                  "h-1.5 w-1.5 rounded-full",
+                                  asset.status === "active"
+                                    ? "bg-emerald-500"
+                                    : asset.status === "in_repair"
+                                      ? "bg-amber-500 animate-pulse"
+                                      : "bg-blue-500",
+                                )}
+                              />
                               {asset.status?.replace(/_/g, " ")}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-xs text-foreground hidden lg:table-cell">{asset.pic_name || "Unassigned"}</td>
+                          <td className="px-4 py-3 text-xs text-foreground hidden lg:table-cell">
+                            {asset.pic_name || "Unassigned"}
+                          </td>
                           <td className="px-4 py-3 text-xs text-muted-foreground hidden xl:table-cell">
                             <div className="flex items-center gap-1">
                               <MapPinIcon className="h-3.5 w-3.5 text-muted-foreground/50" />
@@ -668,16 +858,41 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
                           </td>
                           <td className="px-4 py-3">
                             {(() => {
-                              if (!asset.warranty_expiry) return <span className="text-[9px] text-muted-foreground">No Warranty</span>;
-                              const days = Math.ceil((new Date(asset.warranty_expiry).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-                              if (days <= 0) return <span className="text-[9px] font-semibold text-rose-600">Expired</span>;
-                              if (days <= 90) return <span className="text-[9px] font-semibold text-amber-600">{days}d left</span>;
-                              return <span className="text-[9px] text-emerald-600">{(days / 365).toFixed(1)}y</span>;
+                              if (!asset.warranty_expiry)
+                                return (
+                                  <span className="text-[9px] text-muted-foreground">
+                                    No Warranty
+                                  </span>
+                                );
+                              const days = Math.ceil(
+                                (new Date(asset.warranty_expiry).getTime() - Date.now()) /
+                                  (1000 * 60 * 60 * 24),
+                              );
+                              if (days <= 0)
+                                return (
+                                  <span className="text-[9px] font-semibold text-rose-600">
+                                    Expired
+                                  </span>
+                                );
+                              if (days <= 90)
+                                return (
+                                  <span className="text-[9px] font-semibold text-amber-600">
+                                    {days}d left
+                                  </span>
+                                );
+                              return (
+                                <span className="text-[9px] text-emerald-600">
+                                  {(days / 365).toFixed(1)}y
+                                </span>
+                              );
                             })()}
                           </td>
                           <td className="px-5 py-3 text-center relative">
                             <button
-                              onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === asset.id ? null : asset.id); }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setOpenMenuId(openMenuId === asset.id ? null : asset.id);
+                              }}
                               className="h-8 w-8 rounded-lg hover:bg-muted border border-transparent hover:border-border/60 flex items-center justify-center text-muted-foreground hover:text-foreground transition-all"
                             >
                               <MoreHorizontal className="h-4 w-4" />
@@ -692,24 +907,43 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
                                   onClick={(e) => e.stopPropagation()}
                                   className="absolute right-6 top-10 mt-1 w-48 rounded-xl border border-border bg-popover/90 p-1 shadow-xl z-30 overflow-hidden backdrop-blur-xl select-none"
                                 >
-                                  <Link href={`/assets/${asset.id}`} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-muted text-foreground transition-colors">
-                                    <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" /> View Details
+                                  <Link
+                                    href={`/assets/${asset.id}`}
+                                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-muted text-foreground transition-colors"
+                                  >
+                                    <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />{" "}
+                                    View Details
                                   </Link>
                                   {canManageHardware && (
                                     <>
-                                      <Link href={`/assets/${asset.id}`} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-muted text-foreground transition-colors">
-                                        <Edit className="h-3.5 w-3.5 text-muted-foreground" /> Edit Asset
+                                      <Link
+                                        href={`/assets/${asset.id}`}
+                                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-muted text-foreground transition-colors"
+                                      >
+                                        <Edit className="h-3.5 w-3.5 text-muted-foreground" /> Edit
+                                        Asset
                                       </Link>
-                                      <Link href="/assets/transfer" className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-muted text-foreground transition-colors">
-                                        <MapPin className="h-3.5 w-3.5 text-muted-foreground" /> Transfer Asset
+                                      <Link
+                                        href="/assets/transfer"
+                                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-muted text-foreground transition-colors"
+                                      >
+                                        <MapPin className="h-3.5 w-3.5 text-muted-foreground" />{" "}
+                                        Transfer Asset
                                       </Link>
                                     </>
                                   )}
-                                  <Link href="/maintenance" className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-muted text-foreground transition-colors">
-                                    <ClipboardList className="h-3.5 w-3.5 text-muted-foreground" /> History logs
+                                  <Link
+                                    href="/maintenance"
+                                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-muted text-foreground transition-colors"
+                                  >
+                                    <ClipboardList className="h-3.5 w-3.5 text-muted-foreground" />{" "}
+                                    History logs
                                   </Link>
                                   {canReportIssue && (
-                                    <Link href={`/maintenance/create?hardware_id=${asset.id}`} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-muted text-primary transition-colors">
+                                    <Link
+                                      href={`/maintenance/create?hardware_id=${asset.id}`}
+                                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-muted text-primary transition-colors"
+                                    >
                                       <Wrench className="h-3.5 w-3.5" /> Report Issue
                                     </Link>
                                   )}
@@ -718,16 +952,24 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
                                       <div className="h-px bg-border/60 my-1" />
                                       <button
                                         onClick={() => {
-                                          if (confirm(`Adakah anda pasti mahu memadam aset "${displayName}"?`)) {
+                                          if (
+                                            confirm(
+                                              `Adakah anda pasti mahu memadam aset "${displayName}"?`,
+                                            )
+                                          ) {
                                             setActiveDeletingId(asset.id);
                                             deleteMutation.mutate(asset.id);
                                           }
                                         }}
-                                        disabled={deleteMutation.isPending && activeDeletingId === asset.id}
+                                        disabled={
+                                          deleteMutation.isPending && activeDeletingId === asset.id
+                                        }
                                         className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium hover:bg-rose-500/10 text-rose-600 hover:text-rose-500 transition-colors"
                                       >
                                         <Trash2 className="h-3.5 w-3.5" />
-                                        {deleteMutation.isPending && activeDeletingId === asset.id ? "Deleting..." : "Delete Asset"}
+                                        {deleteMutation.isPending && activeDeletingId === asset.id
+                                          ? "Deleting..."
+                                          : "Delete Asset"}
                                       </button>
                                     </>
                                   )}
@@ -743,14 +985,18 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
               </table>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between border-t border-border/50 bg-muted/5 px-6 py-4 gap-3 text-xs text-muted-foreground select-none">
-              <p>Showing <strong>{filteredAssets.length}</strong> of <strong>{assets.length}</strong> total assets.</p>
+              <p>
+                Showing <strong>{filteredAssets.length}</strong> of <strong>{assets.length}</strong>{" "}
+                total assets.
+              </p>
             </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <AnimatePresence initial={false}>
               {filteredAssets.map((asset: any) => {
-                const displayName = `${asset.brand || ""} ${asset.model || ""}`.trim() || asset.type_hardware;
+                const displayName =
+                  `${asset.brand || ""} ${asset.model || ""}`.trim() || asset.type_hardware;
                 return (
                   <motion.div
                     key={asset.id}
@@ -763,21 +1009,40 @@ export function DrillDownView({ contracts, contractLabel: initialContractLabel }
                   >
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <Badge variant="info" className="capitalize text-[9px] px-2 py-0.5">{asset.type_hardware || "hardware"}</Badge>
-                        <code className="text-[10px] font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{asset.asset_tag}</code>
+                        <Badge variant="info" className="capitalize text-[9px] px-2 py-0.5">
+                          {asset.type_hardware || "hardware"}
+                        </Badge>
+                        <code className="text-[10px] font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                          {asset.asset_tag}
+                        </code>
                       </div>
-                      <Link href={`/assets/${asset.id}`} className="font-medium text-foreground hover:text-primary block text-base leading-tight hover:underline">
+                      <Link
+                        href={`/assets/${asset.id}`}
+                        className="font-medium text-foreground hover:text-primary block text-base leading-tight hover:underline"
+                      >
                         {displayName}
                       </Link>
-                      <span className="text-[10px] font-mono text-muted-foreground block">S/N: {asset.serial_number || "—"}</span>
+                      <span className="text-[10px] font-mono text-muted-foreground block">
+                        S/N: {asset.serial_number || "—"}
+                      </span>
                     </div>
                     <div className="mt-3 border-t border-border/40 pt-3 flex items-center justify-between">
-                      <span className={cn(
-                        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-semibold border",
-                        asset.status === "active" ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" :
-                        asset.status === "in_repair" ? "bg-amber-500/10 text-amber-600 border-amber-500/20" : ""
-                      )}>{asset.status?.replace(/_/g, " ")}</span>
-                      <Link href={`/assets/${asset.id}`} className="text-[10px] text-muted-foreground hover:text-primary">
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-semibold border",
+                          asset.status === "active"
+                            ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
+                            : asset.status === "in_repair"
+                              ? "bg-amber-500/10 text-amber-600 border-amber-500/20"
+                              : "",
+                        )}
+                      >
+                        {asset.status?.replace(/_/g, " ")}
+                      </span>
+                      <Link
+                        href={`/assets/${asset.id}`}
+                        className="text-[10px] text-muted-foreground hover:text-primary"
+                      >
                         <ExternalLink className="h-3 w-3" />
                       </Link>
                     </div>

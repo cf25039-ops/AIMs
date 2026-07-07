@@ -2,44 +2,45 @@ import { cn } from "@/lib/utils";
 
 type StatusType = "active" | "pending" | "warning" | "danger" | "info" | "inactive";
 
-const statusColors: Record<StatusType, { bg: string; text: string; border: string; dot: string }> = {
-  active: {
-    bg: "bg-emerald-500/10",
-    text: "text-emerald-600 dark:text-emerald-400",
-    border: "border-emerald-500/20",
-    dot: "bg-emerald-500",
-  },
-  pending: {
-    bg: "bg-amber-500/10",
-    text: "text-amber-600 dark:text-amber-400",
-    border: "border-amber-500/20",
-    dot: "bg-amber-500 animate-pulse",
-  },
-  warning: {
-    bg: "bg-orange-500/10",
-    text: "text-orange-600 dark:text-orange-400",
-    border: "border-orange-500/20",
-    dot: "bg-orange-500",
-  },
-  danger: {
-    bg: "bg-rose-500/10",
-    text: "text-rose-600 dark:text-rose-400",
-    border: "border-rose-500/20",
-    dot: "bg-rose-500 animate-pulse",
-  },
-  info: {
-    bg: "bg-sky-500/10",
-    text: "text-sky-600 dark:text-sky-400",
-    border: "border-sky-500/20",
-    dot: "bg-sky-500",
-  },
-  inactive: {
-    bg: "bg-slate-500/10",
-    text: "text-slate-600 dark:text-slate-400",
-    border: "border-slate-500/20",
-    dot: "bg-slate-400",
-  },
-};
+const statusColors: Record<StatusType, { bg: string; text: string; border: string; dot: string }> =
+  {
+    active: {
+      bg: "bg-emerald-500/10",
+      text: "text-emerald-600 dark:text-emerald-400",
+      border: "border-emerald-500/20",
+      dot: "bg-emerald-500",
+    },
+    pending: {
+      bg: "bg-amber-500/10",
+      text: "text-amber-600 dark:text-amber-400",
+      border: "border-amber-500/20",
+      dot: "bg-amber-500 animate-pulse",
+    },
+    warning: {
+      bg: "bg-orange-500/10",
+      text: "text-orange-600 dark:text-orange-400",
+      border: "border-orange-500/20",
+      dot: "bg-orange-500",
+    },
+    danger: {
+      bg: "bg-rose-500/10",
+      text: "text-rose-600 dark:text-rose-400",
+      border: "border-rose-500/20",
+      dot: "bg-rose-500 animate-pulse",
+    },
+    info: {
+      bg: "bg-sky-500/10",
+      text: "text-sky-600 dark:text-sky-400",
+      border: "border-sky-500/20",
+      dot: "bg-sky-500",
+    },
+    inactive: {
+      bg: "bg-slate-500/10",
+      text: "text-slate-600 dark:text-slate-400",
+      border: "border-slate-500/20",
+      dot: "bg-slate-400",
+    },
+  };
 
 export function getStatusColor(status: StatusType) {
   return statusColors[status] || statusColors.inactive;
@@ -62,7 +63,7 @@ export function StatusBadge({
         colors.bg,
         colors.text,
         colors.border,
-        className
+        className,
       )}
     >
       <span className={cn("h-1.5 w-1.5 rounded-full", colors.dot)} />

@@ -1,7 +1,7 @@
 export function exportToCSV<T extends Record<string, any>>(
   data: T[],
   filename: string,
-  columns?: Array<{ key: keyof T; header: string }>
+  columns?: Array<{ key: keyof T; header: string }>,
 ) {
   if (data.length === 0) return;
 
@@ -13,7 +13,7 @@ export function exportToCSV<T extends Record<string, any>>(
       const val = row[c.key];
       const str = val == null ? "" : String(val);
       return `"${str.replace(/"/g, '""')}"`;
-    })
+    }),
   );
 
   const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");

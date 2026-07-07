@@ -2,8 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { FadeIn } from "@/components/animations/fade-in";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { UserPlus, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { AdminRoleManager } from "@/components/settings/admin-role-manager";
 import { createClient } from "@/lib/supabase/client";
 
@@ -12,7 +11,9 @@ export default function UsersManagementPage() {
     queryKey: ["current-user-profile"],
     queryFn: async () => {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) return null;
       const { data: profile } = await supabase
         .from("profiles")
@@ -51,7 +52,9 @@ export default function UsersManagementPage() {
           </div>
           <div>
             <h2 className="text-3xl font-semibold tracking-tight">User Management</h2>
-            <p className="text-sm text-muted-foreground">Create and manage user accounts with role-based access</p>
+            <p className="text-sm text-muted-foreground">
+              Create and manage user accounts with role-based access
+            </p>
           </div>
         </div>
       </FadeIn>

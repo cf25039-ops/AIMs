@@ -11,7 +11,9 @@ import { motion } from "framer-motion";
 import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import type { NavItem } from "@/types";
 
-function groupNavItems(items: NavItem[]): Array<{ group: string; label: string; items: NavItem[] }> {
+function groupNavItems(
+  items: NavItem[],
+): Array<{ group: string; label: string; items: NavItem[] }> {
   const groups: Record<string, NavItem[]> = {};
   for (const item of items) {
     const g = item.group || "user";
@@ -57,11 +59,16 @@ export function Sidebar() {
     <aside
       className={cn(
         "sticky top-0 hidden h-screen flex-col border-r border-border/70 bg-card/70 py-6 backdrop-blur-xl lg:flex transition-all duration-300 ease-in-out overflow-y-auto",
-        isCollapsed ? "w-20 px-2" : "w-72 px-4"
+        isCollapsed ? "w-20 px-2" : "w-72 px-4",
       )}
     >
       {/* Header */}
-      <div className={cn("flex items-center justify-between px-2", isCollapsed && "flex-col gap-4 justify-center px-0")}>
+      <div
+        className={cn(
+          "flex items-center justify-between px-2",
+          isCollapsed && "flex-col gap-4 justify-center px-0",
+        )}
+      >
         <div className={cn("flex items-center gap-3", isCollapsed && "flex-col justify-center")}>
           <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent text-lg font-bold text-primary-foreground shadow-lg shadow-primary/20">
             A
@@ -102,7 +109,12 @@ export function Sidebar() {
       {/* Role Badge */}
       {!isLoading && role && !isCollapsed && (
         <div className="mt-4 mx-2">
-          <div className={cn("inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold", getRoleBadgeColor(role))}>
+          <div
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold",
+              getRoleBadgeColor(role),
+            )}
+          >
             <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />
             {getRoleLabel(role)}
           </div>
@@ -110,7 +122,9 @@ export function Sidebar() {
       )}
 
       {/* Navigation */}
-      <nav className={cn("mt-6 flex flex-1 flex-col gap-1 relative", isCollapsed && "items-center")}>
+      <nav
+        className={cn("mt-6 flex flex-1 flex-col gap-1 relative", isCollapsed && "items-center")}
+      >
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
             <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
@@ -138,8 +152,10 @@ export function Sidebar() {
                       title={isCollapsed ? item.label : undefined}
                       className={cn(
                         "group relative flex items-center rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200",
-                        active ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground",
-                        isCollapsed ? "justify-center px-0 py-3 w-12 h-12" : "gap-3"
+                        active
+                          ? "text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground",
+                        isCollapsed ? "justify-center px-0 py-3 w-12 h-12" : "gap-3",
                       )}
                     >
                       {active && (
@@ -153,7 +169,9 @@ export function Sidebar() {
                       <span
                         className={cn(
                           "relative z-10 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg border border-transparent text-lg transition-colors",
-                          active ? "text-primary-foreground" : "bg-background/60 group-hover:bg-background shadow-sm"
+                          active
+                            ? "text-primary-foreground"
+                            : "bg-background/60 group-hover:bg-background shadow-sm",
                         )}
                       >
                         <Icon className="h-4 w-4" />
@@ -162,7 +180,12 @@ export function Sidebar() {
                         <div className="relative z-10 min-w-0">
                           <p className="leading-none font-semibold truncate">{item.label}</p>
                           {item.description ? (
-                            <span className={cn("text-[11px] mt-0.5 block transition-colors truncate", active ? "text-primary-foreground/80" : "text-muted-foreground")}>
+                            <span
+                              className={cn(
+                                "text-[11px] mt-0.5 block transition-colors truncate",
+                                active ? "text-primary-foreground/80" : "text-muted-foreground",
+                              )}
+                            >
                               {item.description}
                             </span>
                           ) : null}
@@ -181,7 +204,7 @@ export function Sidebar() {
       <div
         className={cn(
           "rounded-2xl border border-border/60 bg-card/70 text-xs text-muted-foreground transition-all duration-300",
-          isCollapsed ? "p-2 flex justify-center w-12 h-12 items-center mx-auto" : "p-4"
+          isCollapsed ? "p-2 flex justify-center w-12 h-12 items-center mx-auto" : "p-4",
         )}
       >
         {isLoading ? (
@@ -201,9 +224,7 @@ export function Sidebar() {
             <p className="font-semibold text-foreground truncate">
               {profile?.full_name || profile?.email || "User"}
             </p>
-            <p className="mt-1 truncate">
-              {profile?.assigned_department?.name || "All Access"}
-            </p>
+            <p className="mt-1 truncate">{profile?.assigned_department?.name || "All Access"}</p>
             <p className="mt-1 text-[10px]">RLS enforced per project</p>
           </>
         )}

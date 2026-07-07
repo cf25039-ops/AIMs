@@ -3,7 +3,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { FadeIn } from "@/components/animations/fade-in";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { getVendors, getVendorStats } from "@/services/vendors";
 import { Building2, Users, Store, Loader2, Phone, Mail } from "lucide-react";
@@ -30,7 +37,9 @@ export default function VendorsPage() {
             </div>
             <div>
               <h2 className="text-3xl font-semibold tracking-tight">Vendor Management</h2>
-              <p className="text-sm text-muted-foreground">Manage suppliers, contractors, and service providers</p>
+              <p className="text-sm text-muted-foreground">
+                Manage suppliers, contractors, and service providers
+              </p>
             </div>
           </div>
         </div>
@@ -45,19 +54,23 @@ export default function VendorsPage() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              {loadingStats ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+              {loadingStats ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
                 <div className="text-2xl font-bold">{stats?.totalVendors}</div>
               )}
             </CardContent>
           </Card>
-          
+
           <Card className="glass-card border-l-4 border-l-success">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Vendors</CardTitle>
               <Building2 className="h-4 w-4 text-emerald-500" />
             </CardHeader>
             <CardContent>
-              {loadingStats ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+              {loadingStats ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
                 <div className="text-2xl font-bold text-emerald-600">{stats?.activeVendors}</div>
               )}
             </CardContent>
@@ -74,13 +87,15 @@ export default function VendorsPage() {
           </CardHeader>
           <CardContent>
             {loadingVendors ? (
-              <div className="flex justify-center py-8"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>
+              <div className="flex justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              </div>
             ) : vendors.length === 0 ? (
               <EmptyState
-  icon={Store}
-  title="No vendors found"
-  description="Add your first vendor to start managing supplier relationships"
-/>
+                icon={Store}
+                title="No vendors found"
+                description="Add your first vendor to start managing supplier relationships"
+              />
             ) : (
               <div className="rounded-md border">
                 <Table>
@@ -119,7 +134,12 @@ export default function VendorsPage() {
                           {v.contracts?.[0]?.count || 0}
                         </TableCell>
                         <TableCell className="text-right">
-                          <Badge variant={v.status === 'active' ? 'success' as any : 'secondary' as any} className="uppercase text-[10px]">
+                          <Badge
+                            variant={
+                              v.status === "active" ? ("success" as any) : ("secondary" as any)
+                            }
+                            className="uppercase text-[10px]"
+                          >
                             {v.status}
                           </Badge>
                         </TableCell>

@@ -28,7 +28,7 @@ export async function getHardwareTypes(contractId?: string): Promise<HardwareTyp
 
 export async function getHardwareTypesWithCounts(
   contractId?: string,
-  departmentId?: string
+  departmentId?: string,
 ): Promise<(HardwareTypeRow & { count: number })[]> {
   if (!contractId) return [];
   const supabase = createClient();
@@ -87,12 +87,15 @@ export async function createHardwareType(values: {
   return data;
 }
 
-export async function updateHardwareType(id: string, values: Partial<{
-  name: string;
-  description: string;
-  icon: string;
-  sortOrder: number;
-}>) {
+export async function updateHardwareType(
+  id: string,
+  values: Partial<{
+    name: string;
+    description: string;
+    icon: string;
+    sortOrder: number;
+  }>,
+) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("hardware_types")

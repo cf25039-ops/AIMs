@@ -2,7 +2,6 @@ import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { checkRateLimit } from "@/lib/ratelimit";
-import { validatePassword } from "@/lib/password-policy";
 
 export async function POST(request: Request) {
   let body: { email?: string; password?: string };
@@ -10,20 +9,14 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json(
-      { error: "Invalid login request" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Invalid login request" }, { status: 400 });
   }
 
   const email = body.email?.trim();
   const password = body.password;
 
   if (!email || !password) {
-    return NextResponse.json(
-      { error: "Email and password are required" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
   }
 
   const ip =
@@ -43,7 +36,7 @@ export async function POST(request: Request) {
           "X-RateLimit-Remaining": remaining.toString(),
           "X-RateLimit-Reset": reset.toString(),
         },
-      }
+      },
     );
   }
 
@@ -61,12 +54,14 @@ export async function POST(request: Request) {
         headers: {
           "X-RateLimit-Remaining": remaining.toString(),
         },
-      }
+      },
     );
   }
 
   // Check if user has MFA enabled
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user: _user },
+  } = await supabase.auth.getUser();
   const { data: factors } = await supabase.auth.mfa.listFactors();
   const mfaRequired = factors?.totp && factors.totp.length > 0;
 
@@ -78,6 +73,6 @@ export async function POST(request: Request) {
       headers: {
         "Cache-Control": "no-store",
       },
-    }
+    },
   );
 }

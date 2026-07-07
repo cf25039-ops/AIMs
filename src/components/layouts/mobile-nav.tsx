@@ -11,7 +11,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import type { NavItem } from "@/types";
 
-function groupNavItems(items: NavItem[]): Array<{ group: string; label: string; items: NavItem[] }> {
+function groupNavItems(
+  items: NavItem[],
+): Array<{ group: string; label: string; items: NavItem[] }> {
   const groups: Record<string, NavItem[]> = {};
   for (const item of items) {
     const g = item.group || "user";
@@ -70,7 +72,9 @@ export function MobileNav() {
                     A
                   </div>
                   <div>
-                    <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-semibold">Enterprise Suite</p>
+                    <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-semibold">
+                      Enterprise Suite
+                    </p>
                     <p className="text-base font-bold text-foreground">AIMS Control</p>
                   </div>
                 </div>
@@ -81,7 +85,12 @@ export function MobileNav() {
 
               {role && (
                 <div className="mb-4 mx-2">
-                  <div className={cn("inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold", getRoleBadgeColor(role))}>
+                  <div
+                    className={cn(
+                      "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold",
+                      getRoleBadgeColor(role),
+                    )}
+                  >
                     <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />
                     {getRoleLabel(role)}
                   </div>
@@ -98,7 +107,8 @@ export function MobileNav() {
                     )}
                     <div className="flex flex-col gap-0.5">
                       {section.items.map((item) => {
-                        const active = pathname === item.href || pathname.startsWith(item.href + "/");
+                        const active =
+                          pathname === item.href || pathname.startsWith(item.href + "/");
                         const Icon = item.icon;
                         return (
                           <Link
@@ -109,7 +119,7 @@ export function MobileNav() {
                               "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all",
                               active
                                 ? "bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-md"
-                                : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted",
                             )}
                           >
                             <span className="flex h-8 w-8 items-center justify-center rounded-lg">
@@ -118,7 +128,12 @@ export function MobileNav() {
                             <div>
                               <p className="leading-none font-semibold">{item.label}</p>
                               {item.description && (
-                                <span className={cn("text-[11px] mt-0.5 block", active ? "text-primary-foreground/80" : "text-muted-foreground")}>
+                                <span
+                                  className={cn(
+                                    "text-[11px] mt-0.5 block",
+                                    active ? "text-primary-foreground/80" : "text-muted-foreground",
+                                  )}
+                                >
                                   {item.description}
                                 </span>
                               )}
@@ -133,8 +148,12 @@ export function MobileNav() {
 
               {profile && (
                 <div className="rounded-2xl border border-border/60 p-4 mt-4 text-xs text-muted-foreground">
-                  <p className="font-semibold text-foreground truncate">{profile.full_name || profile.email}</p>
-                  <p className="mt-1 truncate">{profile.assigned_department?.name || "All Access"}</p>
+                  <p className="font-semibold text-foreground truncate">
+                    {profile.full_name || profile.email}
+                  </p>
+                  <p className="mt-1 truncate">
+                    {profile.assigned_department?.name || "All Access"}
+                  </p>
                 </div>
               )}
             </motion.aside>

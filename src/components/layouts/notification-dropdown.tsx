@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, X, Info, Check, AlertCircle, Sparkles } from "lucide-react";
+import { Bell, X, Info, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -25,15 +25,17 @@ export function NotificationDropdown() {
     queryKey: ["topbar-notifications"],
     queryFn: async () => {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) return [];
-      
+
       const { data, error } = await supabase
         .from("notifications")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-      
+
       if (error) {
         console.error("Error fetching notifications:", error);
         return [];
@@ -43,7 +45,7 @@ export function NotificationDropdown() {
     refetchInterval: 15000, // Refetch every 15s to keep in-app updates hot!
   });
 
-  const unreadCount = notifications.filter(n => !n.read_at).length;
+  const unreadCount = notifications.filter((n) => !n.read_at).length;
 
   // Handle clicking outside to close
   useEffect(() => {
@@ -60,15 +62,17 @@ export function NotificationDropdown() {
 
   const handleMarkAllAsRead = async () => {
     const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return;
-    
+
     const { error } = await supabase
       .from("notifications")
       .update({ read_at: new Date().toISOString() })
       .eq("user_id", user.id)
       .is("read_at", null);
-      
+
     if (!error) {
       refetch();
     }
@@ -82,7 +86,7 @@ export function NotificationDropdown() {
       .from("notifications")
       .update({ read_at: new Date().toISOString() })
       .eq("id", id);
-      
+
     if (!error) {
       refetch();
     }
@@ -91,7 +95,20 @@ export function NotificationDropdown() {
   // Date Formatter helper
   const formatNotificationDate = (dateStr: string) => {
     const d = new Date(dateStr);
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     const day = d.getDate();
     const month = months[d.getMonth()];
     const year = d.getFullYear();
@@ -107,7 +124,7 @@ export function NotificationDropdown() {
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:bg-muted/80 text-muted-foreground hover:text-foreground focus:outline-none",
-          isOpen && "bg-muted text-foreground"
+          isOpen && "bg-muted text-foreground",
         )}
       >
         <Bell className="h-5 w-5" />
@@ -175,7 +192,7 @@ export function NotificationDropdown() {
                       key={item.id}
                       className={cn(
                         "group relative flex items-start gap-3 p-4 transition-all duration-200 hover:bg-muted/30",
-                        isUnread && "bg-primary/[0.02]"
+                        isUnread && "bg-primary/[0.02]",
                       )}
                     >
                       {/* Left color bar for unread indicator */}
@@ -193,10 +210,12 @@ export function NotificationDropdown() {
                       {/* Content */}
                       <div className="flex-1 min-w-0 pr-4">
                         <div className="flex items-center gap-1.5">
-                          <p className={cn(
-                            "text-sm font-semibold text-foreground leading-none truncate",
-                            isUnread && "font-bold text-foreground"
-                          )}>
+                          <p
+                            className={cn(
+                              "text-sm font-semibold text-foreground leading-none truncate",
+                              isUnread && "font-bold text-foreground",
+                            )}
+                          >
                             {item.title}
                           </p>
                         </div>

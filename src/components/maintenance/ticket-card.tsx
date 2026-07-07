@@ -42,11 +42,11 @@ export function TicketCard({ ticket }: TicketCardProps) {
         .from("repair_tickets")
         .update({ status: newStatus })
         .eq("id", ticket.id);
-      
+
       if (error) throw error;
       return newStatus;
     },
-    onSuccess: (newStatus) => {
+    onSuccess: (_newStatus) => {
       queryClient.invalidateQueries({ queryKey: ["repair-tickets"] });
       queryClient.invalidateQueries({ queryKey: ["technician-dashboard"] });
       setIsUpdating(false);
@@ -56,7 +56,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
       console.error("Error updating ticket status:", err);
       toast.error("Failed to update status: " + err.message);
       setIsUpdating(false);
-    }
+    },
   });
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -72,7 +72,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
     high: "High",
     medium: "Medium",
     low: "Low",
-    informational: "Informational"
+    informational: "Informational",
   };
 
   const statusLabels: Record<string, string> = {
@@ -83,7 +83,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
     vendor_escalation: "Vendor Escalation",
     testing: "Testing",
     resolved: "Resolved",
-    closed: "Closed"
+    closed: "Closed",
   };
 
   return (
@@ -114,29 +114,35 @@ export function TicketCard({ ticket }: TicketCardProps) {
             <div className="flex items-center gap-4 text-xs text-muted-foreground pt-1 border-t border-border/20">
               <div className="flex items-center gap-1.5">
                 <MonitorSmartphone className="h-3.5 w-3.5" />
-                <span className="capitalize">{ticket.hardware?.type_hardware?.replace(/_/g, " ") || "Unknown Asset"}</span>
+                <span className="capitalize">
+                  {ticket.hardware?.type_hardware?.replace(/_/g, " ") || "Unknown Asset"}
+                </span>
                 <span>({ticket.hardware?.asset_tag})</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5" />
                 <span>{new Date(ticket.created_at).toLocaleDateString()}</span>
               </div>
-              
+
               {/* SLA Countdown Badge */}
-              {ticket.status !== 'resolved' && ticket.status !== 'closed' && (() => {
-                const sla = calculateSLA(ticket.created_at, ticket.severity);
-                const colors = sla.isBreached
-                  ? "text-rose-600 bg-rose-500/10 border-rose-500/20"
-                  : sla.isCritical
-                    ? "text-amber-600 bg-amber-500/10 border-amber-500/20 animate-pulse"
-                    : "text-muted-foreground bg-muted/50 border-border/50";
-                return (
-                  <div className={`ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded-md border font-medium text-[11px] ${colors}`}>
-                    <Clock className="h-3 w-3" />
-                    <span>{sla.label}</span>
-                  </div>
-                );
-              })()}
+              {ticket.status !== "resolved" &&
+                ticket.status !== "closed" &&
+                (() => {
+                  const sla = calculateSLA(ticket.created_at, ticket.severity);
+                  const colors = sla.isBreached
+                    ? "text-rose-600 bg-rose-500/10 border-rose-500/20"
+                    : sla.isCritical
+                      ? "text-amber-600 bg-amber-500/10 border-amber-500/20 animate-pulse"
+                      : "text-muted-foreground bg-muted/50 border-border/50";
+                  return (
+                    <div
+                      className={`ml-auto flex items-center gap-1.5 px-2 py-0.5 rounded-md border font-medium text-[11px] ${colors}`}
+                    >
+                      <Clock className="h-3 w-3" />
+                      <span>{sla.label}</span>
+                    </div>
+                  );
+                })()}
             </div>
           </CardContent>
         </Card>
@@ -154,7 +160,8 @@ export function TicketCard({ ticket }: TicketCardProps) {
             {ticket.title || "Hardware Issue Reported"}
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground mt-1">
-            Reported on {new Date(ticket.created_at).toLocaleString("ms-MY", { timeZone: "Asia/Kuala_Lumpur" })}
+            Reported on{" "}
+            {new Date(ticket.created_at).toLocaleString("ms-MY", { timeZone: "Asia/Kuala_Lumpur" })}
           </DialogDescription>
         </DialogHeader>
 
@@ -162,11 +169,17 @@ export function TicketCard({ ticket }: TicketCardProps) {
           {/* Severity & Status row */}
           <div className="grid grid-cols-2 gap-4 border-b border-border/40 pb-4">
             <div>
-              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Severity</span>
-              <span className="text-sm font-medium mt-1 inline-block capitalize">{severityLabels[ticket.severity] || ticket.severity}</span>
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">
+                Severity
+              </span>
+              <span className="text-sm font-medium mt-1 inline-block capitalize">
+                {severityLabels[ticket.severity] || ticket.severity}
+              </span>
             </div>
             <div>
-              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Current Status</span>
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">
+                Current Status
+              </span>
               <div className="mt-1 inline-block">
                 <TicketStatusBadge status={ticket.status} />
               </div>
@@ -175,7 +188,9 @@ export function TicketCard({ ticket }: TicketCardProps) {
 
           {/* Description */}
           <div className="space-y-2">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Description</span>
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">
+              Description
+            </span>
             <p className="text-sm text-foreground bg-muted/40 border border-border/40 rounded-2xl p-5 leading-relaxed min-h-[100px] max-h-[300px] overflow-y-auto whitespace-pre-wrap shadow-inner">
               {ticket.description || "No description provided."}
             </p>
@@ -183,23 +198,33 @@ export function TicketCard({ ticket }: TicketCardProps) {
 
           {/* Associated Hardware */}
           <div className="bg-muted/20 border border-border/40 rounded-xl p-3.5 space-y-2">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Associated Asset</span>
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">
+              Associated Asset
+            </span>
             <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-xs">
               <div>
                 <span className="text-muted-foreground font-medium">Asset Tag:</span>{" "}
-                <span className="font-semibold text-foreground">{ticket.hardware?.asset_tag || "N/A"}</span>
+                <span className="font-semibold text-foreground">
+                  {ticket.hardware?.asset_tag || "N/A"}
+                </span>
               </div>
               <div>
                 <span className="text-muted-foreground font-medium">Type:</span>{" "}
-                <span className="font-semibold text-foreground capitalize">{ticket.hardware?.type_hardware || "N/A"}</span>
+                <span className="font-semibold text-foreground capitalize">
+                  {ticket.hardware?.type_hardware || "N/A"}
+                </span>
               </div>
               <div>
                 <span className="text-muted-foreground font-medium">Serial Number:</span>{" "}
-                <span className="font-semibold text-foreground">{ticket.hardware?.serial_number || "N/A"}</span>
+                <span className="font-semibold text-foreground">
+                  {ticket.hardware?.serial_number || "N/A"}
+                </span>
               </div>
               <div>
                 <span className="text-muted-foreground font-medium">PIC Name:</span>{" "}
-                <span className="font-semibold text-foreground">{ticket.pic_name || ticket.hardware?.pic_name || "N/A"}</span>
+                <span className="font-semibold text-foreground">
+                  {ticket.pic_name || ticket.hardware?.pic_name || "N/A"}
+                </span>
               </div>
             </div>
           </div>
@@ -207,7 +232,9 @@ export function TicketCard({ ticket }: TicketCardProps) {
           {/* Update Status (if permitted) */}
           {canEditStatus && (
             <div className="border-t border-border/40 pt-4 space-y-2">
-              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Update Ticket Status</span>
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">
+                Update Ticket Status
+              </span>
               <div className="flex gap-3">
                 <select
                   value={selectedStatus}
@@ -220,7 +247,11 @@ export function TicketCard({ ticket }: TicketCardProps) {
                     </option>
                   ))}
                 </select>
-                <Button onClick={handleSave} disabled={isUpdating || selectedStatus === ticket.status} className="gap-2 shrink-0 rounded-xl">
+                <Button
+                  onClick={handleSave}
+                  disabled={isUpdating || selectedStatus === ticket.status}
+                  className="gap-2 shrink-0 rounded-xl"
+                >
                   {isUpdating ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (

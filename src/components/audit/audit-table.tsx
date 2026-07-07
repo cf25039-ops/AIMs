@@ -1,6 +1,13 @@
 "use client";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { JsonViewer } from "./json-viewer";
 import { ShieldAlert, Activity } from "lucide-react";
@@ -14,7 +21,11 @@ export function AuditTable({ logs, type }: AuditTableProps) {
   if (logs.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center text-muted-foreground border rounded-xl border-dashed">
-        {type === "system" ? <ShieldAlert className="h-8 w-8 mb-2 opacity-50" /> : <Activity className="h-8 w-8 mb-2 opacity-50" />}
+        {type === "system" ? (
+          <ShieldAlert className="h-8 w-8 mb-2 opacity-50" />
+        ) : (
+          <Activity className="h-8 w-8 mb-2 opacity-50" />
+        )}
         <p>No logs found.</p>
       </div>
     );
@@ -50,12 +61,19 @@ export function AuditTable({ logs, type }: AuditTableProps) {
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium">{log.profiles?.full_name || "System Actor"}</span>
-                    <span className="text-xs text-muted-foreground">{log.profiles?.email || "N/A"}</span>
+                    <span className="text-sm font-medium">
+                      {log.profiles?.full_name || "System Actor"}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {log.profiles?.email || "N/A"}
+                    </span>
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={getActionColor(log.action) as any} className="uppercase text-[10px]">
+                  <Badge
+                    variant={getActionColor(log.action) as any}
+                    className="uppercase text-[10px]"
+                  >
                     {log.action}
                   </Badge>
                 </TableCell>
@@ -94,11 +112,15 @@ export function AuditTable({ logs, type }: AuditTableProps) {
               <TableCell>
                 <div className="flex flex-col">
                   <span className="text-sm font-medium">{log.profiles?.full_name || "System"}</span>
-                  <span className="text-xs text-muted-foreground">{log.profiles?.email || "Auto-generated"}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {log.profiles?.email || "Auto-generated"}
+                  </span>
                 </div>
               </TableCell>
               <TableCell>
-                <span className="text-sm capitalize font-medium">{log.action.replace(/_/g, ' ')}</span>
+                <span className="text-sm capitalize font-medium">
+                  {log.action.replace(/_/g, " ")}
+                </span>
               </TableCell>
               <TableCell>
                 <code className="text-xs bg-muted px-1.5 py-0.5 rounded">{log.entity}</code>

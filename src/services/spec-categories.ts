@@ -37,7 +37,7 @@ export async function getSpecCategories(hardwareTypeId?: string): Promise<SpecCa
 
 export async function getSpecCategoriesWithCounts(
   hardwareTypeId?: string,
-  departmentId?: string
+  departmentId?: string,
 ): Promise<(SpecCategoryRow & { count: number })[]> {
   if (!hardwareTypeId) return [];
   const supabase = createClient();
@@ -99,12 +99,15 @@ export async function createSpecCategory(values: {
   return data;
 }
 
-export async function updateSpecCategory(id: string, values: Partial<{
-  name: string;
-  description: string;
-  color: string;
-  sortOrder: number;
-}>) {
+export async function updateSpecCategory(
+  id: string,
+  values: Partial<{
+    name: string;
+    description: string;
+    color: string;
+    sortOrder: number;
+  }>,
+) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("spec_categories")
@@ -144,12 +147,15 @@ export async function getSpecRules(specCategoryId?: string): Promise<SpecRuleRow
   return data ?? [];
 }
 
-export async function saveSpecRules(specCategoryId: string, rules: Array<{
-  id?: string;
-  rule_type: string;
-  rule_operator: string;
-  rule_value: string;
-}>) {
+export async function saveSpecRules(
+  specCategoryId: string,
+  rules: Array<{
+    id?: string;
+    rule_type: string;
+    rule_operator: string;
+    rule_value: string;
+  }>,
+) {
   const supabase = createClient();
 
   const existing = await getSpecRules(specCategoryId);
@@ -161,7 +167,10 @@ export async function saveSpecRules(specCategoryId: string, rules: Array<{
     await supabase
       .from("spec_rules")
       .delete()
-      .in("id", toDelete.map((r) => r.id));
+      .in(
+        "id",
+        toDelete.map((r) => r.id),
+      );
   }
 
   const toInsert = rules.filter((r) => !r.id);
@@ -174,7 +183,7 @@ export async function saveSpecRules(specCategoryId: string, rules: Array<{
         rule_type: r.rule_type,
         rule_operator: r.rule_operator,
         rule_value: r.rule_value,
-      }))
+      })),
     );
     if (error) throw error;
   }
@@ -201,7 +210,16 @@ export async function autoClassifyHardware(specCategoryId: string) {
   const { data: allHardware } = await supabase
     .from("hardware")
     .select("id, cpu, ram, storage")
-    .eq("hardware_type_id", (await supabase.from("spec_categories").select("hardware_type_id").eq("id", specCategoryId).single()).data?.hardware_type_id);
+    .eq(
+      "hardware_type_id",
+      (
+        await supabase
+          .from("spec_categories")
+          .select("hardware_type_id")
+          .eq("id", specCategoryId)
+          .single()
+      ).data?.hardware_type_id,
+    );
 
   if (!allHardware) return { matched: 0 };
 
@@ -209,10 +227,7 @@ export async function autoClassifyHardware(specCategoryId: string) {
   for (const hw of allHardware) {
     const matches = rules.every((rule) => matchRule(hw, rule));
     if (matches) {
-      await supabase
-        .from("hardware")
-        .update({ spec_category_id: specCategoryId })
-        .eq("id", hw.id);
+      await supabase.from("hardware").update({ spec_category_id: specCategoryId }).eq("id", hw.id);
       matched++;
     }
   }
@@ -220,7 +235,10 @@ export async function autoClassifyHardware(specCategoryId: string) {
   return { matched };
 }
 
-function matchRule(hw: { cpu: string | null; ram: string | null; storage: string | null }, rule: SpecRuleRow): boolean {
+function matchRule(
+  hw: { cpu: string | null; ram: string | null; storage: string | null },
+  rule: SpecRuleRow,
+): boolean {
   const fieldValue = hw[rule.rule_type as keyof typeof hw]?.toLowerCase() ?? "";
   const value = rule.rule_value.toLowerCase();
 

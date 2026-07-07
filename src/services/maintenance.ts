@@ -26,7 +26,8 @@ export async function getTickets() {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("repair_tickets")
-    .select(`
+    .select(
+      `
       id,
       title,
       description,
@@ -39,7 +40,8 @@ export async function getTickets() {
         type_hardware,
         departments (name)
       )
-    `)
+    `,
+    )
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -53,7 +55,7 @@ export async function getTickets() {
 export async function createTicket(values: TicketFormValues) {
   const supabase = createClient();
   await assertCanCreateTicket(supabase);
-  
+
   const payload: Record<string, any> = {
     hardware_id: values.assetId,
     title: values.issueTitle,
@@ -71,7 +73,13 @@ export async function createTicket(values: TicketFormValues) {
     .single();
 
   if (error) {
-    console.error("[createTicket] Supabase error:", error.message, error.details, error.hint, error.code);
+    console.error(
+      "[createTicket] Supabase error:",
+      error.message,
+      error.details,
+      error.hint,
+      error.code,
+    );
     throw new Error(error.message);
   }
 
@@ -92,13 +100,13 @@ export async function createTicket(values: TicketFormValues) {
 
       if (department && department.facility_id) {
         const facilityId = department.facility_id;
-        
+
         const { data: facility } = await supabase
           .from("facilities")
           .select("name")
           .eq("id", facilityId)
           .single();
-          
+
         const facilityName = facility?.name || "Hospital Kuantan";
 
         // Query profiles and select only technician, project_admin, project_manager, or super_admin
@@ -130,20 +138,27 @@ export async function createTicket(values: TicketFormValues) {
               isSameKawasan = true;
             }
 
-            const isTargetRole = ["technician", "project_admin", "project_manager", "super_admin"].includes(p.role);
+            const isTargetRole = [
+              "technician",
+              "project_admin",
+              "project_manager",
+              "super_admin",
+            ].includes(p.role);
 
             if (isSameKawasan && isTargetRole) {
               notificationsToInsert.push({
                 user_id: p.id,
                 title: `New Ticket: TKT-${ticket.id.split("-")[0].toUpperCase()}`,
                 body: `New issue reported at ${facilityName} (${department.name}): "${values.issueTitle}" for asset ${hardware.asset_tag} (${hardware.brand} ${hardware.model}).`,
-                channel: "in_app"
+                channel: "in_app",
               });
             }
           }
 
           if (notificationsToInsert.length > 0) {
-            console.log(`[createTicket] Dispatching ${notificationsToInsert.length} region-specific notifications...`);
+            console.log(
+              `[createTicket] Dispatching ${notificationsToInsert.length} region-specific notifications...`,
+            );
             const { error: notifError } = await supabase
               .from("notifications")
               .insert(notificationsToInsert);
@@ -163,7 +178,7 @@ export async function createTicket(values: TicketFormValues) {
 
 export async function uploadTicketImage(file: File) {
   const supabase = createClient();
-  const fileExt = file.name.split('.').pop();
+  const fileExt = file.name.split(".").pop();
   const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
   const filePath = `tickets/${fileName}`;
 
@@ -178,9 +193,7 @@ export async function uploadTicketImage(file: File) {
     throw uploadError;
   }
 
-  const { data } = supabase.storage
-    .from("repair_attachments")
-    .getPublicUrl(filePath);
+  const { data } = supabase.storage.from("repair_attachments").getPublicUrl(filePath);
 
   return data.publicUrl;
 }

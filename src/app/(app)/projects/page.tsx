@@ -8,13 +8,7 @@ import { FadeIn } from "@/components/animations/fade-in";
 import toast from "react-hot-toast";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -121,7 +115,7 @@ export default function ProjectsPage() {
           user_id: user.id,
           role: roleForProjectMembership(profile?.role),
         },
-        { onConflict: "project_id,user_id" }
+        { onConflict: "project_id,user_id" },
       );
 
       if (memberError) {
@@ -234,9 +228,7 @@ export default function ProjectsPage() {
             <FolderPlus className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight">
-              Project Management
-            </h2>
+            <h2 className="text-3xl font-semibold tracking-tight">Project Management</h2>
             <p className="text-sm text-muted-foreground">
               Create projects, update registered projects, and add contract numbers.
             </p>
@@ -256,9 +248,7 @@ export default function ProjectsPage() {
               <FolderPlus className="h-5 w-5 text-primary" />
               Projects Directory
             </CardTitle>
-            <CardDescription>
-              All registered projects across the organization
-            </CardDescription>
+            <CardDescription>All registered projects across the organization</CardDescription>
           </CardHeader>
           <CardContent>
             {isLoading ? (
@@ -289,9 +279,7 @@ export default function ProjectsPage() {
                   <TableBody>
                     {projects.map((project) => (
                       <TableRow key={project.id}>
-                        <TableCell className="font-medium">
-                          {project.name}
-                        </TableCell>
+                        <TableCell className="font-medium">{project.name}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-1.5 text-muted-foreground">
                             <Hash className="h-3 w-3" />
@@ -359,9 +347,7 @@ export default function ProjectsPage() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              {editingProject ? "Edit Project" : "Add New Project"}
-            </DialogTitle>
+            <DialogTitle>{editingProject ? "Edit Project" : "Add New Project"}</DialogTitle>
             <DialogDescription>
               {editingProject
                 ? "Update the project name, code, or description."
@@ -422,7 +408,9 @@ export default function ProjectsPage() {
         message={`Are you sure you want to delete "${deleteTarget?.name || deleteTarget?.code || "this project"}"? This action cannot be undone and will also remove all associated data.`}
         confirmText="Delete"
         variant="danger"
-        onConfirm={() => { if (deleteTarget) deleteMutation.mutate(deleteTarget.id); }}
+        onConfirm={() => {
+          if (deleteTarget) deleteMutation.mutate(deleteTarget.id);
+        }}
         loading={deleteMutation.isPending}
       />
     </div>

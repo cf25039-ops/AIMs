@@ -31,7 +31,8 @@ export async function globalSearch(query: string): Promise<SearchResult[]> {
         title: `${a.brand} ${a.model}`.trim() || a.asset_tag,
         subtitle: `${a.asset_tag} — ${a.status}`,
         href: `/assets/${a.id}`,
-        icon: a.type_hardware === "laptop" ? "Laptop" : a.type_hardware === "pc" ? "Monitor" : "Boxes",
+        icon:
+          a.type_hardware === "laptop" ? "Laptop" : a.type_hardware === "pc" ? "Monitor" : "Boxes",
       });
     }
   }
@@ -49,7 +50,7 @@ export async function globalSearch(query: string): Promise<SearchResult[]> {
         id: t.id,
         type: "ticket",
         title: t.title,
-        subtitle: `${(t.hardware as any)?.asset_tag || ""} — ${t.status}`,
+        subtitle: `${(t as unknown as { hardware?: { asset_tag: string } }).hardware?.asset_tag || ""} — ${t.status}`,
         href: `/maintenance/${t.id}`,
         icon: "Wrench",
       });
@@ -69,7 +70,7 @@ export async function globalSearch(query: string): Promise<SearchResult[]> {
         id: c.id,
         type: "contract",
         title: c.contract_number,
-        subtitle: `${(c.vendor as any)?.name || "No vendor"} — ends ${c.end_date || "N/A"}`,
+        subtitle: `${(c as unknown as { vendor?: { name: string } }).vendor?.name || "No vendor"} — ends ${c.end_date || "N/A"}`,
         href: "/contracts",
         icon: "FileText",
       });

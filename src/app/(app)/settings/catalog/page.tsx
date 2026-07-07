@@ -26,7 +26,9 @@ export default function CatalogManagementPage() {
           </div>
           <div>
             <h2 className="text-3xl font-semibold tracking-tight">Hardware Catalog</h2>
-            <p className="text-sm text-muted-foreground">Manage hardware types, spec categories and classification rules</p>
+            <p className="text-sm text-muted-foreground">
+              Manage hardware types, spec categories and classification rules
+            </p>
           </div>
         </div>
       </FadeIn>
@@ -39,7 +41,8 @@ export default function CatalogManagementPage() {
               Contract
             </CardTitle>
             <CardDescription>
-              Select which contract you want to manage. Admin-scoped users will only see their assigned contract.
+              Select which contract you want to manage. Admin-scoped users will only see their
+              assigned contract.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -74,7 +77,10 @@ export default function CatalogManagementPage() {
                   <Monitor className="h-5 w-5 text-sky-500" />
                   Hardware Types
                 </CardTitle>
-                <CardDescription>Define the types of hardware available (e.g. Laptop, PC, Printer, Server, Projector)</CardDescription>
+                <CardDescription>
+                  Define the types of hardware available (e.g. Laptop, PC, Printer, Server,
+                  Projector)
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <HardwareTypeManager contractId={selectedContractId} />
@@ -90,7 +96,8 @@ export default function CatalogManagementPage() {
                   Spec Categories
                 </CardTitle>
                 <CardDescription>
-                  Create spec categories (e.g. Low Spec, High Spec) per hardware type and define auto-classification rules
+                  Create spec categories (e.g. Low Spec, High Spec) per hardware type and define
+                  auto-classification rules
                 </CardDescription>
               </CardHeader>
               <CardContent>

@@ -66,7 +66,7 @@ export default function CreateTicketPage() {
 
   const selectedAsset = useMemo(
     () => hardwareList.find((asset: any) => asset.id === selectedAssetId),
-    [hardwareList, selectedAssetId]
+    [hardwareList, selectedAssetId],
   );
 
   const formatAssetLabel = (asset: any) =>
@@ -125,7 +125,9 @@ export default function CreateTicketPage() {
           </Link>
           <div>
             <h2 className="text-2xl font-semibold">Report New Issue</h2>
-            <p className="text-sm text-muted-foreground">Create a repair ticket for faulty hardware</p>
+            <p className="text-sm text-muted-foreground">
+              Create a repair ticket for faulty hardware
+            </p>
           </div>
         </div>
       </FadeIn>
@@ -135,7 +137,8 @@ export default function CreateTicketPage() {
           <CardHeader>
             <CardTitle className="text-lg">Ticket Details</CardTitle>
             <CardDescription>
-              Please provide clear and accurate information to help technicians resolve the issue faster.
+              Please provide clear and accurate information to help technicians resolve the issue
+              faster.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -150,7 +153,11 @@ export default function CreateTicketPage() {
                       <Input
                         value={assetSearch}
                         onChange={(event) => setAssetSearch(event.target.value)}
-                        placeholder={selectedAsset ? formatAssetLabel(selectedAsset) : "Search or select an asset..."}
+                        placeholder={
+                          selectedAsset
+                            ? formatAssetLabel(selectedAsset)
+                            : "Search or select an asset..."
+                        }
                         className="pl-9"
                       />
                     </div>
@@ -166,7 +173,10 @@ export default function CreateTicketPage() {
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              form.setValue("assetId", "", { shouldDirty: true, shouldValidate: true });
+                              form.setValue("assetId", "", {
+                                shouldDirty: true,
+                                shouldValidate: true,
+                              });
                               setAssetSearch("");
                             }}
                           >
@@ -189,7 +199,10 @@ export default function CreateTicketPage() {
                               key={asset.id}
                               type="button"
                               onClick={() => {
-                                form.setValue("assetId", asset.id, { shouldDirty: true, shouldValidate: true });
+                                form.setValue("assetId", asset.id, {
+                                  shouldDirty: true,
+                                  shouldValidate: true,
+                                });
                                 setAssetSearch("");
                               }}
                               className="flex w-full items-start justify-between gap-3 border-b border-border/60 px-3 py-2.5 text-left text-sm transition hover:bg-muted/60 last:border-b-0"
@@ -199,12 +212,19 @@ export default function CreateTicketPage() {
                                   {asset.asset_tag} - {asset.type_hardware}
                                 </span>
                                 <span className="mt-0.5 block truncate text-xs text-muted-foreground">
-                                  {[asset.brand, asset.model, asset.department?.name, asset.pic_name]
+                                  {[
+                                    asset.brand,
+                                    asset.model,
+                                    asset.department?.name,
+                                    asset.pic_name,
+                                  ]
                                     .filter(Boolean)
                                     .join(" | ") || "No extra details"}
                                 </span>
                               </span>
-                              {isSelected ? <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> : null}
+                              {isSelected ? (
+                                <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                              ) : null}
                             </button>
                           );
                         })
@@ -212,15 +232,22 @@ export default function CreateTicketPage() {
                     </div>
                   </div>
                   {form.formState.errors.assetId && (
-                    <p className="text-xs text-rose-500 mt-1">{form.formState.errors.assetId.message}</p>
+                    <p className="text-xs text-rose-500 mt-1">
+                      {form.formState.errors.assetId.message}
+                    </p>
                   )}
                 </div>
 
                 <div>
                   <label className="text-sm font-medium">Issue Title</label>
-                  <Input {...form.register("issueTitle")} placeholder="e.g. Screen flickering occasionally" />
+                  <Input
+                    {...form.register("issueTitle")}
+                    placeholder="e.g. Screen flickering occasionally"
+                  />
                   {form.formState.errors.issueTitle && (
-                    <p className="text-xs text-rose-500 mt-1">{form.formState.errors.issueTitle.message}</p>
+                    <p className="text-xs text-rose-500 mt-1">
+                      {form.formState.errors.issueTitle.message}
+                    </p>
                   )}
                 </div>
 
@@ -233,7 +260,9 @@ export default function CreateTicketPage() {
                     <option value="low">Low (Minor issue, bypass available)</option>
                   </Select>
                   {form.formState.errors.severity && (
-                    <p className="text-xs text-rose-500 mt-1">{form.formState.errors.severity.message}</p>
+                    <p className="text-xs text-rose-500 mt-1">
+                      {form.formState.errors.severity.message}
+                    </p>
                   )}
                 </div>
 
@@ -245,23 +274,31 @@ export default function CreateTicketPage() {
                     placeholder="Describe what happened, error codes (if any), and steps to reproduce..."
                   />
                   {form.formState.errors.issueDescription && (
-                    <p className="text-xs text-rose-500 mt-1">{form.formState.errors.issueDescription.message}</p>
+                    <p className="text-xs text-rose-500 mt-1">
+                      {form.formState.errors.issueDescription.message}
+                    </p>
                   )}
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium block mb-2">Upload Evidence (Optional)</label>
+                  <label className="text-sm font-medium block mb-2">
+                    Upload Evidence (Optional)
+                  </label>
                   <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border/60 rounded-xl cursor-pointer hover:bg-muted/50 transition-colors">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6 text-muted-foreground">
                       <UploadCloud className="h-8 w-8 mb-2" />
                       <p className="text-sm">
-                        {file ? <span className="font-semibold text-primary">{file.name}</span> : <span>Click to upload image or drag and drop</span>}
+                        {file ? (
+                          <span className="font-semibold text-primary">{file.name}</span>
+                        ) : (
+                          <span>Click to upload image or drag and drop</span>
+                        )}
                       </p>
                       <p className="text-xs mt-1">PNG, JPG or WEBP (Max 5MB)</p>
                     </div>
-                    <input 
-                      type="file" 
-                      className="hidden" 
+                    <input
+                      type="file"
+                      className="hidden"
                       accept="image/*"
                       onChange={(e) => {
                         if (e.target.files && e.target.files[0]) {

@@ -4,7 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 
 async function verifyAdminAccess() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) return false;
 
   const { data: profile } = await supabase
@@ -26,7 +28,8 @@ export async function getSystemAuditLogs() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("audit_logs")
-    .select(`
+    .select(
+      `
       id,
       table_name,
       record_id,
@@ -42,7 +45,8 @@ export async function getSystemAuditLogs() {
         full_name,
         email
       )
-    `)
+    `,
+    )
     .order("created_at", { ascending: false })
     .limit(100);
 
@@ -63,7 +67,8 @@ export async function getActivityLogs() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("activity_logs")
-    .select(`
+    .select(
+      `
       id,
       action,
       entity,
@@ -75,7 +80,8 @@ export async function getActivityLogs() {
         full_name,
         email
       )
-    `)
+    `,
+    )
     .order("created_at", { ascending: false })
     .limit(100);
 

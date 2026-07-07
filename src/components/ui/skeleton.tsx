@@ -7,16 +7,17 @@ type SkeletonProps = {
 };
 
 export function Skeleton({ className }: SkeletonProps) {
-  return (
-    <div className={cn("animate-pulse rounded bg-muted", className)} />
-  );
+  return <div className={cn("animate-pulse rounded bg-muted", className)} />;
 }
 
 export function TableRowSkeleton({ columns = 4 }: { columns?: number }) {
   return (
     <div className="flex items-center gap-4 p-4 border-b border-border/30">
       {Array.from({ length: columns }).map((_, i) => (
-        <Skeleton key={i} className={cn("h-4 rounded", i === 0 ? "w-8" : i === 1 ? "flex-1 max-w-[200px]" : "w-24")} />
+        <Skeleton
+          key={i}
+          className={cn("h-4 rounded", i === 0 ? "w-8" : i === 1 ? "flex-1 max-w-[200px]" : "w-24")}
+        />
       ))}
     </div>
   );

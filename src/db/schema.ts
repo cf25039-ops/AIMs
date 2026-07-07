@@ -53,11 +53,7 @@ export const hardwareTypeEnum = pgEnum("hardware_type", [
   "projector",
 ]);
 
-export const hardwareConditionEnum = pgEnum("hardware_condition", [
-  "good",
-  "fair",
-  "damaged",
-]);
+export const hardwareConditionEnum = pgEnum("hardware_condition", ["good", "fair", "damaged"]);
 
 export const ticketSeverityEnum = pgEnum("ticket_severity", [
   "critical",
@@ -100,11 +96,7 @@ export const notificationChannelEnum = pgEnum("notification_channel", [
   "whatsapp",
 ]);
 
-export const auditActionEnum = pgEnum("audit_action", [
-  "insert",
-  "update",
-  "delete",
-]);
+export const auditActionEnum = pgEnum("audit_action", ["insert", "update", "delete"]);
 
 export const profiles = pgTable(
   "profiles",
@@ -115,14 +107,12 @@ export const profiles = pgTable(
     email: varchar("email", { length: 255 }),
     fullName: varchar("full_name", { length: 120 }),
     role: userRoleEnum("role").notNull().default("staff"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     emailUnique: uniqueIndex("profiles_email_unique").on(table.email),
     roleIdx: index("profiles_role_idx").on(table.role),
-  })
+  }),
 );
 
 export const projects = pgTable(
@@ -132,17 +122,13 @@ export const projects = pgTable(
     name: varchar("name", { length: 120 }).notNull(),
     code: varchar("code", { length: 50 }).notNull(),
     description: text("description"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     codeUnique: uniqueIndex("projects_code_unique").on(table.code),
     nameIdx: index("projects_name_idx").on(table.name),
-  })
+  }),
 );
 
 export const projectMembers = pgTable(
@@ -156,18 +142,16 @@ export const projectMembers = pgTable(
       .references(() => profiles.id, { onDelete: "cascade" })
       .notNull(),
     role: userRoleEnum("role").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     projectIdx: index("project_members_project_idx").on(table.projectId),
     userIdx: index("project_members_user_idx").on(table.userId),
     projectUserUnique: uniqueIndex("project_members_project_user_unique").on(
       table.projectId,
-      table.userId
+      table.userId,
     ),
-  })
+  }),
 );
 
 export const vendors = pgTable(
@@ -181,17 +165,13 @@ export const vendors = pgTable(
     email: varchar("email", { length: 255 }),
     phone: varchar("phone", { length: 40 }),
     status: varchar("status", { length: 40 }).default("active"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     projectIdx: index("vendors_project_idx").on(table.projectId),
     nameIdx: index("vendors_name_idx").on(table.name),
-  })
+  }),
 );
 
 export const slaPolicies = pgTable(
@@ -206,13 +186,11 @@ export const slaPolicies = pgTable(
     highHours: integer("high_hours").notNull(),
     mediumHours: integer("medium_hours").notNull(),
     lowHours: integer("low_hours").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     projectIdx: index("sla_policies_project_idx").on(table.projectId),
-  })
+  }),
 );
 
 export const contracts = pgTable(
@@ -232,20 +210,16 @@ export const contracts = pgTable(
     startDate: date("start_date"),
     endDate: date("end_date"),
     value: numeric("value", { precision: 12, scale: 2 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     projectIdx: index("contracts_project_idx").on(table.projectId),
     projectNumberUnique: uniqueIndex("contracts_project_number_unique").on(
       table.projectId,
-      table.contractNumber
+      table.contractNumber,
     ),
-  })
+  }),
 );
 
 export const regions = pgTable(
@@ -257,20 +231,16 @@ export const regions = pgTable(
       .notNull(),
     name: varchar("name", { length: 120 }).notNull(),
     code: varchar("code", { length: 50 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     contractIdx: index("regions_contract_idx").on(table.contractId),
     contractNameUnique: uniqueIndex("regions_contract_name_unique").on(
       table.contractId,
-      table.name
+      table.name,
     ),
-  })
+  }),
 );
 
 export const states = pgTable(
@@ -282,20 +252,13 @@ export const states = pgTable(
       .notNull(),
     name: varchar("name", { length: 120 }).notNull(),
     code: varchar("code", { length: 50 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     regionIdx: index("states_region_idx").on(table.regionId),
-    regionNameUnique: uniqueIndex("states_region_name_unique").on(
-      table.regionId,
-      table.name
-    ),
-  })
+    regionNameUnique: uniqueIndex("states_region_name_unique").on(table.regionId, table.name),
+  }),
 );
 
 export const facilities = pgTable(
@@ -308,20 +271,13 @@ export const facilities = pgTable(
     name: varchar("name", { length: 160 }).notNull(),
     code: varchar("code", { length: 50 }),
     address: text("address"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     stateIdx: index("facilities_state_idx").on(table.stateId),
-    stateNameUnique: uniqueIndex("facilities_state_name_unique").on(
-      table.stateId,
-      table.name
-    ),
-  })
+    stateNameUnique: uniqueIndex("facilities_state_name_unique").on(table.stateId, table.name),
+  }),
 );
 
 export const departments = pgTable(
@@ -333,20 +289,16 @@ export const departments = pgTable(
       .notNull(),
     name: varchar("name", { length: 160 }).notNull(),
     code: varchar("code", { length: 50 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     facilityIdx: index("departments_facility_idx").on(table.facilityId),
     facilityNameUnique: uniqueIndex("departments_facility_name_unique").on(
       table.facilityId,
-      table.name
+      table.name,
     ),
-  })
+  }),
 );
 
 export const assetTypes = pgTable(
@@ -358,17 +310,12 @@ export const assetTypes = pgTable(
       .notNull(),
     name: varchar("name", { length: 120 }).notNull(),
     description: text("description"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     projectIdx: index("asset_types_project_idx").on(table.projectId),
-    nameUnique: uniqueIndex("asset_types_project_name_unique").on(
-      table.projectId,
-      table.name
-    ),
-  })
+    nameUnique: uniqueIndex("asset_types_project_name_unique").on(table.projectId, table.name),
+  }),
 );
 
 export const brands = pgTable(
@@ -379,17 +326,12 @@ export const brands = pgTable(
       .references(() => projects.id, { onDelete: "cascade" })
       .notNull(),
     name: varchar("name", { length: 120 }).notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     projectIdx: index("brands_project_idx").on(table.projectId),
-    nameUnique: uniqueIndex("brands_project_name_unique").on(
-      table.projectId,
-      table.name
-    ),
-  })
+    nameUnique: uniqueIndex("brands_project_name_unique").on(table.projectId, table.name),
+  }),
 );
 
 export const models = pgTable(
@@ -406,19 +348,14 @@ export const models = pgTable(
       .references(() => assetTypes.id, { onDelete: "cascade" })
       .notNull(),
     name: varchar("name", { length: 160 }).notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     projectIdx: index("models_project_idx").on(table.projectId),
     brandIdx: index("models_brand_idx").on(table.brandId),
     typeIdx: index("models_type_idx").on(table.assetTypeId),
-    nameUnique: uniqueIndex("models_project_name_unique").on(
-      table.projectId,
-      table.name
-    ),
-  })
+    nameUnique: uniqueIndex("models_project_name_unique").on(table.projectId, table.name),
+  }),
 );
 
 export const hardwareTypes = pgTable(
@@ -432,20 +369,16 @@ export const hardwareTypes = pgTable(
     description: text("description"),
     icon: varchar("icon", { length: 40 }),
     sortOrder: integer("sort_order").notNull().default(0),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     contractIdx: index("hardware_types_contract_idx").on(table.contractId),
     contractNameUnique: uniqueIndex("hardware_types_contract_name_unique").on(
       table.contractId,
-      table.name
+      table.name,
     ),
-  })
+  }),
 );
 
 export const specCategories = pgTable(
@@ -462,21 +395,17 @@ export const specCategories = pgTable(
     description: text("description"),
     color: varchar("color", { length: 20 }),
     sortOrder: integer("sort_order").notNull().default(0),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     contractIdx: index("spec_categories_contract_idx").on(table.contractId),
     typeIdx: index("spec_categories_type_idx").on(table.hardwareTypeId),
     typeNameUnique: uniqueIndex("spec_categories_type_name_unique").on(
       table.hardwareTypeId,
-      table.name
+      table.name,
     ),
-  })
+  }),
 );
 
 export const specRules = pgTable(
@@ -489,13 +418,11 @@ export const specRules = pgTable(
     ruleType: varchar("rule_type", { length: 40 }).notNull(),
     ruleOperator: varchar("rule_operator", { length: 10 }).notNull().default("eq"),
     ruleValue: varchar("rule_value", { length: 120 }).notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     categoryIdx: index("spec_rules_category_idx").on(table.specCategoryId),
-  })
+  }),
 );
 
 export const hardware = pgTable(
@@ -544,12 +471,8 @@ export const hardware = pgTable(
     custodianTeam: varchar("custodian_team", { length: 120 }),
     physicalRoom: varchar("physical_room", { length: 120 }),
     notes: text("notes"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     serialUnique: uniqueIndex("hardware_serial_unique").on(table.serialNumber),
@@ -561,7 +484,7 @@ export const hardware = pgTable(
     specCategoryIdx: index("hardware_spec_category_idx").on(table.specCategoryId),
     brandIdx: index("hardware_brand_idx").on(table.brandId),
     modelIdx: index("hardware_model_idx").on(table.modelId),
-  })
+  }),
 );
 
 export const assetMovements = pgTable(
@@ -578,20 +501,14 @@ export const assetMovements = pgTable(
     approvedBy: uuid("approved_by").references(() => profiles.id),
     movementType: movementTypeEnum("movement_type").notNull(),
     transferReason: text("transfer_reason"),
-    transferDate: timestamp("transfer_date", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    transferDate: timestamp("transfer_date", { withTimezone: true }).defaultNow().notNull(),
     attachmentUrl: varchar("attachment_url", { length: 255 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     hardwareIdx: index("asset_movements_hardware_idx").on(table.hardwareId),
-    toDepartmentIdx: index("asset_movements_to_department_idx").on(
-      table.toDepartmentId
-    ),
-  })
+    toDepartmentIdx: index("asset_movements_to_department_idx").on(table.toDepartmentId),
+  }),
 );
 
 export const assetAssignments = pgTable(
@@ -602,18 +519,14 @@ export const assetAssignments = pgTable(
       .references(() => hardware.id, { onDelete: "cascade" })
       .notNull(),
     assignedTo: uuid("assigned_to").references(() => profiles.id),
-    assignedAt: timestamp("assigned_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    assignedAt: timestamp("assigned_at", { withTimezone: true }).defaultNow().notNull(),
     returnedAt: timestamp("returned_at", { withTimezone: true }),
     notes: text("notes"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     hardwareIdx: index("asset_assignments_hardware_idx").on(table.hardwareId),
-  })
+  }),
 );
 
 export const maintenanceLogs = pgTable(
@@ -623,19 +536,15 @@ export const maintenanceLogs = pgTable(
     hardwareId: uuid("hardware_id")
       .references(() => hardware.id, { onDelete: "cascade" })
       .notNull(),
-    performedAt: timestamp("performed_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    performedAt: timestamp("performed_at", { withTimezone: true }).defaultNow().notNull(),
     performedBy: uuid("performed_by").references(() => profiles.id),
     description: text("description").notNull(),
     cost: numeric("cost", { precision: 12, scale: 2 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     hardwareIdx: index("maintenance_logs_hardware_idx").on(table.hardwareId),
-  })
+  }),
 );
 
 export const statusHistory = pgTable(
@@ -647,15 +556,13 @@ export const statusHistory = pgTable(
       .notNull(),
     fromStatus: hardwareStatusEnum("from_status"),
     toStatus: hardwareStatusEnum("to_status").notNull(),
-    changedAt: timestamp("changed_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    changedAt: timestamp("changed_at", { withTimezone: true }).defaultNow().notNull(),
     changedBy: uuid("changed_by").references(() => profiles.id),
     note: text("note"),
   },
   (table) => ({
     hardwareIdx: index("status_history_hardware_idx").on(table.hardwareId),
-  })
+  }),
 );
 
 export const repairTickets = pgTable(
@@ -668,23 +575,17 @@ export const repairTickets = pgTable(
     severity: ticketSeverityEnum("severity").notNull(),
     status: ticketStatusEnum("status").notNull().default("open"),
     slaPolicyId: uuid("sla_policy_id").references(() => slaPolicies.id),
-    openedAt: timestamp("opened_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    openedAt: timestamp("opened_at", { withTimezone: true }).defaultNow().notNull(),
     assignedTo: uuid("assigned_to").references(() => profiles.id),
     title: varchar("title", { length: 160 }).notNull(),
     description: text("description"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     hardwareIdx: index("repair_tickets_hardware_idx").on(table.hardwareId),
     statusIdx: index("repair_tickets_status_idx").on(table.status),
-  })
+  }),
 );
 
 export const repairLogs = pgTable(
@@ -696,13 +597,11 @@ export const repairLogs = pgTable(
       .notNull(),
     note: text("note").notNull(),
     createdBy: uuid("created_by").references(() => profiles.id),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     ticketIdx: index("repair_logs_ticket_idx").on(table.ticketId),
-  })
+  }),
 );
 
 export const repairAttachments = pgTable(
@@ -713,13 +612,11 @@ export const repairAttachments = pgTable(
       .references(() => repairTickets.id, { onDelete: "cascade" })
       .notNull(),
     url: varchar("url", { length: 255 }).notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     ticketIdx: index("repair_attachments_ticket_idx").on(table.ticketId),
-  })
+  }),
 );
 
 export const slaEvents = pgTable(
@@ -732,13 +629,11 @@ export const slaEvents = pgTable(
     status: varchar("status", { length: 40 }).notNull(),
     breachedAt: timestamp("breached_at", { withTimezone: true }),
     resolvedAt: timestamp("resolved_at", { withTimezone: true }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     ticketIdx: index("sla_events_ticket_idx").on(table.ticketId),
-  })
+  }),
 );
 
 export const notifications = pgTable(
@@ -752,13 +647,11 @@ export const notifications = pgTable(
     body: text("body"),
     channel: notificationChannelEnum("channel").notNull().default("in_app"),
     readAt: timestamp("read_at", { withTimezone: true }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     userIdx: index("notifications_user_idx").on(table.userId),
-  })
+  }),
 );
 
 export const notificationLogs = pgTable(
@@ -770,15 +663,11 @@ export const notificationLogs = pgTable(
       .notNull(),
     status: varchar("status", { length: 40 }).notNull(),
     metadata: jsonb("metadata"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
-    notificationIdx: index("notification_logs_notification_idx").on(
-      table.notificationId
-    ),
-  })
+    notificationIdx: index("notification_logs_notification_idx").on(table.notificationId),
+  }),
 );
 
 export const attachments = pgTable(
@@ -789,13 +678,11 @@ export const attachments = pgTable(
     recordId: uuid("record_id").notNull(),
     url: varchar("url", { length: 255 }).notNull(),
     fileType: varchar("file_type", { length: 80 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     recordIdx: index("attachments_record_idx").on(table.recordId),
-  })
+  }),
 );
 
 export const activityLogs = pgTable(
@@ -809,14 +696,12 @@ export const activityLogs = pgTable(
     ipAddress: varchar("ip_address", { length: 64 }),
     device: varchar("device", { length: 255 }),
     metadata: jsonb("metadata"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     actionIdx: index("activity_logs_action_idx").on(table.action),
     entityIdx: index("activity_logs_entity_idx").on(table.entity),
-  })
+  }),
 );
 
 export const auditLogs = pgTable(
@@ -833,14 +718,12 @@ export const auditLogs = pgTable(
     browser: varchar("browser", { length: 255 }),
     sessionId: varchar("session_id", { length: 128 }),
     device: varchar("device", { length: 255 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     tableIdx: index("audit_logs_table_idx").on(table.tableName),
     recordIdx: index("audit_logs_record_idx").on(table.recordId),
-  })
+  }),
 );
 
 export const warehouseItems = pgTable(
@@ -854,17 +737,13 @@ export const warehouseItems = pgTable(
     sku: varchar("sku", { length: 80 }),
     quantity: integer("quantity").notNull().default(0),
     minQuantity: integer("min_quantity").notNull().default(0),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     projectIdx: index("warehouse_items_project_idx").on(table.projectId),
     nameIdx: index("warehouse_items_name_idx").on(table.name),
-  })
+  }),
 );
 
 export const stockMovements = pgTable(
@@ -881,14 +760,12 @@ export const stockMovements = pgTable(
     quantity: integer("quantity").notNull(),
     note: text("note"),
     performedBy: uuid("performed_by").references(() => profiles.id),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     itemIdx: index("stock_movements_item_idx").on(table.warehouseItemId),
     projectIdx: index("stock_movements_project_idx").on(table.projectId),
-  })
+  }),
 );
 
 export const purchaseRequests = pgTable(
@@ -903,15 +780,13 @@ export const purchaseRequests = pgTable(
     quantity: integer("quantity").notNull(),
     status: purchaseStatusEnum("status").notNull().default("pending"),
     note: text("note"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     approvedAt: timestamp("approved_at", { withTimezone: true }),
   },
   (table) => ({
     projectIdx: index("purchase_requests_project_idx").on(table.projectId),
     statusIdx: index("purchase_requests_status_idx").on(table.status),
-  })
+  }),
 );
 
 export const assetHealthScores = pgTable(
@@ -922,16 +797,12 @@ export const assetHealthScores = pgTable(
       .references(() => hardware.id, { onDelete: "cascade" })
       .notNull(),
     score: integer("score").notNull(),
-    calculatedAt: timestamp("calculated_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    calculatedAt: timestamp("calculated_at", { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     hardwareIdx: index("asset_health_scores_hardware_idx").on(table.hardwareId),
-  })
+  }),
 );
 
 export const analyticsSnapshots = pgTable(
@@ -943,13 +814,11 @@ export const analyticsSnapshots = pgTable(
       .notNull(),
     snapshotDate: date("snapshot_date").notNull(),
     data: jsonb("data").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     projectIdx: index("analytics_snapshots_project_idx").on(table.projectId),
-  })
+  }),
 );
 
 export const projectRelations = relations(projects, ({ many }) => ({

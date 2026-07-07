@@ -4,7 +4,8 @@ export async function getContracts() {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("contracts")
-    .select(`
+    .select(
+      `
       id,
       contract_number,
       start_date,
@@ -12,7 +13,8 @@ export async function getContracts() {
       value,
       project:projects(name, code),
       vendor:vendors(name, email, phone)
-    `)
+    `,
+    )
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -25,16 +27,20 @@ export async function getContracts() {
 
 export async function getDashboardStats() {
   const supabase = createClient();
-  
+
   // Get counts
-  const { count: projectCount } = await supabase.from("projects").select("*", { count: "exact", head: true });
-  const { count: vendorCount } = await supabase.from("vendors").select("*", { count: "exact", head: true });
-  
+  const { count: projectCount } = await supabase
+    .from("projects")
+    .select("*", { count: "exact", head: true });
+  const { count: vendorCount } = await supabase
+    .from("vendors")
+    .select("*", { count: "exact", head: true });
+
   const { data: contracts } = await supabase.from("contracts").select("value, end_date");
-  
+
   let totalValue = 0;
   let expiringSoon = 0;
-  
+
   const today = new Date();
   const nextMonth = new Date();
   nextMonth.setMonth(nextMonth.getMonth() + 1);

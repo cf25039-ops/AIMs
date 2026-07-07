@@ -27,7 +27,8 @@ export function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
               "flex min-w-[180px] flex-1 items-center gap-3 rounded-2xl border px-4 py-3 transition",
               isActive && "border-primary bg-primary/5",
               isComplete && "border-emerald-500/20 bg-emerald-500/10",
-              isClickable && "cursor-pointer hover:border-primary/40 hover:bg-muted/30 active:scale-[0.99]"
+              isClickable &&
+                "cursor-pointer hover:border-primary/40 hover:bg-muted/30 active:scale-[0.99]",
             )}
           >
             <div
@@ -35,7 +36,7 @@ export function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
                 "flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition",
                 isComplete && "bg-emerald-500 text-white",
                 isActive && "bg-primary text-primary-foreground",
-                !isActive && !isComplete && "bg-muted text-muted-foreground"
+                !isActive && !isComplete && "bg-muted text-muted-foreground",
               )}
             >
               {index + 1}

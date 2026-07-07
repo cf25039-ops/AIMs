@@ -6,7 +6,7 @@ export const hardwareFormSchema = z.object({
   region: z.string().optional(),
   state: z.string().optional(),
   district: z.string().optional(),
-  
+
   picName: z.string().min(2, "PIC name is required"),
   contactNumber: z.string().min(5, "Contact number is required"),
   serialNumber: z.string().min(3, "Serial number is required"),

@@ -15,11 +15,7 @@ const DEFAULT_HOURS: Record<string, number> = {
   informational: 72,
 };
 
-export function calculateSLA(
-  openedAt: string,
-  severity: string,
-  slaHours?: number
-): SLAResult {
+export function calculateSLA(openedAt: string, severity: string, slaHours?: number): SLAResult {
   const opened = new Date(openedAt);
   const now = new Date();
   const totalHours = slaHours || DEFAULT_HOURS[severity] || 24;

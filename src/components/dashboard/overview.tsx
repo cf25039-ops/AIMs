@@ -19,11 +19,12 @@ export function DashboardOverview() {
   const supabase = createClient();
 
   useEffect(() => {
-    const channel = supabase.channel('dashboard-realtime')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'activity_logs' }, () => {
+    const channel = supabase
+      .channel("dashboard-realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "activity_logs" }, () => {
         queryClient.invalidateQueries({ queryKey: ["dashboard-activities"] });
       })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'repair_tickets' }, () => {
+      .on("postgres_changes", { event: "*", schema: "public", table: "repair_tickets" }, () => {
         queryClient.invalidateQueries({ queryKey: ["dashboard-metrics"] });
       })
       .subscribe();
@@ -84,7 +85,7 @@ export function DashboardOverview() {
       <FadeIn className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-8 shadow-sm">
         {/* Background glow effect */}
         <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
-        
+
         <div className="relative flex flex-col justify-between gap-8 md:flex-row md:items-end">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
@@ -101,14 +102,16 @@ export function DashboardOverview() {
                 <Sparkles className="h-3 w-3" /> Live Sync Active
               </span>
             </div>
-            
+
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
                 Good Morning.
               </h2>
               <p className="max-w-xl text-base text-muted-foreground">
-                All systems running across <strong className="text-foreground">24 active contracts</strong>. 
-                There are currently <strong className="text-destructive">2 critical alerts</strong> requiring attention today.
+                All systems running across{" "}
+                <strong className="text-foreground">24 active contracts</strong>. There are
+                currently <strong className="text-destructive">2 critical alerts</strong> requiring
+                attention today.
               </p>
             </div>
           </div>
@@ -123,7 +126,10 @@ export function DashboardOverview() {
               </Button>
             </Link>
             <Link href="/assets/add">
-              <Button variant="outline" className="group border-border/60 bg-background/50 backdrop-blur-md transition-all hover:bg-accent/10 hover:text-accent hover:border-accent/30">
+              <Button
+                variant="outline"
+                className="group border-border/60 bg-background/50 backdrop-blur-md transition-all hover:bg-accent/10 hover:text-accent hover:border-accent/30"
+              >
                 Add Asset
               </Button>
             </Link>
@@ -136,11 +142,13 @@ export function DashboardOverview() {
       </FadeIn>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {metrics.length > 0 ? metrics.map((metric, index) => (
-          <FadeIn key={metric.title} delay={0.1 + index * 0.05}>
-            <MetricCard {...metric} />
-          </FadeIn>
-        )) : (
+        {metrics.length > 0 ? (
+          metrics.map((metric, index) => (
+            <FadeIn key={metric.title} delay={0.1 + index * 0.05}>
+              <MetricCard {...metric} />
+            </FadeIn>
+          ))
+        ) : (
           <div className="col-span-4 flex h-32 items-center justify-center text-sm text-muted-foreground">
             Loading metrics...
           </div>
@@ -172,7 +180,7 @@ export function DashboardOverview() {
             {/* Urgent glow background */}
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-destructive via-warning to-destructive" />
             <div className="absolute top-0 right-0 w-32 h-32 bg-destructive/5 blur-3xl rounded-full" />
-            
+
             <CardHeader className="relative z-10 pb-4">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg font-bold flex items-center gap-2">
@@ -182,36 +190,63 @@ export function DashboardOverview() {
                   </div>
                   Critical Alerts
                 </CardTitle>
-                <Badge variant="danger" className="bg-destructive/10 text-destructive hover:bg-destructive/20 border-0">
-                  {(alertData?.slaBreaches?.length || 0) + (alertData?.warrantyAlerts?.length || 0)} Requires Action
+                <Badge
+                  variant="danger"
+                  className="bg-destructive/10 text-destructive hover:bg-destructive/20 border-0"
+                >
+                  {(alertData?.slaBreaches?.length || 0) + (alertData?.warrantyAlerts?.length || 0)}{" "}
+                  Requires Action
                 </Badge>
               </div>
             </CardHeader>
             <CardContent className="relative z-10 space-y-3">
               {/* SLA Breach Alerts */}
               {alertData?.slaBreaches?.map((ticket: any) => {
-                const hoursOpen = Math.round((Date.now() - new Date(ticket.created_at).getTime()) / (1000 * 60 * 60));
+                const hoursOpen = Math.round(
+                  (Date.now() - new Date(ticket.created_at).getTime()) / (1000 * 60 * 60),
+                );
                 return (
-                  <div key={ticket.id} className="group relative overflow-hidden rounded-xl border border-destructive/20 bg-destructive/5 p-4 transition-colors hover:bg-destructive/10">
+                  <div
+                    key={ticket.id}
+                    className="group relative overflow-hidden rounded-xl border border-destructive/20 bg-destructive/5 p-4 transition-colors hover:bg-destructive/10"
+                  >
                     <div className="flex justify-between items-start mb-1">
-                      <p className="text-sm font-semibold text-destructive">Open Ticket: {ticket.title}</p>
-                      <span className="text-[10px] font-medium text-destructive/70 uppercase">{hoursOpen}h ago</span>
+                      <p className="text-sm font-semibold text-destructive">
+                        Open Ticket: {ticket.title}
+                      </p>
+                      <span className="text-[10px] font-medium text-destructive/70 uppercase">
+                        {hoursOpen}h ago
+                      </span>
                     </div>
-                    <p className="text-xs text-muted-foreground">Severity: {ticket.severity} · Asset: {ticket.hardware?.asset_tag || "Unknown"}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Severity: {ticket.severity} · Asset: {ticket.hardware?.asset_tag || "Unknown"}
+                    </p>
                   </div>
                 );
               })}
 
               {/* Warranty Expiring Alerts */}
               {alertData?.warrantyAlerts?.map((hw: any) => {
-                const daysLeft = Math.ceil((new Date(hw.warranty_expiry).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+                const daysLeft = Math.ceil(
+                  (new Date(hw.warranty_expiry).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+                );
                 return (
-                  <div key={hw.id} className="group relative overflow-hidden rounded-xl border border-warning/20 bg-warning/5 p-4 transition-colors hover:bg-warning/10">
+                  <div
+                    key={hw.id}
+                    className="group relative overflow-hidden rounded-xl border border-warning/20 bg-warning/5 p-4 transition-colors hover:bg-warning/10"
+                  >
                     <div className="flex justify-between items-start mb-1">
-                      <p className="text-sm font-semibold text-warning">Warranty Expiring: {hw.brand} {hw.model}</p>
-                      <span className="text-[10px] font-medium text-warning/70 uppercase">{daysLeft} days</span>
+                      <p className="text-sm font-semibold text-warning">
+                        Warranty Expiring: {hw.brand} {hw.model}
+                      </p>
+                      <span className="text-[10px] font-medium text-warning/70 uppercase">
+                        {daysLeft} days
+                      </span>
                     </div>
-                    <p className="text-xs text-muted-foreground">Asset: {hw.asset_tag} · Expires: {new Date(hw.warranty_expiry).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Asset: {hw.asset_tag} · Expires:{" "}
+                      {new Date(hw.warranty_expiry).toLocaleDateString()}
+                    </p>
                   </div>
                 );
               })}
@@ -220,19 +255,27 @@ export function DashboardOverview() {
               {alertData?.pendingRequests && alertData.pendingRequests.length > 0 && (
                 <div className="group relative overflow-hidden rounded-xl border border-border/50 bg-muted/30 p-4 transition-colors hover:bg-muted/50">
                   <div className="flex justify-between items-start mb-1">
-                    <p className="text-sm font-semibold text-foreground">Pending Purchase Requests</p>
-                    <span className="text-[10px] font-medium text-muted-foreground uppercase">{alertData.pendingRequests.length} requests</span>
+                    <p className="text-sm font-semibold text-foreground">
+                      Pending Purchase Requests
+                    </p>
+                    <span className="text-[10px] font-medium text-muted-foreground uppercase">
+                      {alertData.pendingRequests.length} requests
+                    </span>
                   </div>
-                  <p className="text-xs text-muted-foreground">{alertData.pendingRequests.length} purchase requests awaiting approval.</p>
+                  <p className="text-xs text-muted-foreground">
+                    {alertData.pendingRequests.length} purchase requests awaiting approval.
+                  </p>
                 </div>
               )}
 
               {/* Empty state if no alerts */}
-              {(!alertData?.slaBreaches?.length && !alertData?.warrantyAlerts?.length && !alertData?.pendingRequests?.length) && (
-                <div className="text-center py-4 text-sm text-muted-foreground">
-                  No critical alerts at this time
-                </div>
-              )}
+              {!alertData?.slaBreaches?.length &&
+                !alertData?.warrantyAlerts?.length &&
+                !alertData?.pendingRequests?.length && (
+                  <div className="text-center py-4 text-sm text-muted-foreground">
+                    No critical alerts at this time
+                  </div>
+                )}
             </CardContent>
           </Card>
         </FadeIn>

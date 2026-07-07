@@ -4,7 +4,8 @@ export async function getVendors() {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("vendors")
-    .select(`
+    .select(
+      `
       id,
       name,
       email,
@@ -12,7 +13,8 @@ export async function getVendors() {
       status,
       project:projects(name, code),
       contracts(count)
-    `)
+    `,
+    )
     .order("name", { ascending: true });
 
   if (error) {
@@ -25,12 +27,11 @@ export async function getVendors() {
 
 export async function getVendorStats() {
   const supabase = createClient();
-  const { count: totalVendors } = await supabase.from("vendors").select("*", { count: "exact", head: true });
-  
-  const { data: activeData } = await supabase
+  const { count: totalVendors } = await supabase
     .from("vendors")
-    .select("id")
-    .eq("status", "active");
+    .select("*", { count: "exact", head: true });
+
+  const { data: activeData } = await supabase.from("vendors").select("id").eq("status", "active");
 
   return {
     totalVendors: totalVendors || 0,

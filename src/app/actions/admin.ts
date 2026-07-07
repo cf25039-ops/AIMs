@@ -7,7 +7,9 @@ import { validatePassword } from "@/lib/password-policy";
 
 async function assertSuperAdmin() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) throw new Error("Not authenticated");
 
   const { data: profile } = await supabase
@@ -55,14 +57,12 @@ export async function createUserAccount(values: {
   const userId = authData.user.id;
 
   // Insert profile
-  const { error: profileError } = await admin
-    .from("profiles")
-    .insert({
-      id: userId,
-      email: values.email,
-      full_name: values.fullName,
-      role: values.role,
-    });
+  const { error: profileError } = await admin.from("profiles").insert({
+    id: userId,
+    email: values.email,
+    full_name: values.fullName,
+    role: values.role,
+  });
 
   if (profileError) {
     console.error("Profile insert failed:", profileError);
@@ -71,13 +71,11 @@ export async function createUserAccount(values: {
 
   // If projectId provided, add as project member
   if (values.projectId) {
-    const { error: memberError } = await admin
-      .from("project_members")
-      .insert({
-        project_id: values.projectId,
-        user_id: userId,
-        role: values.role as any,
-      });
+    const { error: memberError } = await admin.from("project_members").insert({
+      project_id: values.projectId,
+      user_id: userId,
+      role: values.role as any,
+    });
 
     if (memberError) {
       console.error("Project member insert failed:", memberError);
@@ -95,10 +93,7 @@ export async function deleteUserAccount(userId: string) {
   const admin = createAdminClient();
 
   // Delete profile first
-  const { error: profileError } = await admin
-    .from("profiles")
-    .delete()
-    .eq("id", userId);
+  const { error: profileError } = await admin.from("profiles").delete().eq("id", userId);
 
   if (profileError) {
     console.error("Profile delete failed:", profileError);
@@ -130,10 +125,7 @@ export async function updateUserRole(userId: string, role: string) {
   await assertSuperAdmin();
 
   const admin = createAdminClient();
-  const { error } = await admin
-    .from("profiles")
-    .update({ role })
-    .eq("id", userId);
+  const { error } = await admin.from("profiles").update({ role }).eq("id", userId);
 
   if (error) throw new Error(`Failed to update role: ${error.message}`);
 

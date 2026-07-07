@@ -82,10 +82,7 @@ export async function createHardware(values: HardwareFormValues) {
     departmentId = (values.projectId && projectDeptFallback[values.projectId]) || null;
 
     if (!departmentId) {
-      const { data: fallbackDept } = await supabase
-        .from("departments")
-        .select("id")
-        .limit(1);
+      const { data: fallbackDept } = await supabase.from("departments").select("id").limit(1);
       departmentId = fallbackDept?.[0]?.id || "11111111-2222-3333-4444-555555555555";
     }
   }
@@ -132,7 +129,10 @@ export async function createHardware(values: HardwareFormValues) {
       projector: "PRJ",
     };
     const typeCode = typeCodeMap[normalizedType] || normalizedType.toUpperCase();
-    const cleanRunningNumber = (values.runningNumber || "").trim().toUpperCase().replace(/\s+/g, "-");
+    const cleanRunningNumber = (values.runningNumber || "")
+      .trim()
+      .toUpperCase()
+      .replace(/\s+/g, "-");
 
     if (contractNo) {
       if (contractNo.includes(projectPrefix)) {
@@ -197,7 +197,7 @@ export async function createHardware(values: HardwareFormValues) {
       message: error.message,
       details: error.details,
       hint: error.hint,
-      code: error.code
+      code: error.code,
     });
     throw error;
   }
@@ -209,7 +209,8 @@ export async function getHardwareList() {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("hardware")
-    .select(`
+    .select(
+      `
       id,
       asset_tag,
       serial_number,
@@ -227,7 +228,8 @@ export async function getHardwareList() {
           state:states(name)
         )
       )
-    `)
+    `,
+    )
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -236,22 +238,28 @@ export async function getHardwareList() {
   }
 
   // Map state and department structure back to maintain compatibility with existing frontend code.
-  return data.map((hw: any) => ({
-    ...hw,
-    state: hw.department?.facility?.state?.name || "",
-    department: { name: hw.department?.name || "" }
-  }));
+  return data.map((hw) => {
+    const dept = (
+      hw as unknown as { department?: { name: string; facility?: { state?: { name: string } } } }
+    ).department;
+    return {
+      ...hw,
+      state: dept?.facility?.state?.name || "",
+      department: { name: dept?.name || "" },
+    };
+  });
 }
 
 export async function getHardwareByDepartment(
   departmentId: string,
   hardwareTypeId?: string,
-  specCategoryId?: string
+  specCategoryId?: string,
 ) {
   const supabase = createClient();
   let query = supabase
     .from("hardware")
-    .select(`
+    .select(
+      `
       id,
       asset_tag,
       serial_number,
@@ -273,7 +281,8 @@ export async function getHardwareByDepartment(
           state:states(name)
         )
       )
-    `)
+    `,
+    )
     .eq("department_id", departmentId)
     .order("created_at", { ascending: false });
 

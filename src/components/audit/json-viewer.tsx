@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Eye } from "lucide-react";
@@ -17,14 +23,14 @@ export function JsonViewer({ oldData, newData }: JsonViewerProps) {
   // Helper to get formatted keys that changed
   const getChanges = () => {
     if (!oldData && !newData) return [];
-    
+
     const changes: { key: string; oldVal: string; newVal: string }[] = [];
     const allKeys = new Set([...Object.keys(oldData || {}), ...Object.keys(newData || {})]);
 
     allKeys.forEach((key) => {
       const oldVal = JSON.stringify(oldData?.[key] ?? null);
       const newVal = JSON.stringify(newData?.[key] ?? null);
-      
+
       if (oldVal !== newVal) {
         changes.push({
           key,
@@ -63,13 +69,17 @@ export function JsonViewer({ oldData, newData }: JsonViewerProps) {
           {showRaw ? (
             <div className="grid grid-cols-2 divide-x">
               <div className="p-4 bg-destructive/5">
-                <p className="text-xs font-semibold mb-2 text-rose-600 dark:text-rose-400">OLD DATA</p>
+                <p className="text-xs font-semibold mb-2 text-rose-600 dark:text-rose-400">
+                  OLD DATA
+                </p>
                 <pre className="text-xs whitespace-pre-wrap font-mono text-muted-foreground">
                   {JSON.stringify(oldData, null, 2) || "null"}
                 </pre>
               </div>
               <div className="p-4 bg-emerald-500/5">
-                <p className="text-xs font-semibold mb-2 text-emerald-600 dark:text-emerald-400">NEW DATA</p>
+                <p className="text-xs font-semibold mb-2 text-emerald-600 dark:text-emerald-400">
+                  NEW DATA
+                </p>
                 <pre className="text-xs whitespace-pre-wrap font-mono text-muted-foreground">
                   {JSON.stringify(newData, null, 2) || "null"}
                 </pre>
@@ -78,20 +88,28 @@ export function JsonViewer({ oldData, newData }: JsonViewerProps) {
           ) : (
             <div className="p-4">
               {changes.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-4">No data changes detected.</p>
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  No data changes detected.
+                </p>
               ) : (
                 <div className="space-y-4">
                   {changes.map((change) => (
                     <div key={change.key} className="text-sm">
                       <p className="font-medium text-foreground mb-1 capitalize">
-                        {change.key.replace(/_/g, ' ')}
+                        {change.key.replace(/_/g, " ")}
                       </p>
                       <div className="flex items-center gap-2">
-                        <span className="bg-rose-500/10 text-rose-600 dark:text-rose-400 px-2 py-1 rounded line-through text-xs max-w-[45%] truncate" title={change.oldVal}>
+                        <span
+                          className="bg-rose-500/10 text-rose-600 dark:text-rose-400 px-2 py-1 rounded line-through text-xs max-w-[45%] truncate"
+                          title={change.oldVal}
+                        >
                           {change.oldVal}
                         </span>
                         <span className="text-muted-foreground">→</span>
-                        <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-1 rounded font-medium text-xs max-w-[45%] truncate" title={change.newVal}>
+                        <span
+                          className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-1 rounded font-medium text-xs max-w-[45%] truncate"
+                          title={change.newVal}
+                        >
                           {change.newVal}
                         </span>
                       </div>

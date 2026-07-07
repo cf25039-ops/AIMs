@@ -2,11 +2,7 @@ import { useState, useMemo } from "react";
 
 type SortDirection = "asc" | "desc";
 
-export function useSortable<T>(
-  data: T[],
-  defaultKey?: keyof T,
-  defaultDir: SortDirection = "asc"
-) {
+export function useSortable<T>(data: T[], defaultKey?: keyof T, defaultDir: SortDirection = "asc") {
   const [sortKey, setSortKey] = useState<keyof T | undefined>(defaultKey);
   const [sortDir, setSortDir] = useState<SortDirection>(defaultDir);
 

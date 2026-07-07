@@ -2,7 +2,13 @@
 
 import { motion } from "framer-motion";
 
-export function HoverCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+export function HoverCard({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <motion.div
       className={className}

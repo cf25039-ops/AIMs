@@ -24,36 +24,42 @@ export const metadata: Metadata = {
   description: "Advanced Inventory Management System",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${manrope.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${manrope.variable} ${spaceGrotesk.variable}`}
+      suppressHydrationWarning
+    >
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <Providers>
             {children}
             <CommandPalette />
             <ThemeToggle />
-            <Toaster 
+            <Toaster
               position="top-right"
               toastOptions={{
                 duration: 3000,
-                style: { 
-                  background: 'var(--card)', 
-                  color: 'var(--card-foreground)',
-                  border: '1px solid var(--border)',
-                  borderRadius: '0.75rem',
-                  fontSize: '0.875rem',
-                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                style: {
+                  background: "var(--card)",
+                  color: "var(--card-foreground)",
+                  border: "1px solid var(--border)",
+                  borderRadius: "0.75rem",
+                  fontSize: "0.875rem",
+                  boxShadow:
+                    "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
                 },
                 success: {
-                  iconTheme: { primary: '#10b981', secondary: '#fff' },
+                  iconTheme: { primary: "#10b981", secondary: "#fff" },
                 },
                 error: {
-                  iconTheme: { primary: '#ef4444', secondary: '#fff' },
+                  iconTheme: { primary: "#ef4444", secondary: "#fff" },
                 },
               }}
             />

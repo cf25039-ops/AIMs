@@ -9,7 +9,11 @@ import { getSystemAuditLogs, getActivityLogs } from "@/services/audit";
 import { Shield, ShieldAlert, Activity } from "lucide-react";
 
 export default function AuditPage() {
-  const { data: auditData, isLoading: loadingAudit, error: auditError } = useQuery({
+  const {
+    data: auditData,
+    isLoading: loadingAudit,
+    error: auditError,
+  } = useQuery({
     queryKey: ["audit-logs", "system"],
     queryFn: getSystemAuditLogs,
   });
@@ -27,7 +31,8 @@ export default function AuditPage() {
         </div>
         <h2 className="text-3xl font-bold tracking-tight text-foreground">Access Denied</h2>
         <p className="mt-2 max-w-md text-muted-foreground">
-          {auditData?.error || "You do not have the required administrative permissions to view the immutable audit trail."}
+          {auditData?.error ||
+            "You do not have the required administrative permissions to view the immutable audit trail."}
         </p>
       </div>
     );
@@ -42,7 +47,9 @@ export default function AuditPage() {
           </div>
           <div>
             <h2 className="text-3xl font-semibold tracking-tight">Security & Compliance</h2>
-            <p className="text-sm text-muted-foreground">Immutable audit trail and system activity logs</p>
+            <p className="text-sm text-muted-foreground">
+              Immutable audit trail and system activity logs
+            </p>
           </div>
         </div>
       </FadeIn>
@@ -59,19 +66,22 @@ export default function AuditPage() {
               Activity Logs
             </TabsTrigger>
           </TabsList>
-          
+
           <div className="mt-6">
             <TabsContent value="system" className="m-0 focus-visible:outline-none">
               <Card className="glass-card">
                 <CardHeader>
                   <CardTitle>System Audit Trail</CardTitle>
                   <CardDescription>
-                    Low-level database triggers that capture all INSERT, UPDATE, and DELETE operations.
+                    Low-level database triggers that capture all INSERT, UPDATE, and DELETE
+                    operations.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   {loadingAudit ? (
-                    <div className="py-12 text-center text-sm text-muted-foreground">Loading audit trail...</div>
+                    <div className="py-12 text-center text-sm text-muted-foreground">
+                      Loading audit trail...
+                    </div>
                   ) : (
                     <AuditTable logs={auditData?.data || []} type="system" />
                   )}
@@ -89,7 +99,9 @@ export default function AuditPage() {
                 </CardHeader>
                 <CardContent>
                   {loadingActivity ? (
-                    <div className="py-12 text-center text-sm text-muted-foreground">Loading activity logs...</div>
+                    <div className="py-12 text-center text-sm text-muted-foreground">
+                      Loading activity logs...
+                    </div>
                   ) : (
                     <AuditTable logs={activityData?.data || []} type="activity" />
                   )}

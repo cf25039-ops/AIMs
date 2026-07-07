@@ -41,11 +41,7 @@ export function canCreateTickets(role?: UserRole | null): boolean {
 
 /** Check if the role is a scoped/limited role */
 export function isScopedRole(role?: UserRole | null): boolean {
-  return (
-    role === "department_user" ||
-    role === "viewer" ||
-    role === "staff"
-  );
+  return role === "department_user" || role === "viewer" || role === "staff";
 }
 
 /** Get a time-based greeting */

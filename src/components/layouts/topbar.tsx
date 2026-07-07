@@ -1,18 +1,16 @@
 "use client";
 
-import { Bell, Command, LogOut, Plus, Search, User } from "lucide-react";
+import { Command, LogOut, Plus, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GlobalSearch } from "@/components/ui/global-search";
 import { useRole } from "@/contexts/role-context";
 import { getRoleLabel, getGreeting, canManageAssets } from "@/utils/role";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { NotificationDropdown } from "@/components/layouts/notification-dropdown";
 
 export function Topbar() {
   const { role, profile, isLoading } = useRole();
-  const router = useRouter();
 
   const handleLogout = async () => {
     const supabase = createClient();
@@ -32,9 +30,7 @@ export function Topbar() {
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
               {getGreeting()}
             </p>
-            <h1 className="text-2xl font-semibold">
-              {profile?.full_name || "Welcome"}
-            </h1>
+            <h1 className="text-2xl font-semibold">{profile?.full_name || "Welcome"}</h1>
             {profile?.assigned_department?.name && (
               <p className="text-sm text-muted-foreground mt-0.5">
                 {profile.assigned_department.name}
@@ -58,9 +54,7 @@ export function Topbar() {
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
               Command Center
             </p>
-            <h1 className="text-2xl font-semibold">
-              Advanced Inventory Management
-            </h1>
+            <h1 className="text-2xl font-semibold">Advanced Inventory Management</h1>
           </>
         )}
       </div>
@@ -68,9 +62,7 @@ export function Topbar() {
       <div className="flex flex-1 flex-col gap-3 lg:max-w-xl lg:flex-row lg:items-center">
         <GlobalSearch
           placeholder={
-            isScoped
-              ? "Search your assets, tickets..."
-              : "Search assets, contracts, tickets..."
+            isScoped ? "Search your assets, tickets..." : "Search assets, contracts, tickets..."
           }
         />
         {!isScoped && !isTech && (
@@ -105,9 +97,7 @@ export function Topbar() {
           </div>
           <div className="hidden flex-col md:flex">
             <span className="text-sm font-medium leading-none">
-              {isLoading
-                ? "Loading..."
-                : profile?.full_name || profile?.email || "Admin User"}
+              {isLoading ? "Loading..." : profile?.full_name || profile?.email || "Admin User"}
             </span>
             <span className="text-xs text-muted-foreground capitalize mt-1">
               {isLoading ? "" : getRoleLabel(role)}

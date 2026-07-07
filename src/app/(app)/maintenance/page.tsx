@@ -66,7 +66,8 @@ export default function MaintenancePage() {
                     </div>
                     <h3 className="font-medium text-lg">No active tickets</h3>
                     <p className="text-sm text-muted-foreground max-w-sm mt-1 mb-4">
-                      All systems are operational. New issues will appear here once reported by an authorized user.
+                      All systems are operational. New issues will appear here once reported by an
+                      authorized user.
                     </p>
                     {canReportIssue && (
                       <Link href="/maintenance/create">
@@ -75,9 +76,7 @@ export default function MaintenancePage() {
                     )}
                   </div>
                 ) : (
-                  tickets.map((ticket: any) => (
-                    <TicketCard key={ticket.id} ticket={ticket} />
-                  ))
+                  tickets.map((ticket: any) => <TicketCard key={ticket.id} ticket={ticket} />)
                 )}
               </div>
             </CardContent>
@@ -86,17 +85,21 @@ export default function MaintenancePage() {
           <div className="space-y-4">
             <Card className="panel-grid">
               <CardHeader>
-                <CardTitle className="text-sm font-medium text-muted-foreground">SLA Breaches</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  SLA Breaches
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-rose-600 dark:text-rose-400">0</div>
                 <p className="text-xs text-muted-foreground mt-1">Requires immediate attention</p>
               </CardContent>
             </Card>
-            
+
             <Card className="panel-grid">
               <CardHeader>
-                <CardTitle className="text-sm font-medium text-muted-foreground">Pending Escalation</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Pending Escalation
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-amber-600">0</div>

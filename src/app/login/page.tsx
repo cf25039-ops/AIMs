@@ -100,9 +100,7 @@ export default function LoginPage() {
             <Shield className="h-6 w-6" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight">AIMS Enterprise</h1>
-          <p className="text-muted-foreground mt-2">
-            Advanced Infrastructure Management System
-          </p>
+          <p className="text-muted-foreground mt-2">Advanced Infrastructure Management System</p>
         </div>
 
         <Card className="glass-card border-border/60 shadow-xl">
@@ -203,7 +201,11 @@ export default function LoginPage() {
                     </div>
                   ) : null}
 
-                  <Button type="submit" className="w-full" disabled={isSubmitting || mfaCode.length !== 6}>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isSubmitting || mfaCode.length !== 6}
+                  >
                     {isSubmitting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />

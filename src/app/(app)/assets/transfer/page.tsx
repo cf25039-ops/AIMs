@@ -14,7 +14,7 @@ import { AccessDenied } from "@/components/auth/access-denied";
 import { assetTransferSchema, type AssetTransferValues } from "@/schemas/movement";
 import { transferHardware } from "@/services/movement";
 import { getHardwareList } from "@/services/hardware";
-import { getDepartments } from "@/services/hierarchy";
+
 import { useRole } from "@/contexts/role-context";
 import { canManageAssets } from "@/utils/role";
 import { ArrowLeft, ArrowRightLeft, Loader2, MapPin } from "lucide-react";
@@ -97,7 +97,9 @@ export default function AssetTransferPage() {
           </Link>
           <div>
             <h2 className="text-2xl font-semibold">Asset Transfer</h2>
-            <p className="text-sm text-muted-foreground">Relocate hardware and reassign Person In Charge (PIC)</p>
+            <p className="text-sm text-muted-foreground">
+              Relocate hardware and reassign Person In Charge (PIC)
+            </p>
           </div>
         </div>
       </FadeIn>
@@ -110,18 +112,22 @@ export default function AssetTransferPage() {
               Transfer Logistics
             </CardTitle>
             <CardDescription>
-              Complete the form below to securely transfer an asset. All transfers are securely logged in the immutable audit trail.
+              Complete the form below to securely transfer an asset. All transfers are securely
+              logged in the immutable audit trail.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              
               {/* Asset Selection */}
               <div className="space-y-4 rounded-xl border border-border/60 bg-muted/30 p-4">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">1. Select Asset</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  1. Select Asset
+                </h3>
                 <div>
                   <Select {...form.register("assetId")} defaultValue="">
-                    <option value="" disabled>Search or select an asset...</option>
+                    <option value="" disabled>
+                      Search or select an asset...
+                    </option>
                     {hardwareList.map((asset: any) => (
                       <option key={asset.id} value={asset.id}>
                         {asset.asset_tag} - {asset.brand?.name} {asset.model?.name}
@@ -129,7 +135,9 @@ export default function AssetTransferPage() {
                     ))}
                   </Select>
                   {form.formState.errors.assetId && (
-                    <p className="text-xs text-rose-500 mt-1">{form.formState.errors.assetId.message}</p>
+                    <p className="text-xs text-rose-500 mt-1">
+                      {form.formState.errors.assetId.message}
+                    </p>
                   )}
                 </div>
 
@@ -140,10 +148,13 @@ export default function AssetTransferPage() {
                     <div className="grid gap-1">
                       <p className="font-medium text-foreground">Current Location</p>
                       <p className="text-muted-foreground">
-                        {(selectedAsset.department as any)?.name || 'Unknown Department'}
+                        {(selectedAsset.department as any)?.name || "Unknown Department"}
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Current PIC: <span className="font-medium text-foreground">{selectedAsset.pic_name || 'Unassigned'}</span>
+                        Current PIC:{" "}
+                        <span className="font-medium text-foreground">
+                          {selectedAsset.pic_name || "Unassigned"}
+                        </span>
                       </p>
                     </div>
                   </div>
@@ -152,13 +163,21 @@ export default function AssetTransferPage() {
 
               {/* Destination */}
               <div className="space-y-4 rounded-xl border border-border/60 bg-muted/30 p-4">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">2. Destination</h3>
-                
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  2. Destination
+                </h3>
+
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <label className="text-sm font-medium mb-1 block">New Department</label>
-                    <Select {...form.register("toDepartmentId")} defaultValue="" disabled={!selectedAssetId}>
-                      <option value="" disabled>Select new department...</option>
+                    <Select
+                      {...form.register("toDepartmentId")}
+                      defaultValue=""
+                      disabled={!selectedAssetId}
+                    >
+                      <option value="" disabled>
+                        Select new department...
+                      </option>
                       {departments.map((dept: any) => (
                         <option key={dept.id} value={dept.id}>
                           {dept.name} ({dept.facilities?.name})
@@ -166,24 +185,38 @@ export default function AssetTransferPage() {
                       ))}
                     </Select>
                     {form.formState.errors.toDepartmentId && (
-                      <p className="text-xs text-rose-500 mt-1">{form.formState.errors.toDepartmentId.message}</p>
+                      <p className="text-xs text-rose-500 mt-1">
+                        {form.formState.errors.toDepartmentId.message}
+                      </p>
                     )}
                   </div>
 
                   <div>
                     <label className="text-sm font-medium mb-1 block">New PIC Name</label>
-                    <Input {...form.register("toPic")} placeholder="Enter name of new PIC..." disabled={!selectedAssetId} />
+                    <Input
+                      {...form.register("toPic")}
+                      placeholder="Enter name of new PIC..."
+                      disabled={!selectedAssetId}
+                    />
                     {form.formState.errors.toPic && (
-                      <p className="text-xs text-rose-500 mt-1">{form.formState.errors.toPic.message}</p>
+                      <p className="text-xs text-rose-500 mt-1">
+                        {form.formState.errors.toPic.message}
+                      </p>
                     )}
                   </div>
                 </div>
 
                 <div>
                   <label className="text-sm font-medium mb-1 block">Transfer Reason</label>
-                  <Input {...form.register("transferReason")} placeholder="e.g. Relocated for new staff member" disabled={!selectedAssetId} />
+                  <Input
+                    {...form.register("transferReason")}
+                    placeholder="e.g. Relocated for new staff member"
+                    disabled={!selectedAssetId}
+                  />
                   {form.formState.errors.transferReason && (
-                    <p className="text-xs text-rose-500 mt-1">{form.formState.errors.transferReason.message}</p>
+                    <p className="text-xs text-rose-500 mt-1">
+                      {form.formState.errors.transferReason.message}
+                    </p>
                   )}
                 </div>
               </div>
@@ -195,7 +228,11 @@ export default function AssetTransferPage() {
               )}
 
               <div className="flex justify-end pt-2">
-                <Button type="submit" disabled={isSubmitting || !selectedAssetId} className="w-full md:w-auto">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting || !selectedAssetId}
+                  className="w-full md:w-auto"
+                >
                   {isSubmitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />

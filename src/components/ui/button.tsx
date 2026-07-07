@@ -13,8 +13,7 @@ const baseStyles =
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: "bg-primary text-primary-foreground shadow-sm hover:brightness-110",
-  secondary:
-    "bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border",
+  secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border",
   ghost: "bg-transparent text-foreground hover:bg-muted",
   outline: "border border-border bg-transparent text-foreground hover:bg-muted",
   accent: "bg-accent text-accent-foreground hover:brightness-110",
@@ -27,12 +26,7 @@ const sizeStyles: Record<ButtonSize, string> = {
   lg: "h-12 px-6 text-base",
 };
 
-export function Button({
-  variant = "primary",
-  size = "md",
-  className,
-  ...props
-}: ButtonProps) {
+export function Button({ variant = "primary", size = "md", className, ...props }: ButtonProps) {
   return (
     <button
       className={cn(baseStyles, variantStyles[variant], sizeStyles[size], className)}

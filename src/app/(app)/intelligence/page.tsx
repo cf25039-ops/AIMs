@@ -3,9 +3,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { FadeIn } from "@/components/animations/fade-in";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { getIntelligenceData } from "@/services/intelligence";
-import { BrainCircuit, AlertTriangle, CheckCircle2, TrendingDown, Cpu, Server, Loader2 } from "lucide-react";
+import {
+  BrainCircuit,
+  AlertTriangle,
+  CheckCircle2,
+  TrendingDown,
+  Cpu,
+  Server,
+  Loader2,
+} from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 
 export default function IntelligencePage() {
@@ -14,9 +21,9 @@ export default function IntelligencePage() {
     queryFn: getIntelligenceData,
   });
 
-  const criticalAssets = insights.filter((i: any) => i.healthClass === 'critical');
-  const degradedAssets = insights.filter((i: any) => i.healthClass === 'degraded');
-  const healthyAssets = insights.filter((i: any) => i.healthClass === 'healthy');
+  const criticalAssets = insights.filter((i: any) => i.healthClass === "critical");
+  const degradedAssets = insights.filter((i: any) => i.healthClass === "degraded");
+  const healthyAssets = insights.filter((i: any) => i.healthClass === "healthy");
 
   const getHealthColor = (score: number) => {
     if (score < 40) return "text-rose-500";
@@ -39,7 +46,9 @@ export default function IntelligencePage() {
           </div>
           <div>
             <h2 className="text-3xl font-semibold tracking-tight">AI & Intelligence Layer</h2>
-            <p className="text-sm text-muted-foreground">Automated health scoring and predictive maintenance recommendations</p>
+            <p className="text-sm text-muted-foreground">
+              Automated health scoring and predictive maintenance recommendations
+            </p>
           </div>
         </div>
       </FadeIn>
@@ -52,20 +61,30 @@ export default function IntelligencePage() {
               <AlertTriangle className="h-4 w-4 text-rose-500" />
             </CardHeader>
             <CardContent>
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-                <div className="text-2xl font-bold text-rose-600 dark:text-rose-400">{criticalAssets.length} <span className="text-sm font-normal text-muted-foreground">assets</span></div>
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <div className="text-2xl font-bold text-rose-600 dark:text-rose-400">
+                  {criticalAssets.length}{" "}
+                  <span className="text-sm font-normal text-muted-foreground">assets</span>
+                </div>
               )}
             </CardContent>
           </Card>
-          
+
           <Card className="glass-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Degraded Performance</CardTitle>
               <TrendingDown className="h-4 w-4 text-amber-500" />
             </CardHeader>
             <CardContent>
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-                <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">{degradedAssets.length} <span className="text-sm font-normal text-muted-foreground">assets</span></div>
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">
+                  {degradedAssets.length}{" "}
+                  <span className="text-sm font-normal text-muted-foreground">assets</span>
+                </div>
               )}
             </CardContent>
           </Card>
@@ -76,8 +95,13 @@ export default function IntelligencePage() {
               <CheckCircle2 className="h-4 w-4 text-emerald-500" />
             </CardHeader>
             <CardContent>
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-                <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{healthyAssets.length} <span className="text-sm font-normal text-muted-foreground">assets</span></div>
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                  {healthyAssets.length}{" "}
+                  <span className="text-sm font-normal text-muted-foreground">assets</span>
+                </div>
               )}
             </CardContent>
           </Card>
@@ -88,47 +112,66 @@ export default function IntelligencePage() {
         <Card className="glass-card">
           <CardHeader>
             <CardTitle>Predictive Analysis Results</CardTitle>
-            <CardDescription>Algorithms analyze asset age, failure frequency, and current status to generate health scores.</CardDescription>
+            <CardDescription>
+              Algorithms analyze asset age, failure frequency, and current status to generate health
+              scores.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>
+              <div className="flex justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              </div>
             ) : insights.length === 0 ? (
               <EmptyState
-  icon={BrainCircuit}
-  title="No hardware data available"
-  description="Add hardware assets to enable AI health scoring and analysis"
-/>
+                icon={BrainCircuit}
+                title="No hardware data available"
+                description="Add hardware assets to enable AI health scoring and analysis"
+              />
             ) : (
               <div className="space-y-4">
                 {insights.map((asset: any) => (
-                  <div key={asset.id} className="p-4 rounded-xl border bg-card hover:bg-muted/30 transition-colors flex flex-col md:flex-row gap-6 md:items-center">
-                    
+                  <div
+                    key={asset.id}
+                    className="p-4 rounded-xl border bg-card hover:bg-muted/30 transition-colors flex flex-col md:flex-row gap-6 md:items-center"
+                  >
                     {/* Identity */}
                     <div className="md:w-1/4 flex items-center gap-3">
                       <div className="h-10 w-10 rounded bg-muted flex items-center justify-center flex-shrink-0">
-                        {asset.type?.includes("server") ? <Server className="h-5 w-5 text-muted-foreground" /> : <Cpu className="h-5 w-5 text-muted-foreground" />}
+                        {asset.type?.includes("server") ? (
+                          <Server className="h-5 w-5 text-muted-foreground" />
+                        ) : (
+                          <Cpu className="h-5 w-5 text-muted-foreground" />
+                        )}
                       </div>
                       <div>
                         <p className="font-semibold text-foreground">{asset.asset_tag}</p>
-                        <p className="text-xs text-muted-foreground capitalize">{asset.type?.replace(/_/g, ' ')}</p>
+                        <p className="text-xs text-muted-foreground capitalize">
+                          {asset.type?.replace(/_/g, " ")}
+                        </p>
                       </div>
                     </div>
 
                     {/* Scoring Bar */}
                     <div className="md:w-1/3 flex flex-col justify-center">
                       <div className="flex justify-between items-end mb-1">
-                        <span className="text-xs font-medium uppercase text-muted-foreground">Health Score</span>
-                        <span className={`font-bold ${getHealthColor(asset.score)}`}>{asset.score}%</span>
+                        <span className="text-xs font-medium uppercase text-muted-foreground">
+                          Health Score
+                        </span>
+                        <span className={`font-bold ${getHealthColor(asset.score)}`}>
+                          {asset.score}%
+                        </span>
                       </div>
                       <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                        <div 
-                          className={`h-full ${getHealthBg(asset.score)} transition-all duration-1000 ease-out`} 
-                          style={{ width: `${asset.score}%` }} 
+                        <div
+                          className={`h-full ${getHealthBg(asset.score)} transition-all duration-1000 ease-out`}
+                          style={{ width: `${asset.score}%` }}
                         />
                       </div>
                       <div className="flex justify-between mt-1">
-                        <span className="text-[10px] text-muted-foreground">{asset.ticketsCount} Historical Tickets</span>
+                        <span className="text-[10px] text-muted-foreground">
+                          {asset.ticketsCount} Historical Tickets
+                        </span>
                       </div>
                     </div>
 
@@ -138,9 +181,10 @@ export default function IntelligencePage() {
                         <BrainCircuit className="h-3 w-3 text-primary" />
                         AI Recommendation
                       </p>
-                      <p className="text-sm text-muted-foreground leading-snug">{asset.recommendation}</p>
+                      <p className="text-sm text-muted-foreground leading-snug">
+                        {asset.recommendation}
+                      </p>
                     </div>
-
                   </div>
                 ))}
               </div>

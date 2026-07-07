@@ -4,14 +4,16 @@ export async function getWarehouseItems() {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("warehouse_items")
-    .select(`
+    .select(
+      `
       id,
       name,
       sku,
       quantity,
       min_quantity,
       project:projects(name)
-    `)
+    `,
+    )
     .order("name", { ascending: true });
 
   if (error) {
@@ -26,7 +28,8 @@ export async function getPurchaseRequests() {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("purchase_requests")
-    .select(`
+    .select(
+      `
       id,
       item_name,
       quantity,
@@ -35,7 +38,8 @@ export async function getPurchaseRequests() {
       created_at,
       project:projects(name),
       requester:profiles(full_name)
-    `)
+    `,
+    )
     .order("created_at", { ascending: false });
 
   if (error) {

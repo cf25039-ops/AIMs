@@ -11,6 +11,6 @@ export function createClient() {
         path: "/",
         maxAge: 60 * 60 * 24,
       },
-    }
+    },
   );
 }

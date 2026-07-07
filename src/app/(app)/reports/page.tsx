@@ -6,11 +6,29 @@ import { FadeIn } from "@/components/animations/fade-in";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getAnalyticsData, exportHardwareReport } from "@/services/reports";
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { Download, PieChart as PieChartIcon, Activity, Loader2, FileSpreadsheet } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import {
+  Download,
+  PieChart as PieChartIcon,
+  Activity,
+  Loader2,
+  FileSpreadsheet,
+} from "lucide-react";
 import toast from "react-hot-toast";
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
 
 export default function ReportsPage() {
   const [isExporting, setIsExporting] = useState(false);
@@ -34,7 +52,10 @@ export default function ReportsPage() {
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      link.setAttribute("download", `AIMS_Asset_Report_${new Date().toISOString().split('T')[0]}.csv`);
+      link.setAttribute(
+        "download",
+        `AIMS_Asset_Report_${new Date().toISOString().split("T")[0]}.csv`,
+      );
       link.style.visibility = "hidden";
       document.body.appendChild(link);
       link.click();
@@ -55,19 +76,24 @@ export default function ReportsPage() {
           </div>
           <div>
             <h2 className="text-3xl font-semibold tracking-tight">Reporting & Analytics</h2>
-            <p className="text-sm text-muted-foreground">Visualize data and export comprehensive reports</p>
+            <p className="text-sm text-muted-foreground">
+              Visualize data and export comprehensive reports
+            </p>
           </div>
         </div>
 
         <Button onClick={handleExport} disabled={isExporting} className="gap-2">
-          {isExporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+          {isExporting ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Download className="h-4 w-4" />
+          )}
           Export Assets (CSV)
         </Button>
       </FadeIn>
 
       <FadeIn delay={0.1}>
         <div className="grid gap-6 md:grid-cols-2">
-          
           {/* Hardware Status Chart */}
           <Card className="glass-card">
             <CardHeader>
@@ -75,7 +101,9 @@ export default function ReportsPage() {
                 <PieChartIcon className="h-5 w-5 text-primary" />
                 Asset Health Distribution
               </CardTitle>
-              <CardDescription>Overall condition and status of all registered hardware</CardDescription>
+              <CardDescription>
+                Overall condition and status of all registered hardware
+              </CardDescription>
             </CardHeader>
             <CardContent>
               {isLoading ? (
@@ -83,7 +111,9 @@ export default function ReportsPage() {
                   <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                 </div>
               ) : analytics?.hardwareStatusChart.length === 0 ? (
-                <div className="h-[300px] flex items-center justify-center text-muted-foreground">No data available</div>
+                <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                  No data available
+                </div>
               ) : (
                 <div className="h-[300px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
@@ -118,7 +148,9 @@ export default function ReportsPage() {
                 <Activity className="h-5 w-5 text-rose-500" />
                 Repair Tickets by Severity
               </CardTitle>
-              <CardDescription>Analytics of hardware failures and maintenance requests</CardDescription>
+              <CardDescription>
+                Analytics of hardware failures and maintenance requests
+              </CardDescription>
             </CardHeader>
             <CardContent>
               {isLoading ? (
@@ -126,39 +158,53 @@ export default function ReportsPage() {
                   <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                 </div>
               ) : analytics?.ticketSeverityChart.length === 0 ? (
-                <div className="h-[300px] flex items-center justify-center text-muted-foreground">No tickets data</div>
+                <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                  No tickets data
+                </div>
               ) : (
                 <div className="h-[300px] w-full mt-4">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={analytics?.ticketSeverityChart} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+                    <BarChart
+                      data={analytics?.ticketSeverityChart}
+                      margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
+                    >
                       <CartesianGrid strokeDasharray="3 3" vertical={false} />
                       <XAxis dataKey="name" className="text-xs uppercase" />
                       <YAxis allowDecimals={false} />
-                      <Tooltip 
-                        cursor={{fill: 'rgba(0,0,0,0.05)'}}
-                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                      <Tooltip
+                        cursor={{ fill: "rgba(0,0,0,0.05)" }}
+                        contentStyle={{
+                          borderRadius: "8px",
+                          border: "none",
+                          boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                        }}
                       />
-                      <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} name="Tickets Count" />
+                      <Bar
+                        dataKey="value"
+                        fill="#3b82f6"
+                        radius={[4, 4, 0, 0]}
+                        name="Tickets Count"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               )}
             </CardContent>
           </Card>
-
         </div>
       </FadeIn>
-      
+
       <FadeIn delay={0.2}>
-         <Card className="glass-card bg-muted/30 border-dashed">
-            <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-              <FileSpreadsheet className="h-12 w-12 text-muted-foreground mb-4 opacity-50" />
-              <h3 className="text-lg font-medium">Enterprise Data Export</h3>
-              <p className="text-sm text-muted-foreground max-w-md mt-2">
-                Click the "Export Assets" button at the top right to download a comprehensive CSV report of all your hardware assets for offline analysis.
-              </p>
-            </CardContent>
-         </Card>
+        <Card className="glass-card bg-muted/30 border-dashed">
+          <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+            <FileSpreadsheet className="h-12 w-12 text-muted-foreground mb-4 opacity-50" />
+            <h3 className="text-lg font-medium">Enterprise Data Export</h3>
+            <p className="text-sm text-muted-foreground max-w-md mt-2">
+              Click the &quot;Export Assets&quot; button at the top right to download a comprehensive CSV
+              report of all your hardware assets for offline analysis.
+            </p>
+          </CardContent>
+        </Card>
       </FadeIn>
     </div>
   );

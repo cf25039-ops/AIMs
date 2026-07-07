@@ -1,10 +1,5 @@
 import { useState, useMemo } from "react";
 
-type PaginationParams = {
-  page: number;
-  pageSize: number;
-};
-
 type UsePaginationResult<T> = {
   page: number;
   pageSize: number;
@@ -19,10 +14,7 @@ type UsePaginationResult<T> = {
   isLast: boolean;
 };
 
-export function usePagination<T>(
-  data: T[],
-  initialPageSize = 10
-): UsePaginationResult<T> {
+export function usePagination<T>(data: T[], initialPageSize = 10): UsePaginationResult<T> {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(initialPageSize);
 
@@ -43,7 +35,10 @@ export function usePagination<T>(
     totalPages,
     paginated,
     setPage: safeSetPage,
-    setPageSize: (s: number) => { setPageSize(s); setPage(1); },
+    setPageSize: (s: number) => {
+      setPageSize(s);
+      setPage(1);
+    },
     nextPage: () => safeSetPage(page + 1),
     prevPage: () => safeSetPage(page - 1),
     isFirst: page === 1,

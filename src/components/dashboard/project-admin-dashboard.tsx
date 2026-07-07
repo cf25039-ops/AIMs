@@ -11,14 +11,12 @@ import {
   FileText,
   Wrench,
   TrendingUp,
-  AlertTriangle,
   CheckCircle2,
-  Clock,
   Loader2,
 } from "lucide-react";
 
 export function ProjectAdminDashboard() {
-  const { profile } = useRole();
+  const {} = useRole();
 
   const { data: stats, isLoading } = useQuery({
     queryKey: ["project-admin-stats"],
@@ -26,7 +24,9 @@ export function ProjectAdminDashboard() {
       const supabase = createClient();
 
       // Get user's project memberships
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) return null;
 
       const { data: memberships } = await supabase
@@ -52,7 +52,10 @@ export function ProjectAdminDashboard() {
       const { count: contractCount } = await supabase
         .from("contracts")
         .select("*", { count: "exact", head: true })
-        .in("project_id", projectIds.length > 0 ? projectIds : ["00000000-0000-0000-0000-000000000000"]);
+        .in(
+          "project_id",
+          projectIds.length > 0 ? projectIds : ["00000000-0000-0000-0000-000000000000"],
+        );
 
       // Recent activity
       const { data: recentTickets } = await supabase
@@ -171,8 +174,8 @@ export function ProjectAdminDashboard() {
                           ticket.severity === "critical"
                             ? "bg-rose-500"
                             : ticket.severity === "high"
-                            ? "bg-amber-500"
-                            : "bg-emerald-500"
+                              ? "bg-amber-500"
+                              : "bg-emerald-500"
                         }`}
                       />
                       <div>
@@ -190,8 +193,8 @@ export function ProjectAdminDashboard() {
                         ticket.status === "resolved"
                           ? ("success" as any)
                           : ticket.status === "open"
-                          ? ("danger" as any)
-                          : ("warning" as any)
+                            ? ("danger" as any)
+                            : ("warning" as any)
                       }
                       className="text-[10px] uppercase"
                     >

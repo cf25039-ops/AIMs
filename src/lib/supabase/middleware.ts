@@ -13,7 +13,16 @@ const ROLE_ACCESS_MAP: Record<string, string[]> = {
   "/contracts": ["super_admin", "admin", "project_manager", "project_admin"],
 
   // Operations routes
-  "/maintenance": ["super_admin", "admin", "project_manager", "project_admin", "technician", "department_user", "staff", "viewer"],
+  "/maintenance": [
+    "super_admin",
+    "admin",
+    "project_manager",
+    "project_admin",
+    "technician",
+    "department_user",
+    "staff",
+    "viewer",
+  ],
   "/assets": ["super_admin", "admin", "project_manager", "project_admin", "technician"],
 
   // Inventory routes
@@ -25,10 +34,46 @@ const ROLE_ACCESS_MAP: Record<string, string[]> = {
   "/intelligence": ["super_admin", "admin", "project_manager"],
 
   // User-facing routes (all authenticated users)
-  "/dashboard": ["super_admin", "admin", "project_manager", "project_admin", "technician", "department_user", "staff", "viewer"],
-  "/settings": ["super_admin", "admin", "project_manager", "project_admin", "technician", "department_user", "staff", "viewer"],
-  "/help": ["super_admin", "admin", "project_manager", "project_admin", "technician", "department_user", "staff", "viewer"],
-  "/notifications": ["super_admin", "admin", "project_manager", "project_admin", "technician", "department_user", "staff", "viewer"],
+  "/dashboard": [
+    "super_admin",
+    "admin",
+    "project_manager",
+    "project_admin",
+    "technician",
+    "department_user",
+    "staff",
+    "viewer",
+  ],
+  "/settings": [
+    "super_admin",
+    "admin",
+    "project_manager",
+    "project_admin",
+    "technician",
+    "department_user",
+    "staff",
+    "viewer",
+  ],
+  "/help": [
+    "super_admin",
+    "admin",
+    "project_manager",
+    "project_admin",
+    "technician",
+    "department_user",
+    "staff",
+    "viewer",
+  ],
+  "/notifications": [
+    "super_admin",
+    "admin",
+    "project_manager",
+    "project_admin",
+    "technician",
+    "department_user",
+    "staff",
+    "viewer",
+  ],
 };
 
 export async function updateSession(request: NextRequest) {
@@ -51,9 +96,7 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          );
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
           supabaseResponse = NextResponse.next({
             request,
           });
@@ -65,11 +108,11 @@ export async function updateSession(request: NextRequest) {
               sameSite: "lax",
               path: "/",
               maxAge: 60 * 60 * 24,
-            })
+            }),
           );
         },
       },
-    }
+    },
   );
 
   const {
@@ -86,9 +129,7 @@ export async function updateSession(request: NextRequest) {
     "/reset-password",
     "/auth/callback",
   ];
-  const isPublicPath = PUBLIC_PATHS.some((path) =>
-    request.nextUrl.pathname.startsWith(path)
-  );
+  const isPublicPath = PUBLIC_PATHS.some((path) => request.nextUrl.pathname.startsWith(path));
 
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();
@@ -114,9 +155,7 @@ export async function updateSession(request: NextRequest) {
       const pathname = request.nextUrl.pathname;
 
       // Find the most specific route that matches
-      const routeKey = Object.keys(ROLE_ACCESS_MAP).find((key) =>
-        pathname.startsWith(key)
-      );
+      const routeKey = Object.keys(ROLE_ACCESS_MAP).find((key) => pathname.startsWith(key));
 
       if (routeKey) {
         const allowedRoles = ROLE_ACCESS_MAP[routeKey];

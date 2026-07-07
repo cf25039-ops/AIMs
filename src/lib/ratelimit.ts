@@ -20,7 +20,7 @@ setInterval(cleanupOldEntries, CLEANUP_INTERVAL);
 export function checkRateLimit(
   ip: string,
   maxAttempts: number = 5,
-  windowMs: number = 15 * 60 * 1000
+  windowMs: number = 15 * 60 * 1000,
 ): { success: boolean; remaining: number; reset: number } {
   const now = Date.now();
   let entry = rateLimitMap.get(ip);

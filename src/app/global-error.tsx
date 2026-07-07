@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, Home } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import Link from "next/link";
 
 export default function GlobalError({
-  error,
+  error: _error,
   reset,
 }: {
   error: Error & { digest?: string };
@@ -25,7 +25,9 @@ export default function GlobalError({
             </p>
           </div>
           <div className="flex gap-3">
-            <Button onClick={reset} variant="outline">Try Again</Button>
+            <Button onClick={reset} variant="outline">
+              Try Again
+            </Button>
             <Link href="/dashboard">
               <Button>Go to Dashboard</Button>
             </Link>

@@ -44,9 +44,10 @@ export async function getDashboardMetrics() {
     .from("sla_events")
     .select("*", { count: "exact", head: true });
 
-  const slaCompliance = totalSLA && totalSLA > 0
-    ? Math.round(((totalSLA - (slaBreaches || 0)) / totalSLA) * 100) + "%"
-    : "N/A";
+  const slaCompliance =
+    totalSLA && totalSLA > 0
+      ? Math.round(((totalSLA - (slaBreaches || 0)) / totalSLA) * 100) + "%"
+      : "N/A";
 
   return [
     {
@@ -74,7 +75,7 @@ export async function getDashboardMetrics() {
       title: "SLA Compliance",
       value: slaCompliance,
       delta: "",
-      tone: slaBreaches && slaBreaches > 0 ? "warning" as const : "success" as const,
+      tone: slaBreaches && slaBreaches > 0 ? ("warning" as const) : ("success" as const),
       caption: `${slaBreaches || 0} breaches`,
     },
   ];
@@ -96,7 +97,7 @@ export async function getRecentActivities(): Promise<ActivityItem[]> {
       items.push({
         id: `hw-${h.id}`,
         title: `New hardware: ${h.type_hardware}`,
-        detail: `${(h.department as any)?.name || 'Unknown'} · ${h.asset_tag}`,
+        detail: `${(h as unknown as { department?: { name: string } }).department?.name || "Unknown"} · ${h.asset_tag}`,
         time: new Date(h.created_at).toLocaleDateString(),
         tone: "success",
       });
@@ -115,7 +116,7 @@ export async function getRecentActivities(): Promise<ActivityItem[]> {
       items.push({
         id: `tkt-${t.id}`,
         title: t.title,
-        detail: `${(t.hardware as any)?.asset_tag || ''} · ${t.status.replace(/_/g, " ")}`,
+        detail: `${(t as unknown as { hardware?: { asset_tag: string } }).hardware?.asset_tag || ""} · ${t.status.replace(/_/g, " ")}`,
         time: new Date(t.created_at).toLocaleDateString(),
         tone: t.status === "open" || t.status === "vendor_escalation" ? "warning" : "info",
       });

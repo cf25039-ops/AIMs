@@ -2,14 +2,32 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Search, X, Loader2, Laptop, Monitor, Boxes, Wrench, FileText, FolderKanban, Building, ArrowRight } from "lucide-react";
+import {
+  Search,
+  X,
+  Loader2,
+  Laptop,
+  Monitor,
+  Boxes,
+  Wrench,
+  FileText,
+  FolderKanban,
+  Building,
+  ArrowRight,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { globalSearch, type SearchResult } from "@/services/search";
 import { motion, AnimatePresence } from "framer-motion";
 
 const iconMap: Record<string, any> = {
-  Laptop, Monitor, Boxes, Wrench, FileText, FolderKanban, Building,
+  Laptop,
+  Monitor,
+  Boxes,
+  Wrench,
+  FileText,
+  FolderKanban,
+  Building,
 };
 
 const typeLabels: Record<string, string> = {
@@ -28,7 +46,11 @@ const typeColors: Record<string, string> = {
   vendor: "bg-rose-500/10 text-rose-600 dark:text-rose-400",
 };
 
-export function GlobalSearch({ placeholder = "Search assets, contracts, tickets..." }: { placeholder?: string }) {
+export function GlobalSearch({
+  placeholder = "Search assets, contracts, tickets...",
+}: {
+  placeholder?: string;
+}) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -56,7 +78,9 @@ export function GlobalSearch({ placeholder = "Search assets, contracts, tickets.
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => doSearch(query), 300);
-    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
   }, [query, doSearch]);
 
   useEffect(() => {
@@ -111,11 +135,14 @@ export function GlobalSearch({ placeholder = "Search assets, contracts, tickets.
     inputRef.current?.focus();
   };
 
-  const grouped = results.reduce((acc, r) => {
-    if (!acc[r.type]) acc[r.type] = [];
-    acc[r.type].push(r);
-    return acc;
-  }, {} as Record<string, SearchResult[]>);
+  const grouped = results.reduce(
+    (acc, r) => {
+      if (!acc[r.type]) acc[r.type] = [];
+      acc[r.type].push(r);
+      return acc;
+    },
+    {} as Record<string, SearchResult[]>,
+  );
 
   return (
     <div ref={containerRef} className="relative w-full">
@@ -125,7 +152,9 @@ export function GlobalSearch({ placeholder = "Search assets, contracts, tickets.
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
-        onFocus={() => { if (results.length > 0) setIsOpen(true); }}
+        onFocus={() => {
+          if (results.length > 0) setIsOpen(true);
+        }}
         placeholder={placeholder}
         className="pl-9 pr-9"
       />
@@ -169,10 +198,15 @@ export function GlobalSearch({ placeholder = "Search assets, contracts, tickets.
                       onMouseEnter={() => setSelectedIndex(globalIdx)}
                       className={cn(
                         "flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors",
-                        isSelected ? "bg-primary/5" : "hover:bg-muted/50"
+                        isSelected ? "bg-primary/5" : "hover:bg-muted/50",
                       )}
                     >
-                      <span className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", typeColors[result.type])}>
+                      <span
+                        className={cn(
+                          "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg",
+                          typeColors[result.type],
+                        )}
+                      >
                         <Icon className="h-4 w-4" />
                       </span>
                       <div className="flex-1 min-w-0">
@@ -186,7 +220,8 @@ export function GlobalSearch({ placeholder = "Search assets, contracts, tickets.
               </div>
             ))}
             <div className="px-3 py-2 text-[10px] text-muted-foreground border-t border-border/50">
-              {results.length} results — Press <kbd className="rounded bg-muted px-1">Enter</kbd> to open, <kbd className="rounded bg-muted px-1">Esc</kbd> to close
+              {results.length} results — Press <kbd className="rounded bg-muted px-1">Enter</kbd> to
+              open, <kbd className="rounded bg-muted px-1">Esc</kbd> to close
             </div>
           </motion.div>
         )}

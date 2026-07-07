@@ -4,8 +4,10 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function getNotifications() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user) return { error: "Unauthorized" };
 
   const { data, error } = await supabase
@@ -33,13 +35,15 @@ export async function markNotificationAsRead(notificationId: string) {
     console.error("Error marking notification read:", error);
     return { error: "Failed to update notification status" };
   }
-  
+
   return { success: true };
 }
 
 export async function markAllAsRead() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) return { error: "Unauthorized" };
 
   const { error } = await supabase
@@ -51,6 +55,6 @@ export async function markAllAsRead() {
   if (error) {
     return { error: "Failed to mark all as read" };
   }
-  
+
   return { success: true };
 }

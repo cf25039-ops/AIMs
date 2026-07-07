@@ -26,7 +26,7 @@ export function DrillCard({ label, count, icon: Icon, onClick, className }: Dril
         "backdrop-blur-md transition-all duration-200",
         "hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5",
         "text-left",
-        className
+        className,
       )}
     >
       <div className="flex items-start justify-between">
